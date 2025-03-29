@@ -1,4 +1,4 @@
-# Minder
+# EatWithMe
 Team Members
 Andrew Staniaszek
 Jack Nolan 
