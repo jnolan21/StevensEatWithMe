@@ -1,0 +1,27 @@
+<article class="signup">
+    <h1>Log in to your EatWithMe account!</h1>
+
+    <form action="/users/login" method="POST" class="signup-form">
+        <label>
+            Email:
+            <input type="email" name="email" placeholder="Enter your email" value="{{user.email}}" class="login-input">
+        </label>
+        <label>
+            Password:
+            <input type="password" name="password" placeholder="Create a password" value="{{user.password}}" class="login-input">
+        </label>
+        <!-- Button to login -->
+        <button type="submit">Log in</button>
+    </form>
+    <h2><a href="/users/signup">Don't have an account? Signup!</a></h2>
+    {{#if hasErrors}}
+    <ul class="error-list">
+        {{#each errors}}
+        <li>
+            {{this}}
+        </li>
+        {{/each}}
+    </ul>
+    {{/if}}
+
+</article>
