@@ -2,6 +2,8 @@ import {Router} from 'express';
 const router = Router();
 import userData from '../data/users.js';
 import helper from '../data/helpers.js';
+import bcrypt from 'bcrypt'
+const saltRounds = 16;
 //import crypto from 'crypto'
 
 
@@ -152,8 +154,10 @@ router
       let allUsers = await userData.getAllUsers();
       // Make sure a user exists with this email
       for (let i = 0; i < allUsers.length; i++) {
+        // Compare the user's hashed password
+        let comparePasswords = await bcrypt.compare(user.password, allUsers[i].password);
         // Render user's profile page
-        if (user.email === allUsers[i].email && user.password === allUsers[i].password) {
+        if (user.email === allUsers[i].email && comparePasswords) {
           // ** Make sure the user is verified before they're allowed to log in! **
           if (allUsers[i].isVerified) {
             res.render('users/profile', {user: allUsers[i]});
