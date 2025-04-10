@@ -2,7 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import userData from '../data/users.js';
 import helper from '../data/helpers.js';
-import crypto from 'crypto'
+//import crypto from 'crypto'
 
 
 // VERIFY EMAIL route
