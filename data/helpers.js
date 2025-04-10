@@ -221,6 +221,35 @@ function checkStringArray(arr, arr_name) {
     return arr;
 }
 
+//Checks hours of operation for a full thing
+function checkHoursOfOperation(ho) {
+    if (typeof ho !== 'object' || Array.isArray(ho)) throw new Error ("Hours of Operation Must be an object!");
+    const days = Object.keys(ho);
+    const times = Object.values(ho);
+    console.log(days);
+    const validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    if (days.length !== validDays.length || !days.every(day => validDays.includes(day))) {
+        throw new Error("Hours of Operation must have Monday-Sunday");
+    }
+    
+    const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm])) - ((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$/;
+  
+    times.forEach(time => {
+      console.log(time);
+        if(time !== "closed" && (typeof time !== 'string' || !regex.test(time))) {
+            throw new Error("Time must be in the form HH:MM AM/PM");
+        }
+    });
+  }
+
+  function checkHours(time) {
+    const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$/
+    if(time !== "closed" && (typeof time !== 'string' || !regex.test(time))) {
+        throw new Error("Time must be in the form HH:MM AM/PM");
+    }
+  }
+
+
 
 
 

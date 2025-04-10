@@ -42,7 +42,8 @@ const createUser = async (
         RSVP: [],
         friends: [],
         isVerified: false,
-        verificationToken: verificationToken
+        verificationToken: verificationToken,
+        isAdmin: false
     };
     const userCollection = await users();
     const newUserInformation = await userCollection.insertOne(newUser);
@@ -87,7 +88,8 @@ const createVerifiedUser = async (
         RSVP: [],
         friends: [],
         isVerified: true,
-        verificationToken: ""
+        verificationToken: "",
+        isAdmin: false
     };
     const userCollection = await users();
     const newUserInformation = await userCollection.insertOne(newUser);
