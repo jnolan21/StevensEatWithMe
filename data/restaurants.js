@@ -10,6 +10,8 @@ const createRestaurant = async (
     location,
     menuItems,
     typeOfFood,
+    hoursOfOperation,
+    imageURL
 ) => {
     // Verify all the input
     name = helper.checkString(name, 'restaurant name');
