@@ -98,6 +98,53 @@ const createVerifiedUser = async (
 }
 
 
+
+// Function to create a new VERIFIED user (only used by seed.js)
+const createAdminUser = async (
+    firstName,  // string
+    lastName,   // string
+    email,      // string
+    username,   // string
+    password    // string
+) => {
+    // Verify each input
+    firstName = helper.checkName(firstName, 'firstName');
+    lastName = helper.checkName(lastName, 'lastName');
+    // Verify that another user does not exist with the same email
+    email = helper.checkEmail(email);
+    let allUsers = await getAllUsers();
+    username = helper.checkString(username, 'username');
+    // Check if a user already exists with the given email or username
+    for (let i = 0; i < allUsers.length; i++) {
+        if (email === allUsers[i].email) throw new Error(`User with email '${email}' already exists!`);
+        if (username === allUsers[i].username) throw new Error(`User with username '${username}' already exists!`);
+    }
+    password = helper.checkPassword(password);
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    //const hashedPassword = password;
+    // Create a new user object to insert into mongodb
+    let newUser = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        username: username,
+        password: hashedPassword,
+        reviews: [],
+        RSVP: [],
+        friends: [],
+        isVerified: true,
+        verificationToken: "",
+        isAdmin: true
+    };
+    const userCollection = await users();
+    const newUserInformation = await userCollection.insertOne(newUser);
+    if (!newUserInformation.acknowledged || !newUserInformation.insertedId) throw new Error("User insert failed!");
+    // Get the new inserted user and return the user object
+    return await getUserById(newUserInformation.insertedId.toString());
+}
+
+
 // Get an array of all user objects
 const getAllUsers = async () => {
     const userCollection = await users();
@@ -259,6 +306,7 @@ const getAllUserReviews = async (id) => {
 export default {
     createUser,
     createVerifiedUser,
+    createAdminUser,
     getAllUsers,
     getUserById,
     getUserByVerificationToken,
