@@ -20,7 +20,7 @@ try {
     console.error(`${e.message}`);
 }
 
-// createUser() (user2)
+// createVerifiedUser() (user2)
 let user2;
 try {
     user2 = await users.createVerifiedUser("  Donald ", " Duck ", " thedon@stevens.edu", "donaldd1 ", " Quack123$Quack ");
@@ -29,10 +29,19 @@ try {
     console.error(`${e.message}`);
 }
 
-// createUser() (user3)
+// createVerifiedUser() (user3)
 let user3;
 try {
-    user3 = await users.createVerifiedUser("  The ", " Admin ", " admin@stevens.edu", " admin ", " The_0Admin0_Of_EatWithMe ");
+    user3 = await users.createVerifiedUser("  Foo ", " Bar ", " foobar@stevens.edu", " foobar01 ", " The_Foo_Bar_OG123 ");
+    //console.log(user2);
+} catch (e) {
+    console.error(`${e.message}`);
+}
+
+// createAdminUser() (user4)
+let user4;
+try {
+    user4 = await users.createAdminUser("  The ", " Admin ", " admin@stevens.edu", " admin ", " The_0Admin0_Of_EatWithMe ");
     //console.log(user2);
 } catch (e) {
     console.error(`${e.message}`);
