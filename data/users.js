@@ -26,9 +26,8 @@ const createUser = async (
         if (username === allUsers[i].username) throw new Error(`User with username '${username}' already exists!`);
     }
     password = helper.checkPassword(password);
-    // **************** Hash the user's password for security purposes ****************
-    //const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const hashedPassword = password;
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
     // Create an email verification token for this user
     const verificationToken = crypto.randomBytes(32).toString('hex');
     // Create a new user object to insert into mongodb
@@ -73,9 +72,9 @@ const createVerifiedUser = async (
         if (username === allUsers[i].username) throw new Error(`User with username '${username}' already exists!`);
     }
     password = helper.checkPassword(password);
-    // **************** Hash the user's password for security purposes ****************
-    //const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const hashedPassword = password;
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    //const hashedPassword = password;
     // Create a new user object to insert into mongodb
     let newUser = {
         firstName: firstName,
