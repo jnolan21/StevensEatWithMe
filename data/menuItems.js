@@ -1,4 +1,4 @@
-import {menuItems, reviews, restaurants} from '../config/mongoCollections.js';
+import {reviews, restaurants} from '../config/mongoCollections.js';
 import {ObjectId, ReturnDocument} from 'mongodb';
 import helper from './helpers.js'
 import userData from './users.js'
@@ -10,47 +10,55 @@ const createMenuItem = async (
     restaurantId,
     name,
     description,
+    dietaryRestrictions,
 ) => {
     // Verify all the input
     restaurantId = helper.checkId(restaurantId);
     name = helper.checkString(name, 'menu item name');
     description = helper.checkString(description, 'menu item description');
+    dietaryRestrictions = helper.checkStringArray(dietaryRestrictions, 'menu item dietary restrictions');
+    // Create the new menu item object
+    let newMenuItem = {
+        _id: new ObjectId(),
+        name: name,
+        description: description,
+        dietaryRestrictions: dietaryRestrictions,
+        rating: 0
+    };
     // Validate that the restaurant exists AND add menu item to it
-    await restaurantData.getRestaurantById(restaurantId);
-    let newMenuItem = {restaurantId: restaurantId, name: name, description: description, reviews: [], rating: 0};
+    let restaurant = await restaurantData.getRestaurantById(restaurantId);
+    // Add the menu item to the restaurant object
     const rCollection = await restaurants();
-    const menuItemCollection = await menuItems();
-    // Add the menu item to the database
-    const newMenuItemInfo = await menuItemCollection.insertOne(newMenuItem);
-    await rCollection.updateOne(
-        {_id: new ObjectId(restaurantId)},
-        {$addToSet: {menuItems: newMenuItem._id.toString()}}
+    restaurant = await rCollection.findOneAndUpdate(
+        {_id: new ObjectId(restaurant._id)},
+        {$push: {menuItems: newMenuItem}},
+        {returnDocument: "after"}
     );
-    if (!newMenuItemInfo.acknowledged || !newMenuItemInfo.insertedId) throw new Error("Menu item insert failed!");
-    // Get the new inserted menu item and return the menu item object
-    return await getMenuItemById(newMenuItemInfo.insertedId.toString());
+    // Return the restaurant object
+    return getMenuItemById(newMenuItem._id.toString());
 }
 
 
-// Get an array of all review objects
-const getAllMenuItems = async () => {
-    const menuItemCollection = await menuItems();
-    const menuItemList = menuItemCollection.find({}).toArray();
-    return menuItemList;
+// Get an array of all menu item objects for a restaurant
+const getAllMenuItems = async (restaurantId) => {
+    restaurantId = helper.checkId(restaurantId);
+    let restaurant = await restaurantData.getRestaurantById(restaurantId);
+    return restaurant.menuItems;
 }
 
 
 // Get a menu item by their id
 const getMenuItemById = async (id) => {
-    // Validate id
+    // Validate menut item id
     id = helper.checkId(id);
-    // Get the menu item from mongodb
-    const menuItemCollection = await menuItems();
-    const menuItem = await menuItemCollection.findOne({_id: new ObjectId(id)});
-    if (!menuItem) throw new Error("Menu item not found!");
-    // Convert the review _id to a string before returning the review object
-    menuItem._id = menuItem._id.toString();
-    return menuItem;
+    // Search for the menut item in restaurant collection
+    const rCollection = await restaurants();
+    const menuItem = await rCollection.findOne(
+        {'menuItems._id': new ObjectId(id)},
+        {projection: {_id: 0, 'menuItems.$': 1}}
+    )
+    if (!menuItem) throw new Error(`Error in getMenuItemById: menu item not found with id = ${id}`);
+    return menuItem.menuItems[0];
 }
 
 
