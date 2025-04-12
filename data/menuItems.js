@@ -23,6 +23,7 @@ const createMenuItem = async (
         name: name,
         description: description,
         dietaryRestrictions: dietaryRestrictions,
+        reviews: [],
         rating: 0
     };
     // Validate that the restaurant exists AND add menu item to it
