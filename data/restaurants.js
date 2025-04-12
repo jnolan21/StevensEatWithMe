@@ -11,7 +11,8 @@ const createRestaurant = async (
     menuItems,
     typeOfFood,
     hoursOfOperation,
-    imageURL
+    imageURL,
+    dietaryRestrictions
 ) => {
     // Verify all the input
     name = helper.checkString(name, 'restaurant name');
@@ -19,7 +20,18 @@ const createRestaurant = async (
     menuItems = helper.checkIdArray(menuItems, 'menuItems');
     typeOfFood = helper.checkStringArray(typeOfFood, 'typeOfFood');
     // Add the restaurant to the database
-    const newRestaurant = {name: name, location: location, menuItems: menuItems, typeofFood: typeOfFood, overallRating: 0, averageWaitTime: "0h 0min"};
+    const newRestaurant = {
+        name: name,
+        location: location,
+        menuItems: [],
+        typeofFood: typeOfFood,
+        averageWaitTime: "0h 0min",
+        reviews: [],
+        hoursOfOperation: hoursOfOperation,
+        imageURL: imageURL,
+        averageRating: 0,
+        dietaryRestrictions: dietaryRestrictions
+    };
     const rCollection = await restaurants();
     const restaurantInfo = await rCollection.insertOne(newRestaurant);
     if (!restaurantInfo.acknowledged || !restaurantInfo.insertedId) throw new Error("Restaurant insert failed!");

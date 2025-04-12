@@ -47,39 +47,125 @@ try {
     console.error(`${e.message}`);
 }
 
-// createRestaurant() (restaurant1)
-let restaurant1;
+// createRestaurant() (pierceDiningHall)
+let pierceDiningHall;
 try {
-    restaurant1 = await restaurants.createRestaurant(
+    pierceDiningHall = await restaurants.createRestaurant(
         "   Pierce Dining Hall  ",
         " 2nd Floor of Wesley J. Howe Center ",
         [],
-        [" Mixed-Cuisin ", " Comfort Food ", " Fast Food  "]
+        [" Mixed-Cuisine ", " Comfort Food ", " Fast Food  "],
+        {
+            "Sunday": "10:00AM - 10:00PM",
+            "Monday": "7:00AM - 12:00AM",
+            "Tuesday": "7:00AM - 12:00AM",
+            "Wednesday": "7:00AM - 12:00AM",
+            "Thursday": "7:00AM - 12:00AM",
+            "Friday": "7:00AM - 12:00AM",
+            "Saturday": "10:00AM - 10:00PM"
+        },
+        "",
+        ["Vegan", "Dairy-free", "Soy-free", "Shellfish-free", "Nut-free", "Gluten-free"]
     );
-    //console.log(restaurant1);
+    //console.log(pierceDiningHall);
 } catch (e) {
+    console.log("PIERCE ERROR")
+    console.log(`${e.message}`);
+}
+
+// createRestaurant() (yellas)
+let yellas;
+try {
+    yellas = await restaurants.createRestaurant(
+        "   Yellas  ",
+        " University Center, 1st Floor ",
+        [],
+        [" Mixed-Cuisin ", " Comfort Food ", " Fast Food  "],
+        {
+            "Sunday": "9:00AM - 12:00AM",
+            "Monday": "9:00AM - 12:00AM",
+            "Tuesday": "9:00AM - 12:00AM",
+            "Wednesday": "9:00AM - 12:00AM",
+            "Thursday": "9:00AM - 12:00AM",
+            "Friday": "9:00AM - 12:00AM",
+            "Saturday": "9:00AM - 12:00AM"
+        },
+        "",
+        ["Vegan", "Vegeterian"]
+    );
+    //console.log(yellas);
+} catch (e) {
+    console.log("YELLAS ERROR")
     console.log(`${e.message}`);
 }
 
 // createMenuItem() (menuItem1)
 let menuItem1;
 try {
+    //console.log(pierceDiningHall)
+    //console.log(yellas);
     menuItem1 = await menuItems.createMenuItem(
-        restaurant1._id,
+        pierceDiningHall._id,
         " Grilled Chicken Cheddar Sandwich ",
-        " Grilled chicken, cheddar cheeese, lettuce, tomato, and onion on a whole wheat roll. "
+        " Grilled chicken, cheddar cheeese, lettuce, tomato, and onion on a whole wheat roll. ",
+        []
     );
     //console.log(menuItem1);
 } catch (e) {
     console.log(`${e.message}`);
 }
 
+// createMenuItem() (menuItem2)
+let menuItem2;
+try {
+    menuItem2 = await menuItems.createMenuItem(
+        yellas._id,
+        " The Uncle Babe ",
+        " Hot Sub : Deluxe Ham, Salami, Fresh Mozzarella, Roasted Peppers ",
+        []
+    );
+    //console.log(menuItem3);
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (menuItem3)
+let menuItem3;
+try {
+    menuItem3 = await menuItems.createMenuItem(
+        yellas._id,
+        " The Fat Angelo ",
+        " Hot Sub : Sliced Steak, Roasted Potatoes, Peppers & Onions, American Cheese, Sub Roll ",
+        []
+    );
+    //console.log(menuItem1);
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// getAllMenuItems() (yellas)
+try {
+    let yellasMenuItems = await menuItems.getAllMenuItems(yellas._id);
+    //console.log(yellasMenuItems);
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// getMenuItemById() (The Fat Angelo)
+try {
+    let theFatAngelo = await menuItems.getMenuItemById(menuItem3._id.toString());
+    //console.log(theFatAngelo);
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+/*
 // createReview() (review1)
 let review1;
 try {
     review1 = await reviews.createReview(
         user1._id,
-        restaurant1._id,
+        pierceDiningHall._id,
         menuItem1._id,
         " The best food I've ever had in my life! ",
         5,
@@ -95,7 +181,7 @@ let review2;
 try {
     review2 = await reviews.createReview(
         user2._id,
-        restaurant1._id,
+        pierceDiningHall._id,
         menuItem1._id,
         " Good food, very convient to 'grab-and-go'. ",
         4,
@@ -111,9 +197,9 @@ let review3;
 try {
     review3 = await reviews.createReview(
         user1._id,
-        restaurant1._id,
+        pierceDiningHall._id,
         menuItem1._id,
-        " Good to. ",
+        " Good. ",
         4,
         3
     );
@@ -122,6 +208,22 @@ try {
     console.log(`${e.message}`);
 }
 
+// createReview() (review3)
+let review4;
+try {
+    review4 = await reviews.createReview(
+        yellas._id,
+        pierceDiningHall._id,
+        menuItem1._id,
+        " Good. ",
+        4,
+        3
+    );
+    //console.log(review2);
+} catch (e) {
+    console.log(`${e.message}`);
+}
+*/
 
 /* createUser() - Error: user already exists with this email
 try {
@@ -166,34 +268,6 @@ try {
 }
 
 
-
-
-/* CAN DELETE ALL THESE FUNCTIONS
-try {
-    console.log("User #1");
-    //console.log(await users.getUserById(user1._id));
-} catch (e) {
-    console.log(`${e.message}`);
-}
-try {
-    console.log("Restaurant #1");
-    //console.log(await restaurants.getRestaurantById(restaurant1._id));
-} catch (e) {
-    console.log(`${e.message}`);
-}
-try {
-    console.log("Review #1")
-    //console.log(await reviews.getReviewById(review1._id));
-} catch (e) {
-    console.log(`${e.message}`);
-}
-try {
-    console.log("Menu Item #1 (for restaurant #1)");
-    //console.log(await menuItems.getMenuItemById(menuItem1._id));
-} catch (e) {
-    console.log(`${e.message}`);
-}
-*/
 
 
 
