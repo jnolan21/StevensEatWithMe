@@ -70,14 +70,7 @@ function checkReviewRating(rating) {
     if (rating !== 0 && rating !== 1 && rating !== 2 && rating !== 3 && rating !== 4 && rating !== 5) throw new Error('Rating must be a whole number 0 - 5!');
 }
 
-// Verifies that wait time is an integer (representing the minutes)
-function checkWaitTime(time) {
-    if (time === undefined) throw new Error('Wait time cannot be empty!');
-    if (typeof time !== 'number') throw new Error('Wait time must be a number!');
-    if (time < 0) throw new Error('Time cannot be less than 0 minutes!');
-}
-
-/*
+// Verifies the wait time - format: "0h 00min"
 function checkWaitTime(time) {
     // 'waitTime' format: "#h #min"
     // both #'s must be positive, whole numbers, but min must be between 0 - 59
@@ -142,7 +135,6 @@ function checkWaitTime(time) {
     return `${String(hour)}h ${String(minute)}min`;
 
 }
-*/
 
 // Verify the person's email using 'nodemailer' package
 const sendVerificationEmail = async (id) => {

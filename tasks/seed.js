@@ -115,27 +115,41 @@ try {
     console.log(`${e.message}`);
 }
 
-// createMenuItem() (menuItem2)
-let menuItem2;
+// createMenuItem() (uncleBabe)
+let uncleBabe;
 try {
-    menuItem2 = await menuItems.createMenuItem(
+    uncleBabe = await menuItems.createMenuItem(
         yellas._id,
         " The Uncle Babe ",
         " Hot Sub : Deluxe Ham, Salami, Fresh Mozzarella, Roasted Peppers ",
         []
     );
-    //console.log(menuItem3);
+    //console.log(fatAngelo);
 } catch (e) {
     console.log(`${e.message}`);
 }
 
-// createMenuItem() (menuItem3)
-let menuItem3;
+// createMenuItem() (fatAngelo)
+let fatAngelo;
 try {
-    menuItem3 = await menuItems.createMenuItem(
+    fatAngelo = await menuItems.createMenuItem(
         yellas._id,
         " The Fat Angelo ",
         " Hot Sub : Sliced Steak, Roasted Potatoes, Peppers & Onions, American Cheese, Sub Roll ",
+        []
+    );
+    //console.log(menuItem1);
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (bennyBrown)
+let bennyBrown;
+try {
+    bennyBrown = await menuItems.createMenuItem(
+        yellas._id,
+        " The Benny Brown ",
+        " Hot Sub : Sliced Steak, Sauteed Onions, Fresh Mozzarella, Brown Gravy, Sub Roll ",
         []
     );
     //console.log(menuItem1);
@@ -153,77 +167,144 @@ try {
 
 // getMenuItemById() (The Fat Angelo)
 try {
-    let theFatAngelo = await menuItems.getMenuItemById(menuItem3._id.toString());
+    let theFatAngelo = await menuItems.getMenuItemById(fatAngelo._id.toString());
     //console.log(theFatAngelo);
 } catch (e) {
     console.log(`${e.message}`);
 }
 
-/*
-// createReview() (review1)
+// getRestaurantById() (The Fat Angelo)
+try {
+    let pierce = await menuItems.getRestaurantId(menuItem1._id.toString());
+    let yellas = await menuItems.getRestaurantId(fatAngelo._id.toString());
+    //let invalidId = await menuItems.getRestaurantId('67fc00807aeca18a74809187');
+    //console.log(pierce);
+    //console.log(yellas);
+    //console.log(invalidId);
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+
+// createReview() (review1) - review for 'The Fat Angelo'
 let review1;
 try {
-    review1 = await reviews.createReview(
+    review1 = await reviews.createMenuItemReview(
         user1._id,
-        pierceDiningHall._id,
-        menuItem1._id,
-        " The best food I've ever had in my life! ",
+        yellas._id,
+        fatAngelo._id.toString(),
+        " The Fat Angelo is the best sub I've had in my life! ",
         5,
-        5
+        "0h 22min"
     );
     //console.log(review1);
 } catch (e) {
     console.log(`${e.message}`);
 }
 
-// createReview() (review2)
-let review2;
-try {
-    review2 = await reviews.createReview(
-        user2._id,
-        pierceDiningHall._id,
-        menuItem1._id,
-        " Good food, very convient to 'grab-and-go'. ",
-        4,
-        5
-    );
-    //console.log(review2);
-} catch (e) {
-    console.log(`${e.message}`);
+
+// createReview() create 4 reviews for yellas menu items
+let reviewData = [
+    {
+        user: user2._id,
+        restaurant: yellas._id,
+        menuItem: fatAngelo._id.toString(),
+        text: "It was cold when I got it, so much for 'Hot Subs'.",
+        rating: 1,
+        time: "0h 33min"
+    },
+    {
+        user: user1._id,
+        restaurant: yellas._id,
+        menuItem: menuItem1._id.toString(),
+        text: "Tasted like cardboard with cheese on it.",
+        rating: 2,
+        time: "0h 20min"
+    },
+    {
+        user: user3._id,
+        restaurant: yellas._id,
+        menuItem: uncleBabe._id.toString(),
+        text: "Decent, but definitely overpriced for what it is.",
+        rating: 3,
+        time: "0h 40min"
+    },
+    {
+        user: user2._id,
+        restaurant: yellas._id,
+        menuItem: bennyBrown._id.toString(),
+        text: "Honestly pretty good, would get it again.",
+        rating: 4,
+        time: "0h 25min"
+    }
+];
+
+// Add the 4 menu item reviews to yellas
+for (const data of reviewData) {
+    try {
+        const review = await reviews.createMenuItemReview(
+            data.user,
+            data.restaurant,
+            data.menuItem,
+            data.text,
+            data.rating,
+            data.time
+        );
+    } catch (e) {
+        console.log(`${e.message}`);
+    }
 }
 
-// createReview() (review3)
-let review3;
-try {
-    review3 = await reviews.createReview(
-        user1._id,
-        pierceDiningHall._id,
-        menuItem1._id,
-        " Good. ",
-        4,
-        3
-    );
-    //console.log(review2);
-} catch (e) {
-    console.log(`${e.message}`);
+
+// createReview() create 4 reviews for yellas menu items
+reviewData = [
+    {
+        user: user2._id,
+        restaurant: yellas._id,
+        text: " Decent food, took forever to get it though. ",
+        rating: 1,
+        time: "  1h 01min  "
+    },
+    {
+        user: user1._id,
+        restaurant: yellas._id,
+        text: "My go to spot for good subs!",
+        rating: 5,
+        time: "0h 20min"
+    },
+    {
+        user: user3._id,
+        restaurant: yellas._id,
+        text: "Nothing crazy. Decent food and service.",
+        rating: 3,
+        time: "0h 40min"
+    },
+    {
+        user: user2._id,
+        restaurant: yellas._id,
+        text: "I don't even know what to say. Don't eat here!",
+        rating: 0,
+        time: "2h 12min"
+    }
+];
+
+// Add the 4 menu item reviews to yellas
+for (const data of reviewData) {
+    try {
+        const review = await reviews.createRestaurantReview(
+            data.user,
+            data.restaurant,
+            data.text,
+            data.rating,
+            data.time
+        );
+    } catch (e) {
+        console.log(`${e.message}`);
+    }
 }
 
-// createReview() (review3)
-let review4;
-try {
-    review4 = await reviews.createReview(
-        yellas._id,
-        pierceDiningHall._id,
-        menuItem1._id,
-        " Good. ",
-        4,
-        3
-    );
-    //console.log(review2);
-} catch (e) {
-    console.log(`${e.message}`);
-}
-*/
+
+
 
 /* createUser() - Error: user already exists with this email
 try {

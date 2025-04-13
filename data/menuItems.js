@@ -20,6 +20,7 @@ const createMenuItem = async (
     // Create the new menu item object
     let newMenuItem = {
         _id: new ObjectId(),
+        restaurantId: restaurantId,
         name: name,
         description: description,
         dietaryRestrictions: dietaryRestrictions,
@@ -50,7 +51,7 @@ const getAllMenuItems = async (restaurantId) => {
 
 // Get a menu item by their id
 const getMenuItemById = async (id) => {
-    // Validate menut item id
+    // Validate menu item id
     id = helper.checkId(id);
     // Search for the menut item in restaurant collection
     const rCollection = await restaurants();
@@ -62,6 +63,16 @@ const getMenuItemById = async (id) => {
     return menuItem.menuItems[0];
 }
 
+// Get the restaurant id of a menu item using menu item id
+const getRestaurantId = async (id) => {
+    // Validate menu item id
+    id = helper.checkId(id);
+    // Get the menu item
+    let menuItem = await getMenuItemById(id);
+    // Get restaurant using 'restaurantId'
+    return await restaurantData.getRestaurantById(menuItem.restaurantId);
+}
+
 
 
 
@@ -71,5 +82,6 @@ const getMenuItemById = async (id) => {
 export default {
     createMenuItem,
     getAllMenuItems,
-    getMenuItemById
+    getMenuItemById,
+    getRestaurantId,
 }
