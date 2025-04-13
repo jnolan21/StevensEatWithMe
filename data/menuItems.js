@@ -74,6 +74,37 @@ const getRestaurantId = async (id) => {
 }
 
 
+// Remove a menu item from a restaurant
+const removeMenuItem = async (id) => {
+    // Check id
+    id = helper.checkId(id);
+    // Get the menu item object
+    let menuItem = getMenuItemById(id);
+    // Get the restaurant
+    let restaurant = restaurantData.getRestaurantById(menuItem.restaurantId);
+    // Remove the review from the restaurant
+    await rCollection.updateOne(
+        {_id: new ObjectId(menuItem.restaurantId)},
+        {$pull: {reviews: {_id: new ObjectId(menuItem._id.toString())}}}
+    );
+    // Get the updated restaurant
+    let newRestaurant = await rCollection.findOne(
+        {_id: new ObjectId(restaurant._id)}
+    )
+    // Update the menu item rating
+    let newRating = await helper.calculateRestaurantRating(newRestaurant);
+    await rCollection.findOneAndUpdate(
+        {_id: new ObjectId(restaurant._id)},
+        {$set: {rating: newRating}}
+    )
+    // Get the update menu item
+    const updatedMenuItem = await rCollection.findOne (
+        {_id: new ObjectId(restaurant._id)}
+    );
+    return updatedMenuItem;
+}
+
+
 
 
 
@@ -84,4 +115,5 @@ export default {
     getAllMenuItems,
     getMenuItemById,
     getRestaurantId,
+    removeMenuItem
 }

@@ -26,18 +26,6 @@ const createMenuItemReview = async (
     let user = await userData.getUserById(userId);
     let restaurant = await restaurantData.getRestaurantById(restaurantId);
     let menuItem = await menuItemData.getMenuItemById(menuItemId);
-    // Before inserting the new review, calculate the new overall rating of that food item
-    let reviewsArray = menuItem.reviews;
-    let overallRating = rating;
-    for (let i = 0; i < reviewsArray.length; i++) {
-        // Get the full review object's rating
-        let review = await getReviewById(reviewsArray[i]);
-        //console.log(review.rating)
-        overallRating += review.rating;
-    }
-    // Calculate the average menu item rating and truncate it
-    overallRating = overallRating / (reviewsArray.length + 1);
-    overallRating = Math.floor((overallRating * 100)) / 100;
     let newReview = {
         userId: userId,
         restaurantId: restaurantId,
@@ -63,6 +51,9 @@ const createMenuItemReview = async (
         'menuItems._id': new ObjectId(menuItemId)},
         {$push: {'menuItems.$.reviews': newReviewInfo.insertedId.toString()}},
     );
+    // Calculate the new overall rating of that food item
+    menuItem = await menuItemData.getMenuItemById(menuItemId);
+    let overallRating = await helper.calculateMenuItemRating(menuItem);
     // Update the menu item's overall rating
     await rCollection.updateOne(
         {_id: new ObjectId(restaurantId),
@@ -91,18 +82,6 @@ const createRestaurantReview = async (
     // Validate that the user, restaurant, and menu item all exist AND add it the menu item
     let user = await userData.getUserById(userId);
     let restaurant = await restaurantData.getRestaurantById(restaurantId);
-    // Before inserting the new review, calculate the new overall rating of that food item
-    let reviewsArray = restaurant.reviews;
-    let overallRating = rating;
-    for (let i = 0; i < reviewsArray.length; i++) {
-        // Get the full review object's rating
-        let review = await getReviewById(reviewsArray[i]);
-        //console.log(review.rating)
-        overallRating += review.rating;
-    }
-    // Calculate the average rating and truncate it
-    overallRating = overallRating / (reviewsArray.length + 1);
-    overallRating = Math.floor((overallRating * 100)) / 100;
     let newReview = {
         userId: userId,
         restaurantId: restaurantId,
@@ -127,6 +106,9 @@ const createRestaurantReview = async (
         {_id: new ObjectId(restaurantId)},
         {$push: {reviews: newReviewInfo.insertedId.toString()}},
     );
+    // Calculate the new overall rating of that restaurant
+    restaurant = await restaurantData.getRestaurantById(restaurantId);
+    let overallRating = await helper.calculateRestaurantRating(restaurant);
     // Update the menu item's overall rating
     await rCollection.updateOne(
         {_id: new ObjectId(restaurantId)},
@@ -163,11 +145,57 @@ const getReviewById = async (id) => {
 const deleteReview = async (id) => {
     // Validate id
     id = helper.checkId(id);
-    // Get the review from mongodb
+    // Get the review, user, and restaurant collections
     const reviewCollection = await reviews();
-    const review = await reviewCollection.findOne({_id: new ObjectId(id)});
-    if (!review) throw new Error("Review not found!");
-    // Convert the review _id to a string before returning the review object
+    const userCollection = await users();
+    const restaurantCollection = await restaurants();
+    // Get the review
+    let review = await getReviewById(id);
+    // Remove the review from the user
+    await userCollection.updateOne(
+        {_id: new ObjectId(review.userId)},
+        {$pull: {reviews: id}}
+    )
+    // Remove the review from the restaurant OR menu item depending on what it was written for
+    if (review.menuItemId !== "") {
+        // Menu item review
+        // Remove the review
+        await restaurantCollection.updateOne(
+            {_id: new ObjectId(review.restaurantId),
+            'menuItems._id': new ObjectId(review.menuItemId)},
+            {$pull: {'menuItems.$.reviews': id}}
+        )
+        // Calculate the menu item rating
+        let updatedMenuItem = await menuItemData.getMenuItemById(review.menuItemId);
+        let newRating = await helper.calculateMenuItemRating(updatedMenuItem);
+        // Insert the new menu item rating
+        await restaurantCollection.updateOne(
+            {_id: new ObjectId(review.restaurantId),
+            'menuItems._id': new ObjectId(review.menuItemId)},
+            {$set: {'menuItems.$.rating': newRating}}
+        )
+    } else {
+        // Restaurant review
+        // Remove the review
+        await restaurantCollection.updateOne(
+            {_id: new ObjectId(review.restaurantId)},
+            {$pull: {reviews: id}}
+        );
+        // Calculate the restaurant rating
+        let updatedRestaurant = await restaurantData.getRestaurantById(review.restaurantId);
+        let newRating = await helper.calculateRestaurantRating(updatedRestaurant);
+        // Update the restaurant rating
+        await restaurantCollection.updateOne(
+            {_id: new ObjectId(review.restaurantId)},
+            {$set: {averageRating: newRating}}
+        )
+    }
+    // Delete the review from the review collection
+    const deletedReview = await reviewCollection.deleteOne(
+        {_id: new ObjectId(id)}
+    );
+    if (deletedReview.deletedCount === 0) throw new Error('Failed to delete review.');
+    // Return the deleted review
     review._id = review._id.toString();
     return review;
 }

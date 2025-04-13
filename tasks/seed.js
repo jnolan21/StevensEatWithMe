@@ -124,7 +124,7 @@ try {
         " Hot Sub : Deluxe Ham, Salami, Fresh Mozzarella, Roasted Peppers ",
         []
     );
-    //console.log(fatAngelo);
+    //console.log(uncleBabe);
 } catch (e) {
     console.log(`${e.message}`);
 }
@@ -167,16 +167,16 @@ try {
 
 // getMenuItemById() (The Fat Angelo)
 try {
-    let theFatAngelo = await menuItems.getMenuItemById(fatAngelo._id.toString());
-    //console.log(theFatAngelo);
+    let angelo = await menuItems.getMenuItemById(fatAngelo._id.toString());
+    //console.log(angelo);
 } catch (e) {
     console.log(`${e.message}`);
 }
 
 // getRestaurantById() (The Fat Angelo)
 try {
-    let pierce = await menuItems.getRestaurantId(menuItem1._id.toString());
-    let yellas = await menuItems.getRestaurantId(fatAngelo._id.toString());
+    let shouldBePierce = await menuItems.getRestaurantId(menuItem1._id.toString());
+    let shouldBeYellas = await menuItems.getRestaurantId(fatAngelo._id.toString());
     //let invalidId = await menuItems.getRestaurantId('67fc00807aeca18a74809187');
     //console.log(pierce);
     //console.log(yellas);
@@ -257,7 +257,7 @@ for (const data of reviewData) {
 
 
 // createReview() create 4 reviews for yellas menu items
-reviewData = [
+let menuItemReviewData = [
     {
         user: user2._id,
         restaurant: yellas._id,
@@ -289,7 +289,7 @@ reviewData = [
 ];
 
 // Add the 4 menu item reviews to yellas
-for (const data of reviewData) {
+for (const data of menuItemReviewData) {
     try {
         const review = await reviews.createRestaurantReview(
             data.user,
@@ -303,6 +303,22 @@ for (const data of reviewData) {
     }
 }
 
+
+/*
+// deleteReview() - First review about Fat Angelo
+try {
+    let deletedReview = await reviews.deleteReview(review1._id);
+    console.log(deletedReview);
+} catch (e) {
+    console.log(e.message);
+}
+try {
+    let menuItem = await menuItems.getMenuItemById(fatAngelo._id.toString());
+    let deletedReview = await reviews.deleteReview(menuItem.reviews[0]);
+    console.log(deletedReview);
+} catch (e) {
+    console.log(e.message);
+} */
 
 
 
