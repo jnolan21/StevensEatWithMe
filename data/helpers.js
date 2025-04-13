@@ -2,6 +2,8 @@ import {ObjectId} from 'mongodb';
 import nodemailer from 'nodemailer';
 import sgMail from '@sendgrid/mail';
 import userData from './users.js'
+import reviewData from './reviews.js';
+import menuItemData from './menuItems.js';
 
 // Verifies that a string input is non-empty string, and returns the trimmed string
 function checkString(str, str_name) {
@@ -242,6 +244,41 @@ function checkHoursOfOperation(ho) {
   }
 
 
+  async function calculateMenuItemRating(menuItem) {
+    // Before inserting the new review, calculate the new overall rating of that food item
+    let reviewsArray = menuItem.reviews;
+    if (reviewsArray.length === 0) return 0;
+    let overallRating = 0;
+    for (let i = 0; i < reviewsArray.length; i++) {
+        // Get the full review object's rating
+        let review = await reviewData.getReviewById(reviewsArray[i]);
+        //console.log(review.rating)
+        overallRating += review.rating;
+    }
+    // Calculate the average menu item rating and truncate it
+    overallRating = overallRating / (reviewsArray.length);
+    overallRating = Math.floor((overallRating * 100)) / 100;
+    return overallRating;
+  }
+
+  async function calculateRestaurantRating(restaurant) {
+    // Before inserting the new review, calculate the new overall rating of that restaurant
+    let reviewsArray = restaurant.reviews;
+    if (reviewsArray.length === 0) return 0;
+    let overallRating = 0;
+    for (let i = 0; i < reviewsArray.length; i++) {
+        // Get the full review object's rating
+        let review = await reviewData.getReviewById(reviewsArray[i]);
+        //console.log(review.rating)
+        overallRating += review.rating;
+    }
+    // Calculate the average rating and truncate it
+    overallRating = overallRating / (reviewsArray.length);
+    overallRating = Math.floor((overallRating * 100)) / 100;
+    return overallRating
+  }
+
+
 
 
 
@@ -259,5 +296,7 @@ export default {
     sendVerificationEmail,
     checkIdArray,
     checkOverallRating,
-    checkStringArray
+    checkStringArray,
+    calculateMenuItemRating,
+    calculateRestaurantRating
 };
