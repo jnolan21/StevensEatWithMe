@@ -1,5 +1,19 @@
 
-/* nav bar css*/
+:root {
+    --navbar-height: 32px;
+    --stevens-red: #990000;
+    --stevens-gray: #5A5A5A;
+    --stevens-light: #E5E5E5;
+    --stevens-white: #FFFFFF;
+  }
+  /* entire page */
+body {
+    background-color: #f8f9fa;  /* clean, soft, modern */
+    font-family: Georgia, 'Times New Roman', serif;
+
+
+  }
+/* nav bar styling*/
 nav ul{
     list-style-type: none;
     display: flex;
@@ -8,7 +22,6 @@ nav ul{
 }
 nav li a{
     font-weight: bold;
-    font-family:  Helvetica;
     padding-right: 20px;
     color: white;
     text-decoration: none;
@@ -19,10 +32,128 @@ nav li a{
     padding-top: 15px;
     padding-bottom: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    height: var(--navbar-height);
+    display: flex;
+    align-items: center;
 }
 
 .navHeader{
     padding-right: 20px;
-    font-family:  Helvetica;
     color: white;
+    margin-left: 10px;
 }
+
+/* login page styling*/
+.signupB{
+    background-color: darkred; 
+    color: white;
+    padding: 5px 20px;
+    margin-left: 8px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: x-large;
+}
+h2.signup{
+    margin-top: 30px;
+}
+
+.loginForm label{ /* helps align and give space to email and password boxes*/
+    margin-bottom: 12px;
+    margin-top: 12px;
+    width: 80px;
+}
+
+.loginForm { 
+    display: flex;
+    padding: 8px;
+  }
+
+.loginBox{
+  margin-left: 75px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  border: 1px solid rgb(149, 147, 147);
+  border-radius: 8px;
+  padding-bottom: 8px;
+  background-color: var(--stevens-light);
+}
+.loginButton{
+  border: none;
+  border-radius: 8px;
+  background-color: darkred;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 9px;
+  font-size: medium;
+  
+
+}
+
+.loginForm input{
+    border-radius: 8px;
+    border-color: black;
+}
+  
+
+/* landing page styling */
+.landingBox{
+    position: fixed;          /* ⬅️ sticks it to the screen */
+    top: calc(var(--navbar-height) + 45px);                /* ⬅️ distance from top */
+    right: 25px;        
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgb(149, 147, 147);
+    width: 100px;
+    border-radius: 8px;
+    background-color: #E5E5E5;;
+
+}
+.landingBox p{
+    margin: 5px;
+    text-decoration: none;
+    
+}
+
+.landingBox p a{
+    text-decoration: none;
+    color: #5A5A5A;
+}
+
+/*signup Page styling*/
+.signupBox {
+    border: 1px solid var(--stevens-gray);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    width: 400px;
+    background-color: var(--stevens-light);
+    align-items: center; 
+  }
+
+  .signupBox label {
+    display: flex;
+    align-items: center;
+    gap: 10px;          /* adds space between label text and input */
+  }
+  
+  .signupBox input {
+    padding: 6px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 200px;
+  }
+
+  p.inputName {
+    margin: 5px;
+    width: 85px;
+    text-align: right;
+  }
