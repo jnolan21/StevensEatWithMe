@@ -2,16 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>My Site</title>
-    <link rel="stylesheet" href="/public/css/main.css">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/public/main.css">
 </head>
 <body>
 
     <header>
-        <p>EatWithMe: The premier Stevens dining application</p>
+          <nav class="navbar">
+            <ul>
+                <li class = "navHeader"> Stevens Eat With Me! </li>
+              <li><a href="/landingPage/landingPage">Home</a></li>
+              <li><a href="/diningList/diningList">Dining Facilities</a></li>
+              <li><a href="/meetupPage/meetupPage">Meetups</a></li>
+              <li><a href="/profilePage">Profile</a></li>
+            </ul>
+          </nav>
     </header>
-
-    <p>The One Stop Shop For Stevens Dining Information!</p>
     <main>
         {{{body}}}
     </main>
