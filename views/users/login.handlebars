@@ -2,18 +2,26 @@
     <h1>Log in to your EatWithMe account!</h1>
 
     <form action="/users/login" method="POST" class="signup-form">
-        <label>
-            Email:
-            <input type="email" name="email" placeholder="Enter your email" value="{{user.email}}" class="login-input">
-        </label>
-        <label>
-            Password:
-            <input type="password" name="password" placeholder="Create a password" value="{{user.password}}" class="login-input">
-        </label>
-        <!-- Button to login -->
-        <button type="submit">Log in</button>
+        <div class="loginBox">
+            <div class="loginForm">
+                <label >
+                    Email:
+                </label> 
+                <input type="email" name="email" placeholder="Enter your email" value="{{user.email}}" class="login-input">
+            </div>
+
+            <div class="loginForm">
+                <label>
+                    Password: 
+                </label>
+                    <input type="password" name="password" placeholder="Create a password" value="{{user.password}}" class="login-input">
+            
+            </div>
+                <!-- Button to login -->
+                <button type="submit"  class="loginButton">Log in</button>
+        </div>
     </form>
-    <h2><a href="/users/signup">Don't have an account? Signup!</a></h2>
+    <h2 class="signup">Don't have an account?    <a href="/users/signup" class = "signupB">Sign Up</a></h2>
     {{#if hasErrors}}
     <ul class="error-list">
         {{#each errors}}

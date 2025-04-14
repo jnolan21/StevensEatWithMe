@@ -22,7 +22,7 @@ router
       }
       // Update the user signing up to mark them as verified!
       signupUser = await userData.verifyUserSignup(signupUser._id);
-      res.render('users/login');
+      res.render('users/login', {title: "EatWithMe login"});
       return;
     } catch (e) {
       res.status(400).json({error: e});
@@ -36,7 +36,7 @@ router
   .get(async (req, res) => {
     // Render the signup page
     try {
-      res.render('users/signup');
+      res.render('users/signup', {title: "EatWithMe signup"});
     } catch (e) {
       return res.status(400).json({error: e.message});
     }
@@ -89,6 +89,7 @@ router
     // If there are errors, reload the signup page and display the errors
     if (errors.length > 0) {
       res.render('users/signup', {
+        title: "EatWithMe signup",
         user: user,
         errors: errors,
         hasErrors: true
@@ -106,7 +107,7 @@ router
       )
       // Send the verification email
       await helper.sendVerificationEmail(newUser._id);
-      res.render('users/login');
+      res.render('users/login', {title: "EatWithMe login"});
       // Redirect the '/verify' route and wait for user to click the email
       //res.render('users/verify', {email: newUser.email});
     } catch (e) {
@@ -122,7 +123,7 @@ router
   .get(async (req, res) => {
     // Render the login page
     try {
-      res.render('users/login');
+      res.render('users/login', {title: "EatWithMe login"});
     } catch (e) {
       return res.status(400).json({error: e.message});
     }
@@ -144,6 +145,7 @@ router
     if (errors.length > 0) {
       // Render login if invalid input supplied
       res.render('users/login', {
+        title: "EatWithMe login",
         user: user,
         errors: errors,
         hasErrors: true,
@@ -160,12 +162,13 @@ router
         if (user.email === allUsers[i].email && comparePasswords) {
           // ** Make sure the user is verified before they're allowed to log in! **
           if (allUsers[i].isVerified) {
-            res.render('users/profile', {user: allUsers[i]});
+            res.render('users/profile', {title: "EatWithMe Profile", user: allUsers[i]});
             return;
           } else {
             // Reload the login page if the user is not verified
             errors.push(new Error("You need to verify your Stevens email before logging in."));
             res.render('users/login', {
+              title: "EatWithMe login",
               user: user,
               hasErrors: errors,
               errors: errors
@@ -182,6 +185,7 @@ router
       if (errors.length > 0) {
         // Render login if invalid input supplied
         res.render('users/login', {
+          title: "EatWithMe login",
           errors: errors,
           hasErrors: true,
         });
@@ -214,7 +218,7 @@ router
 
 
 router
-  .route('/:id')
+  .route('/:id') //gets profile page 
   .get(async (req, res) => {
     // GET /users/:id
     try {
@@ -225,7 +229,7 @@ router
     try {
       const user = await userData.getUserById(req.params.id);
       // Render the user's profile page
-      res.render('users/profile', {user: user});
+      res.render('users/profile', {title: "EatWithMe Profile", user: user});
     } catch (e) {
       return res.status(404).json({error: e.message});
     }

@@ -2,29 +2,32 @@
     <h1>Signup for EatWithMe!</h1>
 
     <form action="/users/signup" method="POST" class="signup-form">
-        <label>
-            First Name:
-            <input type="text" name="firstName" placeholder="Enter your first name" value="{{user.firstName}}" class="signup-input">
-        </label>
-        <label>
-            Last Name:
-            <input type="text" name="lastName" placeholder="Enter your last name" value="{{user.lastName}}" class="signup-input">
-        </label>
-        <label>
-            Email:
-            <input type="email" name="email" placeholder="Enter your email" value="{{user.email}}" class="signup-input">
-        </label>
-        <label>
-            Username:
-            <input type="text" name="username" placeholder="Create a username" value="{{user.username}}" class="signup-input">
-        </label>
-        <label>
-            Password:
-            <input type="password" name="password" placeholder="Create a password" value="{{user.password}}" class="signup-input">
-        </label>
-        <!-- Button to signup -->
-        <button type="submit">Signup</button>
-        <h2><a href="/users/login">Already have an account? Login!</a></h2>
+        <div class= "signupBox">
+            <label>
+                <p class = "inputName">First Name:</p>
+                <input type="text" name="firstName" placeholder="Enter your first name" value="{{user.firstName}}" class="signup-input">
+            </label>
+            <label>
+                <p class = "inputName">Last Name:</p>
+                <input type="text" name="lastName" placeholder="Enter your last name" value="{{user.lastName}}" class="signup-input">
+            </label>
+            <label>
+                <p class = "inputName">Email:</p>
+                <input type="email" name="email" placeholder="Enter your Stevens email" value="{{user.email}}" class="signup-input">
+            </label>
+            <label>
+                <p class = "inputName">Username:</p>
+                <input type="text" name="username" placeholder="Create a username" value="{{user.username}}" class="signup-input">
+            </label>
+            <label>
+                <p class = "inputName">Password:</p>
+                <input type="password" name="password" placeholder="Create a password" value="{{user.password}}" class="signup-input">
+            </label>
+            <!-- Button to signup -->
+            <button type="submit">Signup</button>
+        </div>
+        <h2>Already have an account?<a href="/users/login" class = "signupB"> Login!</a></h2> 
+        
     </form>
     {{#if hasErrors}}
     <ul class="error-list">
