@@ -89,6 +89,18 @@ const waitTime = async () => {
     return restaurants;
 }
 
+const preferredWaitTime = async (time) => {
+    time = helper.checkWaitTime(time);
+    const restaurants = await getAllRestaurants();
+    const preferredRestaurants = restaurants.filter(r => helper.subtractWaitTime(time, r.averageWaitTime) >= 0);
+    if (preferredRestaurants.length === 0) {
+        throw "No Restaurants Fit within your Preferred Wait Time"
+    }
+    preferredRestaurants.sort((a,b) => helper.subtractWaitTime(a.averageWaitTime, b.averageWaitTime));
+    return preferredRestaurants;
+}
+
+
 
 
 

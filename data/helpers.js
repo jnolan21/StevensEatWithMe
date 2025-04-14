@@ -73,69 +73,89 @@ function checkReviewRating(rating) {
 }
 
 // Verifies the wait time - format: "0h 00min"
-function checkWaitTime(time) {
-    // 'waitTime' format: "#h #min"
-    // both #'s must be positive, whole numbers, but min must be between 0 - 59
-    time = time.trim();
-    let hour = "";
-    let minute = "";
-    let checkingHour = true;
-    let checkingMinute = false;
-    let mustBeSpace = false;
-    let hDetected = false;
-    let minDetected = false;
-    for (let i = 0; i < time.length; i++) {
-        // If extra chars found after 'min', throw error
-        if (checkingHour === false && checkingMinute === false && mustBeSpace === false) throw new Error("Invalid 'waitTime'. format: '#h #min'");
-        // If this char should be a space, and isn't, throw an error
-        if (mustBeSpace && (time[i] != ' ')) {
-            throw new Error("Invalid 'waitTime'. format: '#h #min'");
-        } else if (mustBeSpace && (time[i] === ' ')) {
-            // If this char should be a space, and is, then check minutes next
-            mustBeSpace = false;
-            checkingMinute = true;
-            continue;
-        }
-        // Getting the hour number and verifying it is followed by 'h'
-        if (checkingHour && ('0' <= time[i] && time[i] <= '9')) {
-            hour += time[i];
-            continue;
-        } else if (checkingHour && (time[i] === 'h')) {
-            // If the 'h' is found at the end of hour, set next char to be a space
-            hDetected = true;
-            checkingHour = false;
-            mustBeSpace = true;
-            continue;
-        } else if (checkingHour && !('0' <= time[i] && time[i] <= '9')) {
-            // If a non-number char found in the hour, throw error
-            throw new Error("Invalid 'waitTime'. format: '#h #min'");
-        }
-        // Getting the minute number and verifying it is followed by 'h'
-        if (checkingMinute && ('0' <= time[i] && time[i] <= '9')) {
-            minute += time[i];
-            continue;
-        } else if (checkingMinute && (time[i] === 'm')) {
-            // If 'm' is found, check the next two chars to be 'in'
-            if ((i + 1 >= time.length) || (time[i+1] != 'i')) throw new Error("Invalid 'waitTime'. format: '#h #min'");
-            if ((i + 2 >= time.length) || (time[i+2] != 'n')) throw new Error("Invalid 'waitTime'. format: '#h #min'");
-            // Set checkingMinute to false, to indicate the string should be empty
-            minDetected = true;
-            i += 2;
-            checkingMinute = false;
-        } else if (checkingMinute && !('0' <= time[i] && time[i] <= '9')) {
-            // If a non-number char found in the hour, throw error
-            throw new Error("Invalid 'waitTime'. format: '#h #min'");
-        }
-    }
-    // Validating hour and minute
-    if (hour === '' || minute === '' || !minDetected || !hDetected) throw new Error("Invalid 'waitTime'. format: '#h #min'");
-    hour = Number(hour);
-    minute = Number(minute);
-    if (isNaN(hour) || isNaN(minute)) throw new Error("Invalid 'waitTime'. format: '#h #min'");
-    // Make sure minute is valid
-    if ((minute < 0 || minute >= 60)) throw new Error("Invalid 'waitTime' minute value");
-    return `${String(hour)}h ${String(minute)}min`;
+// function checkWaitTime(time) {
+//     // 'waitTime' format: "#h #min"
+//     // both #'s must be positive, whole numbers, but min must be between 0 - 59
+//     time = time.trim();
+//     let hour = "";
+//     let minute = "";
+//     let checkingHour = true;
+//     let checkingMinute = false;
+//     let mustBeSpace = false;
+//     let hDetected = false;
+//     let minDetected = false;
+//     for (let i = 0; i < time.length; i++) {
+//         // If extra chars found after 'min', throw error
+//         if (checkingHour === false && checkingMinute === false && mustBeSpace === false) throw new Error("Invalid 'waitTime'. format: '#h #min'");
+//         // If this char should be a space, and isn't, throw an error
+//         if (mustBeSpace && (time[i] != ' ')) {
+//             throw new Error("Invalid 'waitTime'. format: '#h #min'");
+//         } else if (mustBeSpace && (time[i] === ' ')) {
+//             // If this char should be a space, and is, then check minutes next
+//             mustBeSpace = false;
+//             checkingMinute = true;
+//             continue;
+//         }
+//         // Getting the hour number and verifying it is followed by 'h'
+//         if (checkingHour && ('0' <= time[i] && time[i] <= '9')) {
+//             hour += time[i];
+//             continue;
+//         } else if (checkingHour && (time[i] === 'h')) {
+//             // If the 'h' is found at the end of hour, set next char to be a space
+//             hDetected = true;
+//             checkingHour = false;
+//             mustBeSpace = true;
+//             continue;
+//         } else if (checkingHour && !('0' <= time[i] && time[i] <= '9')) {
+//             // If a non-number char found in the hour, throw error
+//             throw new Error("Invalid 'waitTime'. format: '#h #min'");
+//         }
+//         // Getting the minute number and verifying it is followed by 'h'
+//         if (checkingMinute && ('0' <= time[i] && time[i] <= '9')) {
+//             minute += time[i];
+//             continue;
+//         } else if (checkingMinute && (time[i] === 'm')) {
+//             // If 'm' is found, check the next two chars to be 'in'
+//             if ((i + 1 >= time.length) || (time[i+1] != 'i')) throw new Error("Invalid 'waitTime'. format: '#h #min'");
+//             if ((i + 2 >= time.length) || (time[i+2] != 'n')) throw new Error("Invalid 'waitTime'. format: '#h #min'");
+//             // Set checkingMinute to false, to indicate the string should be empty
+//             minDetected = true;
+//             i += 2;
+//             checkingMinute = false;
+//         } else if (checkingMinute && !('0' <= time[i] && time[i] <= '9')) {
+//             // If a non-number char found in the hour, throw error
+//             throw new Error("Invalid 'waitTime'. format: '#h #min'");
+//         }
+//     }
+//     // Validating hour and minute
+//     if (hour === '' || minute === '' || !minDetected || !hDetected) throw new Error("Invalid 'waitTime'. format: '#h #min'");
+//     hour = Number(hour);
+//     minute = Number(minute);
+//     if (isNaN(hour) || isNaN(minute)) throw new Error("Invalid 'waitTime'. format: '#h #min'");
+//     // Make sure minute is valid
+//     if ((minute < 0 || minute >= 60)) throw new Error("Invalid 'waitTime' minute value");
+//     return `${String(hour)}h ${String(minute)}min`;
 
+// }
+
+function checkWaitTime(time) {
+    if (!time || typeof time !== 'string') throw 'Error: Must be a valid time input entered'
+    time = time.trim();
+    if (time === "") throw "Error: Time Cannot be Spaces or Empty";
+
+
+    const format = /^(\d+)h (\d{1,2})min$/;
+    if(!format.test(time)) throw "Error: Time must be in the format #h #min";
+
+    const [hour, minutes] = time.split(" ");
+
+    const h = parseInt(hour);
+    const m = parseInt(minutes);
+
+    
+    if (m < 0 || m > 59 || h < 0) throw "Error: Hours must be greater than 0 and minutes must be between 0 and 59";
+
+    return time;
 }
 
 // Verify the person's email using 'nodemailer' package
@@ -220,7 +240,6 @@ function checkHoursOfOperation(ho) {
     if (typeof ho !== 'object' || Array.isArray(ho)) throw new Error ("Hours of Operation Must be an object!");
     const days = Object.keys(ho);
     const times = Object.values(ho);
-    console.log(days);
     const validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     if (days.length !== validDays.length || !days.every(day => validDays.includes(day))) {
         throw new Error("Hours of Operation must have Monday-Sunday");
@@ -229,7 +248,6 @@ function checkHoursOfOperation(ho) {
     const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm])) - ((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$/;
   
     times.forEach(time => {
-      console.log(time);
         if(time !== "closed" && (typeof time !== 'string' || !regex.test(time))) {
             throw new Error("Time must be in the form HH:MM AM/PM");
         }
@@ -287,14 +305,16 @@ function checkHoursOfOperation(ho) {
    * Parses both of these and converts them to minutes so I can then sort them based on wait time
    */
   function subtractWaitTime(waitTimeOne, waitTimeTwo) {
+    waitTimeOne = checkWaitTime(waitTimeOne);
+    waitTimeTwo = checkWaitTime(waitTimeTwo);
 
-    const splitOne = waitTimeOne.split(" ");
-    const splitTwo = waitTimeTwo.split(" ");
-    const hoursOne = parseInt(splitOne[0]) * 60;
-    const minutesOne = parseInt(splitOne[1]);
+    let [hoursOne, minutesOne] = waitTimeOne.split(" ");
+    let [hoursTwo, minutesTwo] = waitTimeTwo.split(" ");
+    hoursOne = parseInt(hoursOne) * 60;
+    minutesOne = parseInt(minutesOne);
     const timeOne = hoursOne + minutesOne; //Total minutes for waitTimeOne
-    const hoursTwo = parseInt(splitTwo[0]) * 60;
-    const minutesTwo = parseInt(splitTwo[1]);
+    hoursTwo = parseInt(hoursTwo) * 60;
+    minutesTwo = parseInt(minutesTwo);
     const timeTwo = hoursTwo + minutesTwo; //Total minutes for waitTimeTwo
 
 
@@ -321,5 +341,6 @@ export default {
     checkStringArray,
     calculateMenuItemRating,
     calculateRestaurantRating,
-    subtractWaitTime
+    subtractWaitTime,
+    checkHoursOfOperation
 };
