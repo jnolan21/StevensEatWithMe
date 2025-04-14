@@ -279,6 +279,28 @@ function checkHoursOfOperation(ho) {
   }
 
 
+  /**
+   * 
+   * @param {Time for the first movie #h #min} waitTimeOne 
+   * @param {Time for the second movie #h #min} waitTimeTwo 
+   * 
+   * Parses both of these and converts them to minutes so I can then sort them based on wait time
+   */
+  function subtractWaitTime(waitTimeOne, waitTimeTwo) {
+
+    const splitOne = waitTimeOne.split(" ");
+    const splitTwo = waitTimeTwo.split(" ");
+    const hoursOne = parseInt(splitOne[0]) * 60;
+    const minutesOne = parseInt(splitOne[1]);
+    const timeOne = hoursOne + minutesOne; //Total minutes for waitTimeOne
+    const hoursTwo = parseInt(splitTwo[0]) * 60;
+    const minutesTwo = parseInt(splitTwo[1]);
+    const timeTwo = hoursTwo + minutesTwo; //Total minutes for waitTimeTwo
+
+
+    return timeOne - timeTwo;
+  }
+
 
 
 
@@ -298,5 +320,6 @@ export default {
     checkOverallRating,
     checkStringArray,
     calculateMenuItemRating,
-    calculateRestaurantRating
+    calculateRestaurantRating,
+    subtractWaitTime
 };

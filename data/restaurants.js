@@ -76,7 +76,18 @@ const removeRestaurant = async (id) => {
 }
 
 
+const ratingFilter = async () => {
+    let restaurants = await getAllRestaurants();
+    restaurants.sort((a,b) =>  b.averageRating - a.averageRating);
+    return restaurants;
+}
 
+const waitTime = async () => {
+    let restaurants = await getAllRestaurants();
+    restaurants.sort((a,b) => helper.subtractWaitTime(a.averageWaitTime, b.averageWaitTime)); 
+
+    return restaurants;
+}
 
 
 
@@ -88,4 +99,7 @@ export default {
     getAllRestaurants,
     getRestaurantById,
     removeRestaurant,
+    removeRestaurant,
+    ratingFilter,
+    waitTime
 }
