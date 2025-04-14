@@ -54,3 +54,23 @@ _**Extra Features**_
 - Admin pages will have different capabilities, including inserting, removing and editing the data of dining facilities.
 - Report Feature for inappropriate comments.
 - An anonymous user feature to allow users to make anonymous comments about restaurants or to report that a restaurant no longer exists.
+
+
+---
+
+## 🎨 Design References
+
+These reference images help visualize the design direction for **EatWithMe** — including layout, colors, and interface inspiration:
+
+![IMG_4425](IMG_4425.jpeg)
+![IMG_4426](IMG_4426.jpeg)
+![IMG_4427](IMG_4427.jpeg)
+![IMG_4428](IMG_4428.jpeg)
+![IMG_4429](IMG_4429.jpeg)
+![IMG_4430](IMG_4430.jpeg)
+![IMG_4431](IMG_4431.jpeg)
+![IMG_4432](IMG_4432.jpeg)
+
+> _These are just for inspiration and not part of the app functionality._
+
+---
