@@ -56,21 +56,17 @@ _**Extra Features**_
 - An anonymous user feature to allow users to make anonymous comments about restaurants or to report that a restaurant no longer exists.
 
 
----
-
 ## 🎨 Design References
 
 These reference images help visualize the design direction for **EatWithMe** — including layout, colors, and interface inspiration:
 
-![IMG_4425](IMG_4425.jpeg)
-![IMG_4426](IMG_4426.jpeg)
-![IMG_4427](IMG_4427.jpeg)
-![IMG_4428](IMG_4428.jpeg)
-![IMG_4429](IMG_4429.jpeg)
-![IMG_4430](IMG_4430.jpeg)
-![IMG_4431](IMG_4431.jpeg)
-![IMG_4432](IMG_4432.jpeg)
+![IMG_4425](designPicturesForReference/IMG_4425.jpeg)  
+![IMG_4426](designPicturesForReference/IMG_4426.jpeg)  
+![IMG_4427](designPicturesForReference/IMG_4427.jpeg)  
+![IMG_4428](designPicturesForReference/IMG_4428.jpeg)  
+![IMG_4429](designPicturesForReference/IMG_4429.jpeg)  
+![IMG_4430](designPicturesForReference/IMG_4430.jpeg)  
+![IMG_4431](designPicturesForReference/IMG_4431.jpeg)  
+![IMG_4432](designPicturesForReference/IMG_4432.jpeg)
 
-> _These are just for inspiration and not part of the app functionality._
-
----
+> _These are for design inspiration only and not part of the application logic._
