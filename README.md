@@ -20,40 +20,67 @@ The purpose of this application is to create a central hub for Stevens students 
 _**Core Features**_
 
 **Landing Page**
-- Provides an overview of EatWithMe and how to use it.
-- Introduces the creators of the platform.
+- Provides a brief overview of EatWithMe and how to use it. Creator names will be listed in the footer.
+- Lists and ranks the top 3 dining locations at Stevens, and will feature the top menu items at each location.
+- Will have a link “List all Dining Facilities” that brings the user to the Dining Facility List Page which lists all restaurants and menu items
+- The top right corner will display a login/signup button to allow the user to log into their account, or create one. 
+
 
 **Dining Facility List Page**
-- Lists all dining locations on campus.
-- Filter that generates specific lists of dining options based on dining preferences and restrictions. Users can also sort dining options in order based on rating.
+- Lists all dining locations on campus. Users can also sort dining options in order based on their ratings.
+- Filter that generates specific lists of dining options based on user preferences (such as dietary preferences/restrictions, preferred wait time, or preferred rating). 
+
 
 **Dining Facility Details Page**
-- Displays information about each dining facility, including:
-- Name
-- Location
-- Type of food
-- Ratings
-- Wait Time / Availability
-- Individual Reviews
-- Photos of the facilities cuisine
+Displays information about a single dining location, including:
+- Name.
+- Location.
+- Type of food.
+- Dietary Information.
+- Hours of operation for each day of the week.
+- All menu items: 
+- Each menu item's overall rating.
+- All reviews about each item.
+- Reviews can also be sorted by time or ratings.
+- Overall Location Rating.
+- Average Wait Time.
+- All general reviews about the dining location itself.
+
 
 **User Profile Page**
-- This is created when a student creates an account.
-- Displays the user’s username and all of the reviews they have created.
-- Users can edit and delete previous reviews they have made.
+This page is created when a Stevens student creates an account.
+Displays the user’s:
+- Username
+- Reviews
+- All reviews posted by the user. 
+- Users can create, update, and delete (their own) reviews.
+- Following List
+Each verified user can follow other users through RSVP postings (each RSVP post will have a button with it that allows the user viewing the post to follow the reviewer (this will not be a request; it will be an immediate follow).
+Users have the ability to delete users from their following list. If the user clicks on the profile of a user they are following, that user’s current RSVP posts will be displayed.
+RSVPs
+All RSVP posts made by this user will be displayed.
 
-**Messaging Platform**
-- Messaging Platforms for users to connect with friends.
-- Allows users to communicate with one another to discuss times they want to get food together.
+
+**RSVP Page**
+- On this page, users can create an RSVP post for a specific dining location, date, and time. The users can also add a short comment along with the RSVP post.
+- All RSVPs for the current day will be posted on this page. RSVPs will be automatically sorted by most recently posted.
+- Each posted RSVP will display the username of the user who posted it. Any registered user who views the RSVP post will have the option to RSVP to the post. This will display the user’s username alongside the post to indicate that they plan on attending. 
+- User’s who view the RSVP post can also “follow” the user who posted the RSVP.
+
+**Admin Profile Page**
+- Through this page, verified admins will have the ability to:
+- Create/update/remove dining locations.
+- Create/update/remove menu items from any dining location. 
+- Remove other user reviews.
+- The admins will obtain the dining location and menu item information from https://dineoncampus.com/stevensdining and/or GrubHub
+
 
 ---
 
 _**Extra Features**_
-- Expand to other schools outside of Stevens.
-- Allow admins so that it could be monitored or edited if certain dining facilities change.
-- Admin pages will have different capabilities, including inserting, removing and editing the data of dining facilities.
-- Report Feature for inappropriate comments.
-- An anonymous user feature to allow users to make anonymous comments about restaurants or to report that a restaurant no longer exists.
+- Report Feature for inappropriate comments and to report a restaurant that no longer exists. Reports can be viewed and handled accordingly by Admin users.
+- An anonymous user feature to allow registered users to make anonymous comments about restaurants and menu items. The user must still be a verified user who is a Stevens student. This feature will allow the user to hide their username on a given review they create/update. The username of the user who created/updated the post will still be logged on the backend as the user who posted the review, for Admin users to view.  
+
 
 
 ## 🎨 Design References
