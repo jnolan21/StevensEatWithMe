@@ -321,6 +321,14 @@ function checkHoursOfOperation(ho) {
     return timeOne - timeTwo;
   }
 
+function upTooThree(arr) {
+    if (!arr || !Array.isArray(arr)) throw "Must be an array!";
+
+    const size = arr.length;
+
+    if (size >= 3) return 3;
+    else return size;
+}
 
 
 
@@ -342,5 +350,6 @@ export default {
     calculateMenuItemRating,
     calculateRestaurantRating,
     subtractWaitTime,
-    checkHoursOfOperation
+    checkHoursOfOperation,
+    upTooThree
 };
