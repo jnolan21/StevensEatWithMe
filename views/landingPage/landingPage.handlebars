@@ -1,9 +1,27 @@
 <article class="landingPage">
         <h1>LANDING PAGE</h1>
     <div class = "landingBox">
-        <p><a href="/users/signup">Signup</a></p>
+        <p><a href="/users/signup">Signup</a></p> <!--make this hidden if theyre already logged in and give them a user profile they can click on or just disappear-->
         <p><a href="/users/login">Login</a></p>
     </div>
 
 </article>
+<div id = "restaurants">
+    {{#each topRestaurants}}
+    <div >
+        <img src = {{this.img}} alt = {{this.name}} >
+        <h2>{{this.name}}</h2>
+        
+        <ul>
+            {{#each menuItems}}
+            <li>{{name}}</li>
+            {{/each}}
+        </ul>
+    </div>
+    {{/each}}
+</div>
 
+<footer>
+    <p>Authors: Alexander Lupia, Andrew Staniaszek, Jack Nolan, Jenn Alexander
+    </p>
+</footer>

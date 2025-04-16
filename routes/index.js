@@ -10,6 +10,7 @@ const constructorMethod = (app) => {
   app.use('/users', userRoutes);
   app.use('/diningList', setRoutes);
   app.use('/meetupPage', setRoutes);
+  app.use('/', setRoutes);
   app.use('/public', staticDir('public'));
   app.use('*', (req, res) => {
     return res.render('landingPage/landingPage', {title: "EatWithMe Home"});
