@@ -2,9 +2,11 @@ import userDataFunctions from './users.js';
 import restaurantDataFunctions from './restaurants.js';
 import menuItemDataFunctions from './menuItems.js';
 import reviewDataFunctions from './reviews.js';
+import rsvpDataFunctions from './rsvps.js';
 
 
 export const userData = userDataFunctions;
 export const restaurantData = restaurantDataFunctions;
 export const menuItemData = menuItemDataFunctions;
 export const reviewsData = reviewDataFunctions;
+export const rsvpData = rsvpDataFunctions;
