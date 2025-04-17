@@ -113,5 +113,6 @@ export default {
     removeRestaurant,
     removeRestaurant,
     ratingFilter,
-    waitTime
+    waitTime,
+    preferredWaitTime
 }
