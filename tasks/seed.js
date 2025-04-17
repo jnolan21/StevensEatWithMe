@@ -64,7 +64,7 @@ try {
             "Friday": "7:00AM - 12:00AM",
             "Saturday": "10:00AM - 10:00PM"
         },
-        "",
+        "https://www.stevens.edu/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fmviowpldu823%2F41klnCv1DtziHVpmeNc0ga%2Fdfc437bb7c8fa978efd6b1eae344dd09%2FPierce_Dining_Hall__9_.jpg%3Fw%3D640%26h%3D360%26f%3Dcenter%26q%3D80%26fit%3Dfill&w=2400&q=80",
         ["Vegan", "Dairy-free", "Soy-free", "Shellfish-free", "Nut-free", "Gluten-free"]
     );
     //console.log(pierceDiningHall);
@@ -90,7 +90,7 @@ try {
             "Friday": "9:00AM - 12:00AM",
             "Saturday": "9:00AM - 12:00AM"
         },
-        "",
+        "https://yellas.com/wp-content/uploads/2024/06/yellas-burgers-shakes-deli-sandwiches.jpg",
         ["Vegan", "Vegeterian"]
     );
     //console.log(yellas);

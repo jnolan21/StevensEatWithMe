@@ -9,7 +9,7 @@ router.route('/').get(async (req, res) => {
     let top3 = restaurantss.slice(0,helpers.upTooThree(restaurantss));
     res.render('landingPage/landingPage', {
       title: "EatWithMe Home",
-      topRestaurants: top3,
+      topRestaurants: top3
     });
   }
   catch (e) {

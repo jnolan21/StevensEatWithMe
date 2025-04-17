@@ -1,5 +1,4 @@
 <article class="landingPage">
-        <h1>LANDING PAGE</h1>
     <div class = "landingBox">
         <p><a href="/users/signup">Signup</a></p> <!--make this hidden if theyre already logged in and give them a user profile they can click on or just disappear-->
         <p><a href="/users/login">Login</a></p>
@@ -7,9 +6,12 @@
 
 </article>
 <div id = "restaurants">
+    <h1> Top Dining Options </h1>
+
+
     {{#each topRestaurants}}
-    <div >
-        <img src = {{this.img}} alt = {{this.name}} >
+    <div class = "restaurant_box" >
+        <img src = {{this.imageURL}} class = "restaurant_img" alt = {{this.name}} >
         <h2>{{this.name}}</h2>
         
         <ul>
