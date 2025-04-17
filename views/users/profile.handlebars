@@ -1,4 +1,68 @@
-<article class="profile">
+<article class="profile-container">
     <h1>Hi, {{user.firstName}}!</h1>
-    <!-- Link to all of your reviews -->
+
+    <!-- Profile Information Container -->
+    <section class="profile-info">
+        <p>Username: {{user.username}}</p>
+        <p>First Name: {{user.firstName}}</p>
+        <p>Last Name: {{user.lastName}}</p>
+    </section>
+
+    <!-- "My Following" Container -->
+    <section class="profile-following">
+        <h2>My Following:</h2>
+        <ul>
+            <!-- Display each user this user is following -->
+            {{#each user.following}}
+                <li>Username: {{this.username}}</li>
+            {{/each}}
+        </ul>
+    </section>
+
+    <!-- "My Followers" Container -->
+    <section class="profile-followers">
+        <h2>My Followers:</h2>
+        <ul>
+            <!-- Display each user who is following this user -->
+            {{#each user.followers}}
+                <li>Username: {{this.username}}</li>
+            {{/each}}
+        </ul>
+    </section>
+
+<!-- PERSONAL COMMENT:
+ALL RSVP FIELDS:
+    comment: comment,
+    meetUpTime: meetUpTime,
+    restaurantId: restaurantId,
+    userId: userId,
+    usersAttending: [userId]
+-->
+
+
+    <!-- "My RSVP Posts" Container -->
+    <section class="profile-rsvps">
+        <h2>My RSVP Posts:</h2>
+        <ul>
+            <!-- Display all RSVP posts made by this user -->
+            {{#each user.RSVPposts}}
+                <!-- Link that displays RSVP post: title, date, time -->
+                <li><a href="/rsvp/{{this._id}}">{{this.title}} - {{this.meetUpTime.date}}, {{this.meetUpTime.time}}</a></li>
+            {{/each}}
+        </ul>
+    </section>
+
+
+    <!-- "My Current RSVPs" Container -->
+    <section class="profile-myRSVPposts">
+        <h2>My Current RSVPs:</h2>
+        <ul>
+            <!-- Display all current RSVP posts made by this user -->
+            {{#each user.RSVPposts}}
+                <!-- Link that displays RSVP post: title, date, time -->
+                <li><a href="/rsvp/{{this._id}}">{{this.title}} - {{this.date}}, {{this.time}}</a></li>
+            {{/each}}
+        </ul>
+    </section>
+
 </article>

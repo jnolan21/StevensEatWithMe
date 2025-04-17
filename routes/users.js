@@ -166,7 +166,7 @@ router
             //res.render('users/profile', {title: "EatWithMe Profile", user: allUsers[i]});
             // Store the user's information in the session
             req.session.user = {
-              _id: allUsers[i]._id,
+              _id: allUsers[i]._id.toString(),
               username: allUsers[i].username,
               email: allUsers[i].email
             }

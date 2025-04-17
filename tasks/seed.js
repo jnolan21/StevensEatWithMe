@@ -4,6 +4,7 @@ import users from '../data/users.js';
 import restaurants from '../data/restaurants.js';
 import reviews from '../data/reviews.js';
 import menuItems from '../data/menuItems.js';
+import RSVPS from '../data/rsvps.js'
 
 // Command to run seed.js: node ./tasks/seed.js
 
@@ -338,6 +339,13 @@ try {
     console.error(`${e.message}`);
 } */
 
+// addFriend() - add user4 to user1's friend list
+try {
+    let user1FriendsList = await users.addFriend(user1._id, user4._id);
+    //console.log(user1FriendsList);
+} catch (e) {
+    console.error(`${e.message}`);
+}
 
 // addFriend() - add user2 to user1's friend list
 try {
@@ -347,22 +355,65 @@ try {
     console.error(`${e.message}`);
 }
 
-/* addFriend() - Error user2 is already in user1's friend list
+// addFriend() - add user3 to user1's friend list
 try {
-    let user1FriendsList = await users.addFriend(user1._id, user2._id);
-    console.log(user1FriendsList);
-} catch (e) {
-    console.error(`${e.message}`);
-}
-*/
-
-// removeFriend() - remove user2 from user1's friend list
-try {
-    let user1FriendsList = await users.removeFriend(user1._id, user2._id);
+    let user1FriendsList = await users.addFriend(user1._id, user3._id);
     //console.log(user1FriendsList);
 } catch (e) {
     console.error(`${e.message}`);
 }
+
+// addFriend() - add user1 to user2's friend list
+try {
+    let user1FriendsList = await users.addFriend(user2._id, user1._id);
+    //console.log(user1FriendsList);
+} catch (e) {
+    console.error(`${e.message}`);
+}
+
+// addFriend() - add user1 to user3's friend list
+try {
+    let user1FriendsList = await users.addFriend(user3._id, user1._id);
+    //console.log(user1FriendsList);
+} catch (e) {
+    console.error(`${e.message}`);
+}
+
+// createRSVP() - RSVP1 for user1
+let RSVP1;
+try {
+    RSVP1 = await RSVPS.createRsvp(
+        "Fun freshman meetup!",
+        {date: '04/18/2025', time: '5:00PM'},
+        pierceDiningHall._id,
+        user1._id
+    );
+    //console.log(RSVP1);
+} catch (e) {
+    console.log(e.message);
+}
+
+// createRSVP() - RSVP2 for user1
+let RSVP2;
+try {
+    RSVP1 = await RSVPS.createRsvp(
+        "CS majors assemble.",
+        {date: '04/19/2025', time: '8:00PM'},
+        yellas._id,
+        user1._id
+    );
+    //console.log(RSVP2);
+} catch (e) {
+    console.log(e.message);
+}
+
+/* getAllPeopleFollowingThisUser() - get all the users following user1
+try {
+    let followingUser1 = await users.getAllPeopleFollowingThisUser(user1._id);
+    //console.log(followingUser4);
+} catch (e) {
+    console.error(`${e.message}`);
+} */
 
 
 
