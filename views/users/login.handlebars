@@ -1,20 +1,20 @@
 <article class="signup">
     <h1>Log in to your EatWithMe account!</h1>
 
-    <form action="/users/login" method="POST" id="login-form" class="signup-form">
+    <form action="/users/login" method="POST" class="signup-form">
         <div class="loginBox">
             <div class="loginForm">
                 <label >
                     Email:
                 </label> 
-                <input type="email" id="login-email" name="email" placeholder="Enter your email" value="{{email}}" class="login-input">
+                <input type="email" name="email" placeholder="Enter your email" value="{{user.email}}" class="login-input">
             </div>
 
             <div class="loginForm">
                 <label>
                     Password: 
                 </label>
-                    <input type="password" id="login-password" name="password" placeholder="Enter your password" class="login-input">
+                    <input type="password" name="password" placeholder="Create a password" value="{{user.password}}" class="login-input">
             
             </div>
                 <!-- Button to login -->
@@ -23,7 +23,7 @@
     </form>
     <h2 class="signup">Don't have an account?    <a href="/users/signup" class = "signupB">Sign Up</a></h2>
     {{#if hasErrors}}
-    <ul id="login-errors" class="error-list">
+    <ul class="error-list">
         {{#each errors}}
         <li>
             {{this}}

@@ -132,14 +132,13 @@ router
     // Attempt to login given user input
     const user = req.body;
     let errors = [];
-    let email, password;
     try {
-      email = helper.checkEmail(user.email);
+      user.email = helper.checkEmail(user.email);
     } catch (e) {
       errors.push(e);
     }
     try {
-      password = helper.checkString(user.password, 'password');
+      user.password = helper.checkString(user.password, 'password');
     } catch (e) {
       errors.push(e);
     }
@@ -147,7 +146,7 @@ router
       // Render login if invalid input supplied
       res.render('users/login', {
         title: "EatWithMe login",
-        user: {email},
+        user: user,
         errors: errors,
         hasErrors: true,
       });
@@ -158,34 +157,27 @@ router
       // Make sure a user exists with this email
       for (let i = 0; i < allUsers.length; i++) {
         // Compare the user's hashed password
-        let comparePasswords = await bcrypt.compare(password, allUsers[i].password);
+        let comparePasswords = await bcrypt.compare(user.password, allUsers[i].password);
         // Render user's profile page
-        if (email === allUsers[i].email && comparePasswords) {
+        if (user.email === allUsers[i].email && comparePasswords) {
           // ** Make sure the user is verified before they're allowed to log in! **
           if (allUsers[i].isVerified) {
-            //res.render('users/profile', {title: "EatWithMe Profile", user: allUsers[i]});
-            // Store the user's information in the session
-            req.session.user = {
-              _id: allUsers[i]._id.toString(),
-              username: allUsers[i].username,
-              email: allUsers[i].email
-            }
-            res.redirect(`/profile`); // Redirect the user to the profile route
+            res.render('users/profile', {title: "EatWithMe Profile", user: allUsers[i]});
             return;
           } else {
             // Reload the login page if the user is not verified
-            errors.push("Invalid login credentials or account not verified.");
+            errors.push(new Error("You need to verify your Stevens email before logging in."));
             res.render('users/login', {
               title: "EatWithMe login",
-              user: {email},
-              hasErrors: true,
+              user: user,
+              hasErrors: errors,
               errors: errors
             });
             return;
           }
         }
       }
-      errors.push('Invalid login credentials.');
+      errors.push('Invalid email or password!');
     } catch (e) {
       errors.push(e)
     }
@@ -194,7 +186,6 @@ router
         // Render login if invalid input supplied
         res.render('users/login', {
           title: "EatWithMe login",
-          user: {email},
           errors: errors,
           hasErrors: true,
         });
