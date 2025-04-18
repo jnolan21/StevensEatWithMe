@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 
 import {rsvps, users} from '../config/mongoCollections.js';
-=======
-import {reviews, users, restaurants, rsvps} from '../config/mongoCollections.js';
->>>>>>> upstream/main
 import {ObjectId, ReturnDocument} from 'mongodb';
 import helper from './helpers.js'
 import userData from './users.js'
@@ -43,11 +39,7 @@ const createRsvp = async (
         {_id: new ObjectId(userId)},
         {$push: {RSVP: newRsvpInfo.insertedId.toString()}},
     );
-<<<<<<< HEAD
     return await getRsvpById(newRsvpInfo.insertedId.toString());
-=======
-    return newRsvp;
->>>>>>> upstream/main
 }
 
 // Get an array of all RSVP objects
@@ -63,17 +55,11 @@ const getRsvpById = async (id) => {
 
     id = helper.checkId(id);
     // Get the rsvp from mongodb
-<<<<<<< HEAD
 
     const rsvpCollection = await rsvps();
     const rsvp = await rsvpCollection.findOne({_id: new ObjectId(id)});
     if (!rsvp) throw new Error("RSVP not found!");
 
-=======
-    const rsvpCollection = await rsvps();
-    const rsvp = await rsvpCollection.findOne({_id: new ObjectId(id)});
-    if (!rsvp) throw new Error("RSVP not found!");
->>>>>>> upstream/main
     // Convert the RSVP _id to a string before returning the RSVP object
     rsvp._id = rsvp._id.toString();
     return rsvp;
