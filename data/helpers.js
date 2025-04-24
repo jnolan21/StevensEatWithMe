@@ -4,6 +4,8 @@ import sgMail from '@sendgrid/mail';
 import userData from './users.js'
 import reviewData from './reviews.js';
 import menuItemData from './menuItems.js';
+import restaurants from './restaurants.js'
+import users from './users.js'
 
 // Verifies that a string input is non-empty string, and returns the trimmed string
 function checkString(str, str_name) {
@@ -357,6 +359,42 @@ function checkMeetUpTime(meetUpTime){
     return meetUpTime;
 }
 
+async function formatAndCheckRSVPS(allrsvps){
+    let currentRsvps = [];
+    for(let i =0; i< allrsvps.length; i++){
+        let [month, day, year] = (allrsvps[i].meetUpTime.Date).split('/');
+        let inputDate = new Date(Number(year), Number(month) - 1, Number(day));        
+        let today = new Date();
+ 
+          if(inputDate.getFullYear() === today.getFullYear() && inputDate.getMonth() === today.getMonth() && inputDate.getDate() === today.getDate()){
+            let [time, period] = (allrsvps[i].meetUpTime.Time).split(/(AM|PM)/); // ex: split into "3:45" and "PM"
+            let [hoursStr, minutesStr] = time.split(':'); //seperate mins and hours by colon
+            let hours = Number(hoursStr);
+            const minutes = Number(minutesStr);
+            //convert to military time to comapre to current time
+            if (period === 'PM' && hours !== 12) {
+              hours += 12;
+            }
+            if (period === 'AM' && hours === 12) {
+              hours = 0; //make midnight 0
+            }
+            //get current time in minutes
+            const now = new Date();
+            const currentMinutes = now.getHours() * 60 + now.getMinutes();
+            const inputMinutes = hours * 60 + minutes;
+            if (inputMinutes >= currentMinutes){
+                let rest = await restaurants.getRestaurantById(allrsvps[i].restaurantId);
+                        allrsvps[i].restaurantId = rest.name;
+                        let userPosted = await users.getUserById(String(allrsvps[i].userId));
+                        allrsvps[i].user = userPosted.firstName;
+                        currentRsvps.push(allrsvps[i]);
+            }
+            }
+
+
+      }
+      return currentRsvps;
+}
 
 
 
@@ -378,5 +416,6 @@ export default {
     subtractWaitTime,
     checkHoursOfOperation,
     upTooThree,
-    checkMeetUpTime
+    checkMeetUpTime,
+    formatAndCheckRSVPS
 };

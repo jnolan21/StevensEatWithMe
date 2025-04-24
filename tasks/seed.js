@@ -4,6 +4,7 @@ import users from '../data/users.js';
 import restaurants from '../data/restaurants.js';
 import reviews from '../data/reviews.js';
 import menuItems from '../data/menuItems.js';
+import rsvps from '../data/rsvps.js'
 
 // Command to run seed.js: node ./tasks/seed.js
 
@@ -682,6 +683,51 @@ try {
 } catch (e) {
     console.error(`${e.message}`);
 }
+
+
+
+//create RSVPS
+
+try{
+    const today = new Date();
+    const month = String(today.getMonth() + 1).padStart(2, '0');  
+    const day = String(today.getDate()).padStart(2, '0');         
+    const year = today.getFullYear();                            
+    const formattedDate = `${month}/${day}/${year}`;
+
+    let rsvpPost1 = await rsvps.createRsvp(
+        "Hi! Im a freshman looking for someone to get chicken tenders with me!",
+        {Date: formattedDate, Time:"10:00PM"},
+        yellas._id,
+        user1._id
+    )
+}
+catch(e){
+    console.error(`${e.message}`)
+}
+try{
+    const today = new Date();
+    const month = String(today.getMonth() + 1).padStart(2, '0');  
+    const day = String(today.getDate()).padStart(2, '0');         
+    const year = today.getFullYear();                            
+    const formattedDate = `${month}/${day}/${year}`;
+
+    let rsvpPost2 = await rsvps.createRsvp(
+        "Hi! Im a duck looking for love at late night Pierce!",
+        {Date: formattedDate, Time:"11:00PM"},
+        pierceDiningHall._id,
+        user2._id
+    )
+}
+catch(e){
+    console.error(`${e.message}`)
+}
+
+
+
+
+
+
 
 
 

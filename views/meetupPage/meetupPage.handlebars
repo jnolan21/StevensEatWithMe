@@ -1,5 +1,16 @@
 
-    <h1>I am the meetup page!</h1>
-    <p>should only be accessible to real users. if not logged in , direct user to login or signup</p>
+    <h1> Current Meetups </h1>
 
+    {{#each allrsvps}}
+    <div class = "rsvpBox" >
+        
+        <h2>Where: {{this.restaurantId}}</h2>
+        <p>User Posted: {{this.user}} <button class = "followButton"> Follow</button></p>
+        <p>When: {{this.meetUpTime.Date}}</p>
+        <p> {{this.meetUpTime.Time}}</p>
+        <p class = "comments">Comments: {{this.comment}} </p>
+        <button class = "rsvpButton"> RSVP</button>
+    </div>
+    {{/each}}
   
+    <footer>should only be accessible to real users. if not logged in , direct user to login or signup</footer>
