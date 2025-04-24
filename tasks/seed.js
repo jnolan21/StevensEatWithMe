@@ -47,6 +47,32 @@ try {
     console.error(`${e.message}`);
 }
 
+// createRestaurant() (piccola italia)
+let piccolaItalia;
+try {
+    piccolaItalia = await restaurants.createRestaurant(
+        "   Piccola Italia  ",
+        " University Center, 1st Floor ",
+        [],
+        [" Italian Food "],
+        {
+            "Sunday": "11:00AM - 8:00PM",
+            "Monday": "11:00AM - 8:00PM",
+            "Tuesday": "11:00AM - 8:00PM",
+            "Wednesday": "11:00AM - 8:00PM",
+            "Thursday": "11:00AM - 8:00PM",
+            "Friday": "11:00AM - 8:00PM",
+            "Saturday": "11:00AM - 8:00PM"
+        },
+        "https://api.dineoncampus.com/files/images/9688976f-2c14-4865-9248-6fef4de251cd.png",
+        ["Vegetarian", "Shellfish-free", "Nut-free"]
+    );
+} catch (e) {
+    console.log("PICCOLA ITALIA ERROR")
+    console.log(`${e.message}`);
+}
+
+
 // createRestaurant() (pierceDiningHall)
 let pierceDiningHall;
 try {
@@ -65,7 +91,7 @@ try {
             "Saturday": "10:00AM - 10:00PM"
         },
         "https://www.stevens.edu/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fmviowpldu823%2F41klnCv1DtziHVpmeNc0ga%2Fdfc437bb7c8fa978efd6b1eae344dd09%2FPierce_Dining_Hall__9_.jpg%3Fw%3D640%26h%3D360%26f%3Dcenter%26q%3D80%26fit%3Dfill&w=2400&q=80",
-        ["Vegan", "Dairy-free", "Soy-free", "Shellfish-free", "Nut-free", "Gluten-free"]
+        ["Vegan", "Vegetarian", "Dairy-free", "Soy-free", "Shellfish-free", "Nut-free", "Gluten-free"]
     );
     //console.log(pierceDiningHall);
 } catch (e) {
@@ -96,6 +122,57 @@ try {
     //console.log(yellas);
 } catch (e) {
     console.log("YELLAS ERROR")
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (chicken parm)
+let chickenParm;
+try {
+    chickenParm = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Chicken Parmesan Sub ",
+        " Hand breaded crispy chicken, topped with mozzarella cheese and zesty marinara sauce served on an Italian roll and sesame bun.",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+// createMenuItem() (meatball sub)
+let meatballSub;
+try {
+    meatballSub = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Meatball Sub ",
+        " Classic beef meatballs on a sesame seed italian roll.",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (eggplant parm sub)
+let eggplantParm;
+try {
+    eggplantParm = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Eggplant Parmesan Sub ",
+        " Hand breaded crispy eggplant topped with mozarella and parmesan cheeses and zesty marinara sauce served on a sesame seed italian roll.",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (vegetarian meatball sub)
+let vegMeatball;
+try {
+    vegMeatball = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Vegetarian Meatball Sub ",
+        " Vegetarian meatball sub.",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
     console.log(`${e.message}`);
 }
 

@@ -102,8 +102,8 @@ h2.signup{
 
 /* landing page styling */
 .landingBox{
-    position: fixed;          /* ⬅️ sticks it to the screen */
-    top: calc(var(--navbar-height) + 45px);                /* ⬅️ distance from top */
+    position: fixed;                 
+    top: calc(var(--navbar-height) + 45px);                     
     right: 25px;        
     display:flex;
     flex-direction: column;
