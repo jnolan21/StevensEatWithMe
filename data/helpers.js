@@ -330,32 +330,6 @@ function upTooThree(arr) {
     else return size;
 }
 
-function checkMeetUpTime(meetUpTime){
-    // make sure it's an object
-    if (typeof meetUpTime !== 'object' || meetUpTime === null) {
-        throw new Error('meetUpTime must be object');
-    }
-    // make sure it has the date and time keys
-    const keys = Object.keys(meetUpTime);
-    if (keys.length !== 2 || !keys.includes('Date') || !keys.includes('Time')) {
-        throw new Error('meetUpTime needs Date and Time keys')
-    }
-    let dateStr = meetUpTime['Date'];
-    let timeStr = meetUpTime['Time'];
-    // make sure dateStr and timeStr are both strs
-    if (typeof dateStr !== 'string') throw new Error('meetUpTime[Date] must be str');
-    if (typeof timeStr !== 'string') throw new Error('meetupTime[Time] must be str');
-    // make sure date format is MM/DD/YYY and time format is H:MM{AM/PM}
-    let dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/;
-    let timeRegex = /^(1[0-2]|[1-9]):[0-5]\d(?:AM|PM)$/;
-    if (!dateRegex.test(dateStr)){
-        throw new Error('Date must have format MM/DD/YYYY');
-    }
-    if (!timeRegex.test(timeStr)){
-        throw new Error('Time must have format H:MM{AM/PM}');
-    }
-    return meetUpTime;
-}
 
 
 
@@ -377,6 +351,5 @@ export default {
     calculateRestaurantRating,
     subtractWaitTime,
     checkHoursOfOperation,
-    upTooThree,
-    checkMeetUpTime
+    upTooThree
 };
