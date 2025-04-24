@@ -1,8 +1,25 @@
 
 
-    <h1>I am the dining list!</h1>
 
-    
+    <div id = "restaurantList">
+        <h1> All Dining Options </h1>
+
+        <ol>
+        {{#each restaurantss}}
+        <li>
+            <h2 id = "restName">{{this.name}}</h2>
+            <img src = {{this.imageURL}} class = "restaurant_img" alt = {{this.name}} >            
+            <ul>
+                {{#each menuItems}}
+                <li>{{name}}</li>
+                {{/each}}
+            </ul>
+
+        </li>
+        {{/each}}
+        
+        </ol>
+</div>
 
     <p>i should be viewable by all users (logged in or not)</p>
         
