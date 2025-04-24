@@ -4,7 +4,6 @@ import users from '../data/users.js';
 import restaurants from '../data/restaurants.js';
 import reviews from '../data/reviews.js';
 import menuItems from '../data/menuItems.js';
-import RSVPS from '../data/rsvps.js'
 
 // Command to run seed.js: node ./tasks/seed.js
 
@@ -48,6 +47,32 @@ try {
     console.error(`${e.message}`);
 }
 
+// createRestaurant() (piccola italia)
+let piccolaItalia;
+try {
+    piccolaItalia = await restaurants.createRestaurant(
+        "   Piccola Italia  ",
+        " University Center, 1st Floor ",
+        [],
+        [" Italian Food "],
+        {
+            "Sunday": "11:00AM - 8:00PM",
+            "Monday": "11:00AM - 8:00PM",
+            "Tuesday": "11:00AM - 8:00PM",
+            "Wednesday": "11:00AM - 8:00PM",
+            "Thursday": "11:00AM - 8:00PM",
+            "Friday": "11:00AM - 8:00PM",
+            "Saturday": "11:00AM - 8:00PM"
+        },
+        "https://api.dineoncampus.com/files/images/9688976f-2c14-4865-9248-6fef4de251cd.png",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log("PICCOLA ITALIA ERROR")
+    console.log(`${e.message}`);
+}
+
+
 // createRestaurant() (pierceDiningHall)
 let pierceDiningHall;
 try {
@@ -66,7 +91,7 @@ try {
             "Saturday": "10:00AM - 10:00PM"
         },
         "https://www.stevens.edu/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fmviowpldu823%2F41klnCv1DtziHVpmeNc0ga%2Fdfc437bb7c8fa978efd6b1eae344dd09%2FPierce_Dining_Hall__9_.jpg%3Fw%3D640%26h%3D360%26f%3Dcenter%26q%3D80%26fit%3Dfill&w=2400&q=80",
-        ["Vegan", "Dairy-free", "Soy-free", "Shellfish-free", "Nut-free", "Gluten-free"]
+        ["Vegan", "Vegetarian", "Dairy-free", "Soy-free", "Nut-free", "Gluten-free"]
     );
     //console.log(pierceDiningHall);
 } catch (e) {
@@ -100,6 +125,210 @@ try {
     console.log(`${e.message}`);
 }
 
+
+
+
+//////PICCOLA ITALIA MENU ITEMS////////////////////
+
+// createMenuItem() (chicken parm)
+let chickenParm;
+try {
+    chickenParm = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Chicken Parmesan Sub ",
+        " Hand breaded crispy chicken, topped with mozzarella cheese and zesty marinara sauce served on an Italian roll and sesame bun.",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+// createMenuItem() (meatball sub)
+let meatballSub;
+try {
+    meatballSub = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Meatball Sub ",
+        " Classic beef meatballs on a sesame seed italian roll.",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (eggplant parm sub)
+let eggplantParm;
+try {
+    eggplantParm = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Eggplant Parmesan Sub ",
+        " Hand breaded crispy eggplant topped with mozarella and parmesan cheeses and zesty marinara sauce served on a sesame seed italian roll.",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (vegetarian meatball sub)
+let vegMeatball;
+try {
+    vegMeatball = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Vegetarian Meatball Sub ",
+        " Vegetarian meatball sub.",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (mixed green salad)
+let greenSalad;
+try {
+    greenSalad = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Mixed Green Salad",
+        " Mixed greens, cucumber, carrots.",
+        ["Vegetarian", "Nut-free", "Gluten-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (broccoli cheddar soup)
+let broccSoup;
+try {
+    broccSoup = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Broccoli Cheddar Soup ",
+        " Broccoli Cheddar Soup. ",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (Cheese ravioli)
+let ravioli;
+try {
+    ravioli = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Cheese Ravioli ",
+        " Cheese ravioli in a blush sauce. ",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (baked mac)
+let bakedMac;
+try {
+    bakedMac = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Baked Macaroni and Cheese ",
+        " Baked macaroni and cheese. ",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (flatbread)
+let flatbread;
+try {
+    flatbread = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Margherita Flatbread ",
+        " Fresh mozzarella, plum tomatoes, and fresh basil with balsamic drizzle. ",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (plain pizza)
+let cheesepiz;
+try {
+    cheesepiz = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Cheese Pizza ",
+        " Personal cheese pizza. ",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (pepporoni pizza)
+let peppopiz;
+try {
+    peppopiz = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Pepperoni Pizza ",
+        " Personal pepperoni pizza. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (veggie pizza)
+let vegpiz;
+try {
+    vegpiz = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Veggie Pizza ",
+        " Personal veggie pizza. ",
+        ["Vegetarian", "Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (buffalo chicken pizza)
+let buffpiz;
+try {
+    buffpiz = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Special: Buffalo Chicken Pizza ",
+        " Personal buffalo chicken and ranch pizza. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (choc chip cookie)
+let cookie;
+try {
+    cookie = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Chocolate Chip Cookie ",
+        " Chocolate chip cookie ",
+        ["Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (brownie)
+let brownie;
+try {
+    brownie = await menuItems.createMenuItem(
+        piccolaItalia._id,
+        " Classic Fudge Brownie ",
+        " Classic fudge brownie ",
+        ["Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+
+
+
+//////PIERCE DINING HALL MENU ITEMS////////////////////
+
 // createMenuItem() (menuItem1)
 let menuItem1;
 try {
@@ -109,12 +338,16 @@ try {
         pierceDiningHall._id,
         " Grilled Chicken Cheddar Sandwich ",
         " Grilled chicken, cheddar cheeese, lettuce, tomato, and onion on a whole wheat roll. ",
-        []
+        ["Nut-free"]
     );
-    //console.log(menuItem1);
 } catch (e) {
     console.log(`${e.message}`);
 }
+
+
+//////YELLAS MENU ITEMS////////////////////
+
+
 
 // createMenuItem() (uncleBabe)
 let uncleBabe;
@@ -122,10 +355,9 @@ try {
     uncleBabe = await menuItems.createMenuItem(
         yellas._id,
         " The Uncle Babe ",
-        " Hot Sub : Deluxe Ham, Salami, Fresh Mozzarella, Roasted Peppers ",
-        []
+        " Hot Sub : Deluxe Ham, Salami, Fresh Mozzarella, Roasted Peppers. ",
+        ["Nut-free"]
     );
-    //console.log(uncleBabe);
 } catch (e) {
     console.log(`${e.message}`);
 }
@@ -136,10 +368,9 @@ try {
     fatAngelo = await menuItems.createMenuItem(
         yellas._id,
         " The Fat Angelo ",
-        " Hot Sub : Sliced Steak, Roasted Potatoes, Peppers & Onions, American Cheese, Sub Roll ",
-        []
+        " Hot Sub : Sliced Steak, Roasted Potatoes, Peppers & Onions, American Cheese, Sub Roll. ",
+        ["Nut-free"]
     );
-    //console.log(menuItem1);
 } catch (e) {
     console.log(`${e.message}`);
 }
@@ -150,13 +381,133 @@ try {
     bennyBrown = await menuItems.createMenuItem(
         yellas._id,
         " The Benny Brown ",
-        " Hot Sub : Sliced Steak, Sauteed Onions, Fresh Mozzarella, Brown Gravy, Sub Roll ",
-        []
+        " Hot Sub : Sliced Steak, Sauteed Onions, Fresh Mozzarella, Brown Gravy, Sesame Seed Sub Roll. ",
+        ["Nut-free"]
     );
-    //console.log(menuItem1);
 } catch (e) {
     console.log(`${e.message}`);
 }
+
+// createMenuItem() (CHIPOTLE CHIX CHEESESTEAK)
+let chipotleCheeseSteak;
+try {
+    chipotleCheeseSteak = await menuItems.createMenuItem(
+        yellas._id,
+        " Chipotle Chicken Cheesesteak ",
+        " Chicken breast, grilled onions, pepper jack cheese, arugula, tomato, chipotle mayo on a sesame seed roll. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (gpa joe)
+let gpaJoe;
+try {
+    gpaJoe = await menuItems.createMenuItem(
+        yellas._id,
+        " The Grandpa Joe Steak ",
+        " Sliced steak, sauteed onions, provolone cheese, and hot banana peppers on a sesame seed roll. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (lombardi)
+let lombardi;
+try {
+    lombardi = await menuItems.createMenuItem(
+        yellas._id,
+        " The Lombardi ",
+        " Crispy chicken breast, fresh mozzarella, roasted peppers, sundried tomato pesto, sesame seed sub roll. ",
+        []
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (eggplan milanese)
+let eggMil;
+try {
+    eggMil = await menuItems.createMenuItem(
+        yellas._id,
+        " Eggplant Milanese ",
+        " Crispy fried eggplant, provolone cheese, arugula, roasted red peppers, and balsamic glazed on a sesame seeded italian hero. ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (yellas sub)
+let yellassub;
+try {
+    yellassub = await menuItems.createMenuItem(
+        yellas._id,
+        " The Yellas Sub ",
+        " Prosciuttini, hot ham, salami, provolone. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (torpedo sub)
+let torpedo;
+try {
+    torpedo = await menuItems.createMenuItem(
+        yellas._id,
+        " The Torpedo Sub ",
+        " Salami, fresh mozzarella, sundried tomato pesto. ",
+        []
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (nuclear sub)
+let nuclear;
+try {
+    nuclear = await menuItems.createMenuItem(
+        yellas._id,
+        " The Nuclear Sub ",
+        " Hot ham, pepper jack cheese, hot banana peppers. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (talking turkey sub)
+let turkeysub;
+try {
+    turkeysub = await menuItems.createMenuItem(
+        yellas._id,
+        " The Talking Turkey Sub ",
+        " Turkey, pepper jack cheese, chipotle mayo. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( turkey club sub)
+let turkeyClub;
+try {
+    turkeyClub = await menuItems.createMenuItem(
+        yellas._id,
+        " The Turkey Club Sub ",
+        " Turkey, swiss cheese, bacon, mayo. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+
+
+
 
 // getAllMenuItems() (yellas)
 try {
@@ -165,6 +516,8 @@ try {
 } catch (e) {
     console.log(`${e.message}`);
 }
+
+
 
 // getMenuItemById() (The Fat Angelo)
 try {
@@ -339,13 +692,6 @@ try {
     console.error(`${e.message}`);
 } */
 
-// addFriend() - add user4 to user1's friend list
-try {
-    let user1FriendsList = await users.addFriend(user1._id, user4._id);
-    //console.log(user1FriendsList);
-} catch (e) {
-    console.error(`${e.message}`);
-}
 
 // addFriend() - add user2 to user1's friend list
 try {
@@ -355,65 +701,22 @@ try {
     console.error(`${e.message}`);
 }
 
-// addFriend() - add user3 to user1's friend list
+/* addFriend() - Error user2 is already in user1's friend list
 try {
-    let user1FriendsList = await users.addFriend(user1._id, user3._id);
+    let user1FriendsList = await users.addFriend(user1._id, user2._id);
+    console.log(user1FriendsList);
+} catch (e) {
+    console.error(`${e.message}`);
+}
+*/
+
+// removeFriend() - remove user2 from user1's friend list
+try {
+    let user1FriendsList = await users.removeFriend(user1._id, user2._id);
     //console.log(user1FriendsList);
 } catch (e) {
     console.error(`${e.message}`);
 }
-
-// addFriend() - add user1 to user2's friend list
-try {
-    let user1FriendsList = await users.addFriend(user2._id, user1._id);
-    //console.log(user1FriendsList);
-} catch (e) {
-    console.error(`${e.message}`);
-}
-
-// addFriend() - add user1 to user3's friend list
-try {
-    let user1FriendsList = await users.addFriend(user3._id, user1._id);
-    //console.log(user1FriendsList);
-} catch (e) {
-    console.error(`${e.message}`);
-}
-
-// createRSVP() - RSVP1 for user1
-let RSVP1;
-try {
-    RSVP1 = await RSVPS.createRsvp(
-        "Fun freshman meetup!",
-        {date: '04/18/2025', time: '5:00PM'},
-        pierceDiningHall._id,
-        user1._id
-    );
-    //console.log(RSVP1);
-} catch (e) {
-    console.log(e.message);
-}
-
-// createRSVP() - RSVP2 for user1
-let RSVP2;
-try {
-    RSVP1 = await RSVPS.createRsvp(
-        "CS majors assemble.",
-        {date: '04/19/2025', time: '8:00PM'},
-        yellas._id,
-        user1._id
-    );
-    //console.log(RSVP2);
-} catch (e) {
-    console.log(e.message);
-}
-
-/* getAllPeopleFollowingThisUser() - get all the users following user1
-try {
-    let followingUser1 = await users.getAllPeopleFollowingThisUser(user1._id);
-    //console.log(followingUser4);
-} catch (e) {
-    console.error(`${e.message}`);
-} */
 
 
 
