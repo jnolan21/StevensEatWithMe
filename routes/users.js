@@ -80,8 +80,8 @@ router
     try {
       // Check if a user already exists with the given email or username
       for (let i = 0; i < allUsers.length; i++) {
-        if (user.email === allUsers[i].email) throw new Error(`User with email '${user.email}' already exists!`);
-        if (user.username === allUsers[i].username) throw new Error(`User with username '${user.username}' already exists!`);
+        if (user.email.toLowerCase() === allUsers[i].email.toLowerCase()) throw new Error(`User with email '${user.email}' already exists!`);
+        if (user.username.toLowerCase() === allUsers[i].username.toLowerCase()) throw new Error(`User with username '${user.username}' already exists!`);
       }
     } catch (e) {
       errors.push(e);
@@ -160,15 +160,17 @@ router
         // Compare the user's hashed password
         let comparePasswords = await bcrypt.compare(password, allUsers[i].password);
         // Render user's profile page
-        if (email === allUsers[i].email && comparePasswords) {
+        if (email.toLowerCase() === allUsers[i].email.toLowerCase() && comparePasswords) {
           // ** Make sure the user is verified before they're allowed to log in! **
           if (allUsers[i].isVerified) {
-            //res.render('users/profile', {title: "EatWithMe Profile", user: allUsers[i]});
             // Store the user's information in the session
             req.session.user = {
               _id: allUsers[i]._id.toString(),
+              firstName: allUsers[i].firstName,
+              lastName: allUsers[i].lastName,
               username: allUsers[i].username,
-              email: allUsers[i].email
+              email: allUsers[i].email,
+              isAdmin: allUsers[i].isAdmin || false
             }
             res.redirect(`/profile`); // Redirect the user to the profile route
             return;

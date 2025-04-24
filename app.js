@@ -26,7 +26,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(
     session({
         name: "AuthCookie", // Name of the session ID cookie
-        secret: process.env.SESSION_SECRET || "some secret string!",
+        secret: "some secret string!",
         resave: false,
         saveUninitialized: true,
         cookie: {maxAge: 1000 * 60 * 60 * 1} // The session expires after 1 hour
