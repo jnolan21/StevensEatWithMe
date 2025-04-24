@@ -22,14 +22,14 @@ const createUser = async (
     username = helper.checkString(username, 'username');
     // Check if a user already exists with the given email or username
     for (let i = 0; i < allUsers.length; i++) {
-        if (email === allUsers[i].email) throw new Error(`User with email '${email}' already exists!`);
-        if (username === allUsers[i].username) throw new Error(`User with username '${username}' already exists!`);
+        if (email.toLowerCase() === allUsers[i].email.toLowerCase()) throw new Error(`User with email '${email}' already exists!`);
+        if (username.toLowerCase() === allUsers[i].username.toLowerCase()) throw new Error(`User with username '${username}' already exists!`);
     }
     password = helper.checkPassword(password);
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     // Create an email verification token for this user
-    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const token = crypto.randomBytes(32).toString('hex');
     // Create a new user object to insert into mongodb
     let newUser = {
         firstName: firstName,
@@ -41,7 +41,10 @@ const createUser = async (
         RSVP: [],
         friends: [],
         isVerified: false,
-        verificationToken: verificationToken,
+        verificationToken: {
+            _id: new ObjectId(),
+            token: token
+        },
         isAdmin: false
     };
     const userCollection = await users();
@@ -69,8 +72,8 @@ const createVerifiedUser = async (
     username = helper.checkString(username, 'username');
     // Check if a user already exists with the given email or username
     for (let i = 0; i < allUsers.length; i++) {
-        if (email === allUsers[i].email) throw new Error(`User with email '${email}' already exists!`);
-        if (username === allUsers[i].username) throw new Error(`User with username '${username}' already exists!`);
+        if (email.toLowerCase() === allUsers[i].email.toLowerCase()) throw new Error(`User with email '${email}' already exists!`);
+        if (username.toLowerCase() === allUsers[i].username.toLowerCase()) throw new Error(`User with username '${username}' already exists!`);
     }
     password = helper.checkPassword(password);
     // Hash the password
@@ -87,7 +90,7 @@ const createVerifiedUser = async (
         RSVP: [],
         friends: [],
         isVerified: true,
-        verificationToken: "",
+        verificationToken: null,
         isAdmin: false
     };
     const userCollection = await users();
@@ -116,8 +119,8 @@ const createAdminUser = async (
     username = helper.checkString(username, 'username');
     // Check if a user already exists with the given email or username
     for (let i = 0; i < allUsers.length; i++) {
-        if (email === allUsers[i].email) throw new Error(`User with email '${email}' already exists!`);
-        if (username === allUsers[i].username) throw new Error(`User with username '${username}' already exists!`);
+        if (email.toLowerCase() === allUsers[i].email.toLowerCase()) throw new Error(`User with email '${email}' already exists!`);
+        if (username.toLowerCase() === allUsers[i].username.toLowerCase()) throw new Error(`User with username '${username}' already exists!`);
     }
     password = helper.checkPassword(password);
     // Hash the password
@@ -134,7 +137,7 @@ const createAdminUser = async (
         RSVP: [],
         friends: [],
         isVerified: true,
-        verificationToken: "",
+        verificationToken: null,
         isAdmin: true
     };
     const userCollection = await users();
@@ -168,13 +171,13 @@ const getUserById = async (id) => {
 
 
 // Get a user by their verification token
-const getUserByVerificationToken = async (token) => {
+const getUserByVerificationToken = async (tokenId) => {
     // Validate id
-    token = helper.checkString(token, 'verification token');
+    tokenId = helper.checkId(tokenId);
     // Get the user from mongodb
     const userCollection = await users();
-    const user = await userCollection.findOne({verificationToken: token});
-    if (!user) throw new Error(`User not found with verification token: ${token}!`);
+    const user = await userCollection.findOne({"verificationToken._id": new ObjectId(tokenId)});
+    if (!user) throw new Error(`User not found with verification token id: ${tokenId}!`);
     // Convert the user _id to a string before returning the user object
     user._id = user._id.toString();
     return user;
@@ -219,8 +222,7 @@ const verifyUserSignup = async (id) => {
     // Mark user as verified and delete their verification token
     const updatedUser = await userCollection.findOneAndUpdate(
         {_id: new ObjectId(id)},
-        {$set: {isVerified: true}},
-        {$set: {verificationToken: ""}}
+        {$set: {isVerified: true, verificationToken: null}}
     );
     // ******* DOUBLE CHECK THIS *******
     if (!updatedUser) throw new Error(`User verification failed, couldn't find user with id '${id}'!`);

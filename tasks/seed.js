@@ -658,41 +658,6 @@ for (const data of menuItemReviewData) {
 }
 
 
-/*
-// deleteReview() - First review about Fat Angelo
-try {
-    let deletedReview = await reviews.deleteReview(review1._id);
-    console.log(deletedReview);
-} catch (e) {
-    console.log(e.message);
-}
-try {
-    let menuItem = await menuItems.getMenuItemById(fatAngelo._id.toString());
-    let deletedReview = await reviews.deleteReview(menuItem.reviews[0]);
-    console.log(deletedReview);
-} catch (e) {
-    console.log(e.message);
-} */
-
-
-
-/* createUser() - Error: user already exists with this email
-try {
-    let user = await users.createUser("  Scrouge ", " McDuck ", " thedon@stevens.edu", "duckman1 ", " i_love_gold ");
-    console.log(user);
-} catch (e) {
-    console.error(`${e.message}`);
-} */
-
-/* removeUser(user1)
-try {
-    let user = await users.removeUser(user1._id);
-    console.log(user);
-} catch (e) {
-    console.error(`${e.message}`);
-} */
-
-
 // addFriend() - add user2 to user1's friend list
 try {
     let user1FriendsList = await users.addFriend(user1._id, user2._id);

@@ -167,7 +167,7 @@ const sendVerificationEmail = async (id) => {
     let token = user.verificationToken;
     let email = user.email;
 
-    const url = `http://localhost:3000/users/verifyEmail?token=${token}`;
+    const url = `http://localhost:3000/users/verifyEmail?token=${token._id}`;
     const emailInformation = {
         from: process.env.VERIFICATION_EMAIL,
         to: email,

@@ -1,6 +1,7 @@
 // Here is where we will list all of our routes that index.js routes to
 import userRoutes from './users.js';
 import setRoutes from './set.js';
+import profileRoutes from './profile.js';
 import restaurants from '../data/restaurants.js';
 import helpers from '../data/helpers.js';
 
@@ -12,6 +13,7 @@ const constructorMethod = (app) => {
   app.use('/users', userRoutes);
   app.use('/diningList', setRoutes);
   app.use('/meetupPage', setRoutes);
+  app.use('/profile', profileRoutes);
   app.use('/', setRoutes);
   app.use('/public', staticDir('public'));
   app.use('*', async (req, res) => {
