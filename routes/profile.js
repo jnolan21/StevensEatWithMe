@@ -10,7 +10,6 @@ router
   .route('/')
   .get(async (req, res) => {
     // Verify that the user is logged in
-    console.log(req.session.user) // TEST
     if (!req.session.user) {
         // 403 = forbidden page
         return res.status(403).render('users/login', {

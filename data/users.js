@@ -19,7 +19,7 @@ const createUser = async (
     // Verify that another user does not exist with the same email
     email = helper.checkEmail(email);
     let allUsers = await getAllUsers();
-    username = helper.checkString(username, 'username');
+    username = helper.checkUsername(username);
     // Check if a user already exists with the given email or username
     for (let i = 0; i < allUsers.length; i++) {
         if (email.toLowerCase() === allUsers[i].email.toLowerCase()) throw new Error(`User with email '${email}' already exists!`);
@@ -69,7 +69,7 @@ const createVerifiedUser = async (
     // Verify that another user does not exist with the same email
     email = helper.checkEmail(email);
     let allUsers = await getAllUsers();
-    username = helper.checkString(username, 'username');
+    username = helper.checkUsername(username);
     // Check if a user already exists with the given email or username
     for (let i = 0; i < allUsers.length; i++) {
         if (email.toLowerCase() === allUsers[i].email.toLowerCase()) throw new Error(`User with email '${email}' already exists!`);
@@ -116,7 +116,7 @@ const createAdminUser = async (
     // Verify that another user does not exist with the same email
     email = helper.checkEmail(email);
     let allUsers = await getAllUsers();
-    username = helper.checkString(username, 'username');
+    username = helper.checkUsername(username);
     // Check if a user already exists with the given email or username
     for (let i = 0; i < allUsers.length; i++) {
         if (email.toLowerCase() === allUsers[i].email.toLowerCase()) throw new Error(`User with email '${email}' already exists!`);
@@ -198,10 +198,10 @@ const removeUser = async (id) => {
 }
 
 
-// Use a PUT request to update a user's username
+/* Use a PUT request to update a user's username
 const updateUsername = async (id, username) => {
     id = helper.checkId(id);
-    username = helper.checkString(username, 'username');
+    username = helper.checkUsername(username);
     const userCollection = await users();
     const updatedUser = await userCollection.findOneAndUpdate(
         {_id: new ObjectId(id)},
@@ -213,6 +213,7 @@ const updateUsername = async (id, username) => {
     const newUserInfo = await userCollection.findOne({_id: new ObjectId(id)});
     return newUserInfo;
 }
+*/
 
 
 // Mark a user as verified once they verify their email
@@ -345,7 +346,7 @@ export default {
     getUserById,
     getUserByVerificationToken,
     removeUser,
-    updateUsername,
+    //updateUsername,
     verifyUserSignup,
     addFriend,
     removeFriend,

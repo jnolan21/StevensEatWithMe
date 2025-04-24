@@ -18,6 +18,22 @@ const rewriteUnsupportedBrowserMethods = (req, res, next) => {
     next();
 }
 
+// Set up the handlebars instance
+const handlebarsInstance = exphbs.create({
+  defaultLayout: 'main',
+  helpers: {
+    asJSON: (obj, spacing) => {
+      if (typeof spacing === 'number')
+        return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
+
+      return new Handlebars.SafeString(JSON.stringify(obj));
+    },
+
+    // This just means that our handlebars partials are located in views/partials
+    partialsDir: ['views/partials/']
+  }
+});
+
 app.use('/public', express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -36,7 +52,7 @@ app.use(
 
 app.use(rewriteUnsupportedBrowserMethods);
 
-app.engine('handlebars', exphbs.engine({defaultLayout: 'main'}));
+app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');
 
 configRoutes(app);
