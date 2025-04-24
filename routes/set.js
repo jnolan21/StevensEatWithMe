@@ -26,10 +26,12 @@ router.route('/').get(async (req, res) => {
     return res.status(400).json({error: e.message});
   }
 });
-
 router.route('/diningList').get(async (req, res) => {
   try {
-    res.render('diningList/diningList', {title: "EatWithMe Dining List"})  } 
+    const restaurantss = await restaurants.ratingFilter();
+    res.render('diningList/diningList', 
+    {title: "EatWithMe Dining List",
+  restaurantss: restaurantss})  } 
   catch (e) {
     return res.status(400).json({error: e.message});
   }
@@ -43,6 +45,7 @@ router.route('/meetupPage').get(async (req, res) => {
     return res.status(400).json({error: e.message});
   }
 });
+
 router.route('/diningList/:id').get(async (req, res) => {
 
 });
