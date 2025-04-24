@@ -1,6 +1,8 @@
 import {Router} from 'express';
 const router = Router();
 import restaurants from '../data/restaurants.js';
+import rsvps from '../data/rsvps.js'
+import users from '../data/users.js'
 import helpers from '../data/helpers.js';
 
 router.route('/').get(async (req, res) => {
@@ -39,7 +41,9 @@ router.route('/diningList').get(async (req, res) => {
 });
 router.route('/meetupPage').get(async (req, res) => {
   try{
-    res.render('meetupPage/meetupPage', {title: "EatWithMe Meetup Page"})
+    let allrsvps = await rsvps.getAllRsvps();
+    allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
+    res.render('meetupPage/meetupPage', {title: "EatWithMe Meetup Page", allrsvps: allrsvps})
   }
   catch (e) {
     return res.status(400).json({error: e.message});

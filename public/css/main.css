@@ -194,3 +194,40 @@ h2.signup{
   #restName{
     color: var(--stevens-red);
   }
+
+
+  /*styling for rsvp boxes on meetup page*/
+  .rsvpBox{
+    position: relative;
+    color: black;
+    border: 2px solid var(--stevens-red);
+    border-radius: 10px;
+    padding-left: 10px;
+    margin-bottom: 20px;
+    max-width: 400px;
+    box-shadow:12px 6px 30px rgba(0, 0, 0, 0.1); 
+    background-color: var(--stevens-light);
+  }
+
+  .rsvpButton{
+    background-color: var(--stevens-red);
+    border-radius: 8px;
+    width: 70px;
+    font-size: small;
+    color: white;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+  }
+  .followButton{
+    background-color: var(--stevens-red);
+    border-radius: 8px;
+    font-size: x-small;
+    color:white;
+    width: 55px;
+
+  }
+
+  .comments{
+    margin-bottom: 50px;
+  }
