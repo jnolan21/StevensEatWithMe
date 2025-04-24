@@ -22,7 +22,7 @@ router
       }
       // Update the user signing up to mark them as verified!
       signupUser = await userData.verifyUserSignup(signupUser._id);
-      res.render('users/login', {title: "EatWithMe login"});
+      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript'});
       return;
     } catch (e) {
       res.status(400).json({error: e});
@@ -36,7 +36,7 @@ router
   .get(async (req, res) => {
     // Render the signup page
     try {
-      res.render('users/signup', {title: "EatWithMe signup"});
+      res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript'});
     } catch (e) {
       return res.status(400).json({error: e.message});
     }
@@ -61,19 +61,38 @@ router
     } catch (e) {
       errors.push(e);
     }
-    let allUsers;
     try {
-      allUsers = await userData.getAllUsers();
-    } catch (e) {
-      errors.push(e);
-    }
-    try {
-      user.username = helper.checkString(user.username, 'username');
+      user.username = helper.checkUsername(user.username);
     } catch (e) {
       errors.push(e);
     }
     try {
       user.password = helper.checkPassword(user.password);
+    } catch (e) {
+      errors.push(e);
+    }
+    try {
+      user.passwordConfirm = helper.checkPassword(user.passwordConfirm);
+    } catch (e) {
+      errors.push(e);
+    }
+    // Make sure password === passwordConfirm
+    if (user.password !== user.passwordConfirm) errors.push("Password and confirm password must match.");
+    // If there are errors, reload the signup page and display the errors
+    if (errors.length > 0) {
+      res.render('users/signup', {
+        title: "EatWithMe signup",
+        user: user,
+        errors: errors,
+        hasErrors: true,
+        partial: 'signupScript'
+      });
+      return;
+    }
+    // Get all users
+    let allUsers;
+    try {
+      allUsers = await userData.getAllUsers();
     } catch (e) {
       errors.push(e);
     }
@@ -86,16 +105,6 @@ router
     } catch (e) {
       errors.push(e);
     }
-    // If there are errors, reload the signup page and display the errors
-    if (errors.length > 0) {
-      res.render('users/signup', {
-        title: "EatWithMe signup",
-        user: user,
-        errors: errors,
-        hasErrors: true
-      });
-      return;
-    }
     try {
       // Create the new user
       let newUser = await userData.createUser(
@@ -107,7 +116,7 @@ router
       )
       // Send the verification email
       await helper.sendVerificationEmail(newUser._id);
-      res.render('users/login', {title: "EatWithMe login"});
+      res.render('users/login', {title: "EatWithMe login", partial: 'signupScript'});
       // Redirect the '/verify' route and wait for user to click the email
       //res.render('users/verify', {email: newUser.email});
     } catch (e) {
@@ -123,7 +132,7 @@ router
   .get(async (req, res) => {
     // Render the login page
     try {
-      res.render('users/login', {title: "EatWithMe login"});
+      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript'});
     } catch (e) {
       return res.status(400).json({error: e.message});
     }
@@ -150,6 +159,7 @@ router
         user: {email},
         errors: errors,
         hasErrors: true,
+        partial: 'loginScript'
       });
       return;
     }
@@ -181,7 +191,8 @@ router
               title: "EatWithMe login",
               user: {email},
               hasErrors: true,
-              errors: errors
+              errors: errors,
+              partial: 'loginScript'
             });
             return;
           }
@@ -209,80 +220,6 @@ router
 
 
 
-
-
-
-router
-  .route('/')
-  .get(async (req, res) => {
-    // Get all users
-    let user = req.body;
-    let errors = [];
-    try {
-      let userList = await userData.getAllUsers();
-    } catch (e) {
-      res.status(500).json({error: e.message});
-    }
-    // TODO
-  });
-
-
-
-router
-  .route('/:id') //gets profile page 
-  .get(async (req, res) => {
-    // GET /users/:id
-    try {
-      req.params.id = helper.checkId(req.params.id, 'GET /users/:id');
-    } catch (e) {
-      return res.status(400).json({error: e.message});
-    }
-    try {
-      const user = await userData.getUserById(req.params.id);
-      // Render the user's profile page
-      res.render('users/profile', {title: "EatWithMe Profile", user: user});
-    } catch (e) {
-      return res.status(404).json({error: e.message});
-    }
-  })
-  .put(async (req, res) => {
-    // Allow user to change their username
-    let info = req.body;
-    try {
-      req.params.id = helper.checkId(req.params.id, 'PUT /users/:id');
-      info.username = helper.checkString(info.username, 'username', 'PUT /users/:id');
-    } catch (e) {
-      return res.status(400).json({error: e.message});
-    }
-    try {
-      const user = await userData.updateUsername(
-        req.params.id,
-        info.username
-      );
-      return res.status(200).json(user);
-    } catch (e) {
-      return res.status(404).json({error: e.message});
-    }
-  })
-  .patch(async (req, res) =>{
-    // Allow user to change their username
-    //TODO
-  })
-  .delete(async (req, res) => {
-    // Delete the user with the given id
-    try {
-      req.params.id = helper.checkId(req.params.id, 'DELETE /users/:id');
-    } catch (e) {
-      return res.status(400).json({error: e.message});
-    }
-    // Attemp to delete the user
-    try {
-      let user = await userData.removeUser(req.params.id);
-      return res.json(user);
-    } catch (e) {
-      return res.status(404).send({error: e.message});
-    }
-  })
 
 
 export default router;

@@ -9,50 +9,63 @@ import users from './users.js'
 
 // Verifies that a string input is non-empty string, and returns the trimmed string
 function checkString(str, str_name) {
-    if (str === undefined) throw new Error(`${str_name} cannot be empty!`);
-    if (typeof str !== "string") throw new Error(`${str_name} must be a string!`);
-    if (str.trim().length === 0) throw new Error(`${str_name} cannot be just spaces!`);
+    if (str === undefined) throw new Error(`${str_name} cannot be empty.`);
+    if (typeof str !== "string") throw new Error(`${str_name} must be a string.`);
+    if (str.trim().length === 0) throw new Error(`${str_name} cannot be just spaces.`);
     return str.trim();
 }
 
 // Verifies that a mongodb string id is a non-empty, valid ObjectId() and returns the trimed version of it
 function checkId(id) {
-    if (id === undefined) throw new Error(`Id cannot be empty!`);
-    if (typeof id !== 'string') throw new Error(`Id must be a string!`);
+    if (id === undefined) throw new Error(`Id cannot be empty.`);
+    if (typeof id !== 'string') throw new Error(`Id must be a string.`);
     id = id.trim();
-    if (id.length === 0) throw new Error(`Id cannot be an empty string!`);
-    if (!ObjectId.isValid(id)) throw new Error(`Invalid object ID!`);
+    if (id.length === 0) throw new Error(`Id cannot be an empty string.`);
+    if (!ObjectId.isValid(id)) throw new Error(`Invalid object ID.`);
     return id;
 }
 
 // Verifies that 'name' is a string with no numbers and returns the trimed version of it
 function checkName(name, str_name) {
-    if (name === undefined) throw new Error(`${str_name} cannot be empty!`);
-    if (typeof name !== 'string') throw new Error(`${str_name} must be a string!`);
+    if (name === undefined) throw new Error(`${str_name} cannot be empty.`);
+    if (typeof name !== 'string') throw new Error(`${str_name} must be a string.`);
     name = name.trim();
-    if (name.length === 0) throw new Error(`${str_name} cannot be an empty string!`);
-    for (let i = 0; i < name.length; i++) if (name[i] !== ' ' && !isNaN(name[i])) throw new Error(`Error in ${func_name}: ${str_name} cannot contain numbers!`);
+    if (name.length === 0) throw new Error(`${str_name} cannot be an empty string.`);
+    for (let i = 0; i < name.length; i++) if (name[i] !== ' ' && !isNaN(name[i])) throw new Error(`Error in ${func_name}: ${str_name} cannot contain numbers.`);
     return name;
+}
+
+// Verifies the username provided is valid
+function checkUsername(username) {
+    if (username === undefined) throw new Error(`Username cannot be empty.`);
+    if (typeof username !== 'string') throw new Error(`Username must be a string.`);
+    username = username.trim();
+    if (username.length === 0) throw new Error(`Username cannot be an empty string.`);
+    for (let i = 0; i < username.length; i++) {
+        if (!('a' <= username[i] && username[i] <= 'z') && !('A' <= username[i] && username[i] <= 'Z') && !('0' <= username[i] && username[i] <= '9'))
+            throw new Error(`Username can only contain letters and numbers.`);
+    }
+    return username;
 }
 
 // Verifies that an email is of the form "***@stevens.edu"
 function checkEmail(email) {
-    if (email === undefined) throw new Error('Email cannot be blank!');
-    if (typeof email !== 'string') throw new Error('Email must be a string!');
+    if (email === undefined) throw new Error('Email cannot be blank.');
+    if (typeof email !== 'string') throw new Error('Email must be a string.');
     email = email.trim();
-    if (email.length === 0) throw new Error('Email cannot be an empty string!');
-    if (email[0] === '@' || email.length < 12) throw new Error('Invalid email!');
-    if (email.substring((email.length - 12)) !== '@stevens.edu') throw new Error('Email must be a Stevens email (@stevens.edu)!');
+    if (email.length === 0) throw new Error('Email cannot be an empty string.');
+    if (email[0] === '@' || email.length < 12) throw new Error('Invalid email.');
+    if (email.substring((email.length - 12)) !== '@stevens.edu') throw new Error('Email must be a Stevens email (@stevens.edu).');
     return email.toLowerCase();
 }
 
 // Verifies that a password is valid: must have at least 12 characters, one uppercase letter, one lowercase letter, one number, and one symbol
 function checkPassword(password) {
-    if (password === undefined) throw new Error('Password cannot be empty!');
-    if (typeof password !== 'string') throw new Error('Password must be a string!');
+    if (password === undefined) throw new Error('Password cannot be empty.');
+    if (typeof password !== 'string') throw new Error('Password must be a string.');
     password = password.trim()
-    if (password.length === 0) throw new Error('Password cannot be an empty string!');
-    if (password.length < 12) throw new Error('Password must have at least 12 characters!');
+    if (password.length === 0) throw new Error('Password cannot be an empty string.');
+    if (password.length < 12) throw new Error('Password must have at least 12 characters.');
     let uppercaseFound = false;
     let lowercaseFound = false;
     let numberFound = false;
@@ -63,15 +76,15 @@ function checkPassword(password) {
         if ('A' <= password[i] && password[i] <= 'Z') uppercaseFound = true;
         if (/[^a-zA-Z0-9\s]/.test(password[i])) symbolFound = true;
     }
-    if (!uppercaseFound || !lowercaseFound || !numberFound || !symbolFound) throw new Error('Error: Password must contain at least one lowercase letter, uppercase letter, number, and symbol!');
+    if (!uppercaseFound || !lowercaseFound || !numberFound || !symbolFound) throw new Error('Password must contain at least one lowercase letter, uppercase letter, number, and symbol.');
     return password;
 }
 
 // Verify review rating - should be a number 0 - 5
 function checkReviewRating(rating) {
-    if (rating === undefined) throw new Error('Rating cannot be empty!');
-    if (typeof rating !== 'number') throw new Error('Rating must be a number!');
-    if (rating !== 0 && rating !== 1 && rating !== 2 && rating !== 3 && rating !== 4 && rating !== 5) throw new Error('Rating must be a whole number 0 - 5!');
+    if (rating === undefined) throw new Error('Rating cannot be empty.');
+    if (typeof rating !== 'number') throw new Error('Rating must be a number.');
+    if (rating !== 0 && rating !== 1 && rating !== 2 && rating !== 3 && rating !== 4 && rating !== 5) throw new Error('Rating must be a whole number 0 - 5.');
 }
 
 // Verifies the wait time - format: "0h 00min"
@@ -141,13 +154,13 @@ function checkReviewRating(rating) {
 // }
 
 function checkWaitTime(time) {
-    if (!time || typeof time !== 'string') throw 'Error: Must be a valid time input entered'
+    if (!time || typeof time !== 'string') throw 'Must be a valid time input entered.'
     time = time.trim();
-    if (time === "") throw "Error: Time Cannot be Spaces or Empty";
+    if (time === "") throw "Time Cannot be Spaces or Empty.";
 
 
     const format = /^(\d+)h (\d{1,2})min$/;
-    if(!format.test(time)) throw "Error: Time must be in the format #h #min";
+    if(!format.test(time)) throw "Time must be in the format #h #min";
 
     const [hour, minutes] = time.split(" ");
 
@@ -155,7 +168,7 @@ function checkWaitTime(time) {
     const m = parseInt(minutes);
 
     
-    if (m < 0 || m > 59 || h < 0) throw "Error: Hours must be greater than 0 and minutes must be between 0 and 59";
+    if (m < 0 || m > 59 || h < 0) throw "Hours must be greater than 0 and minutes must be between 0 and 59.";
 
     return time;
 }
@@ -187,26 +200,24 @@ const sendVerificationEmail = async (id) => {
     // Send the verification email
     try {
         await sgMail.send(emailInformation);
-        //await sender.sendMail(emailInformation);
     } catch (e) {
-        //console.log("Error sending verification email!");
-        throw new Error('Error sending verification email!');
+        throw new Error('Error sending verification email.');
     }
 }
 
 // Verifies an array of id's
 function checkIdArray(array, arr_name) {
-    if (array === undefined) throw new Error(`${arr_name} input cannot be empty!`);
-    if (!Array.isArray(array)) throw new Error(`${arr_name} must be an array!`);
+    if (array === undefined) throw new Error(`${arr_name} input cannot be empty.`);
+    if (!Array.isArray(array)) throw new Error(`${arr_name} must be an array.`);
     for (let i = 0; i < array.length; i++) {
-        if (!(typeof array[i] === 'string')) throw new Error(`${arr_name} can only contain string elements!`);
+        if (!(typeof array[i] === 'string')) throw new Error(`${arr_name} can only contain string elements.`);
         // Check each string - make sure its a valid id
         array[i] = array[i].trim();
         try {
             array[i] = checkId(array[i]);
         } catch (e) {
             // If array[i] not an id, throw error
-            throw new Error(`${arr_name} can only contain valid ObjectIds!`);
+            throw new Error(`${arr_name} can only contain valid ObjectIds.`);
         }
     }
     return array;
@@ -214,9 +225,9 @@ function checkIdArray(array, arr_name) {
 
 // Verifies a restaurant's overall rating
 function checkOverallRating(rating) {
-    if (rating === undefined) throw new Error("'rating' for cannot be empty");
-    if (typeof rating !== "number") throw new Error("'rating' for must be a number 0-5");
-    if (rating < 0 || rating > 5) throw new Error("'rating' must be a number 0-5");
+    if (rating === undefined) throw new Error("Rating cannot be empty.");
+    if (typeof rating !== "number") throw new Error("Rating must be a number 0-5");
+    if (rating < 0 || rating > 5) throw new Error("Rating must be a number 0-5");
     // If rating is a non-integer number, round to one decimal
    rating = Math.floor((rating * 10)) / 10;
    return rating;
@@ -224,14 +235,14 @@ function checkOverallRating(rating) {
 
 // Verifies an array of strings
 function checkStringArray(arr, arr_name) {
-    if (arr === undefined) throw new Error(`${arr_name} input cannot be empty!`);
-    if (!Array.isArray(arr)) throw new Error(`${arr_name} must be an array!`);
+    if (arr === undefined) throw new Error(`${arr_name} input cannot be empty.`);
+    if (!Array.isArray(arr)) throw new Error(`${arr_name} must be an array.`);
     for (let i = 0; i < arr.length; i++) {
         // Call 'checkString()' on each element
         try {
             arr[i] = checkString(arr[i]);
         } catch (e) {
-            throw new Error(`${arr_name} must be an array of string!`);
+            throw new Error(`${arr_name} must be an array of string.`);
         }
     }
     return arr;
@@ -239,7 +250,7 @@ function checkStringArray(arr, arr_name) {
 
 //Checks hours of operation for a full thing
 function checkHoursOfOperation(ho) {
-    if (typeof ho !== 'object' || Array.isArray(ho)) throw new Error ("Hours of Operation Must be an object!");
+    if (typeof ho !== 'object' || Array.isArray(ho)) throw new Error ("Hours of Operation Must be an object.");
     const days = Object.keys(ho);
     const times = Object.values(ho);
     const validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -254,14 +265,14 @@ function checkHoursOfOperation(ho) {
             throw new Error("Time must be in the form HH:MM AM/PM");
         }
     });
-  }
+}
 
-  function checkHours(time) {
+function checkHours(time) {
     const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$/
     if(time !== "closed" && (typeof time !== 'string' || !regex.test(time))) {
         throw new Error("Time must be in the form HH:MM AM/PM");
     }
-  }
+}
 
 
   async function calculateMenuItemRating(menuItem) {
@@ -324,7 +335,7 @@ function checkHoursOfOperation(ho) {
   }
 
 function upTooThree(arr) {
-    if (!arr || !Array.isArray(arr)) throw "Must be an array!";
+    if (!arr || !Array.isArray(arr)) throw "Must be an array.";
 
     const size = arr.length;
 
@@ -335,18 +346,18 @@ function upTooThree(arr) {
 function checkMeetUpTime(meetUpTime){
     // make sure it's an object
     if (typeof meetUpTime !== 'object' || meetUpTime === null) {
-        throw new Error('meetUpTime must be object');
+        throw new Error('meetUpTime must be object.');
     }
     // make sure it has the date and time keys
     const keys = Object.keys(meetUpTime);
     if (keys.length !== 2 || !keys.includes('Date') || !keys.includes('Time')) {
-        throw new Error('meetUpTime needs Date and Time keys')
+        throw new Error('meetUpTime needs Date and Time keys.')
     }
     let dateStr = meetUpTime['Date'];
     let timeStr = meetUpTime['Time'];
     // make sure dateStr and timeStr are both strs
-    if (typeof dateStr !== 'string') throw new Error('meetUpTime[Date] must be str');
-    if (typeof timeStr !== 'string') throw new Error('meetupTime[Time] must be str');
+    if (typeof dateStr !== 'string') throw new Error('meetUpTime[Date] must be str.');
+    if (typeof timeStr !== 'string') throw new Error('meetupTime[Time] must be str.');
     // make sure date format is MM/DD/YYY and time format is H:MM{AM/PM}
     let dateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/;
     let timeRegex = /^(1[0-2]|[1-9]):[0-5]\d(?:AM|PM)$/;
@@ -404,6 +415,7 @@ export default {
     checkId,
     checkName,
     checkEmail,
+    checkUsername,
     checkPassword,
     checkReviewRating,
     checkWaitTime,

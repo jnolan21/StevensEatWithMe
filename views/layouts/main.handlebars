@@ -14,7 +14,11 @@
               <li><a href="/landingPage/landingPage">Home</a></li>
               <li><a href="/diningList/diningList">Dining Facilities</a></li>
               <li><a href="/meetupPage/meetupPage">Meetups</a></li>
-              <li><a href="/profile">Profile</a></li> <!-- fix this when profile page is worked on **-->
+              <li><a href="/profile">Profile</a></li>
+              <!-- Only show the SIGN OUT button if the user is logged in -->
+              {{#if isLoggedIn}}
+                <li><a href="/users/logout">Profile</a></li>
+              {{/if}}
             </ul>
           </nav>
     </header>
@@ -22,6 +26,12 @@
         {{{body}}}
     </main>
     <footer>&copy; Copyright 2025</footer>
+
+<!-- ONLY INCLUDE THIS IN PARTIALS THAT USE JQUERY -->
+<!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script> -->
+{{#if partial}}
+{{> (lookup . 'partial')}}
+{{/if}}
 
 </body>
 

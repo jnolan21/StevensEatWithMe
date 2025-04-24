@@ -1,27 +1,31 @@
 <article class="signup">
     <h1>Signup for EatWithMe!</h1>
 
-    <form action="/users/signup" method="POST" class="signup-form">
+    <form action="/users/signup" method="POST" class="signup-form" id="signup-form">
         <div class= "signupBox">
             <label>
                 <p class = "inputName">First Name:</p>
-                <input type="text" name="firstName" placeholder="Enter your first name" value="{{user.firstName}}" class="signup-input">
+                <input type="text" id="signup-firstName" name="firstName" placeholder="Enter your first name" value="{{user.firstName}}" class="signup-input">
             </label>
             <label>
                 <p class = "inputName">Last Name:</p>
-                <input type="text" name="lastName" placeholder="Enter your last name" value="{{user.lastName}}" class="signup-input">
+                <input type="text" id="signup-lastName" name="lastName" placeholder="Enter your last name" value="{{user.lastName}}" class="signup-input">
             </label>
             <label>
                 <p class = "inputName">Email:</p>
-                <input type="email" name="email" placeholder="Enter your Stevens email" value="{{user.email}}" class="signup-input">
+                <input type="email" id="signup-email" name="email" placeholder="Enter your Stevens email" value="{{user.email}}" class="signup-input">
             </label>
             <label>
                 <p class = "inputName">Username:</p>
-                <input type="text" name="username" placeholder="Create a username" value="{{user.username}}" class="signup-input">
+                <input type="text" id="signup-username" name="username" placeholder="Create a username" value="{{user.username}}" class="signup-input">
             </label>
             <label>
                 <p class = "inputName">Password:</p>
-                <input type="password" name="password" placeholder="Create a password" class="signup-input">
+                <input type="password" id="signup-password" name="password" placeholder="Create a password" class="signup-input">
+            </label>
+            <label>
+                <p class = "inputName">Confirm Password:</p>
+                <input type="password" id="signup-passwordConfirm" name="passwordConfirm" placeholder="Confirm password" class="signup-input">
             </label>
             <!-- Button to signup -->
             <button type="submit">Signup</button>
@@ -30,7 +34,7 @@
         
     </form>
     {{#if hasErrors}}
-    <ul class="error-list">
+    <ul id='signup-errors' class="error-list">
         {{#each errors}}
         <li>
             {{this}}
