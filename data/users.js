@@ -231,9 +231,7 @@ const verifyUserSignup = async (id) => {
 // Add user to a user's friend list
 const addFriend = async (id, friendId) => {
     id = helper.checkId(id);
-    friendId = helper.checkId(friendId);
-    // Prevent self-following
-    if (id === friendId) throw new Error('Cannot add or remove yourself as a friend.');
+    friendId = helper.checkId(id);
     const allUsers = await getAllUsers();
     // Verify that 'id' and 'friendId' exist
     let idFound = false;
@@ -246,10 +244,11 @@ const addFriend = async (id, friendId) => {
     if (!friendIdFound) throw new Error('Friend id not found!');
     // Add the friend to user's friend list (make sure they're not already in the friends list)
     let user = await getUserById(id);
+    for (let i = 0; i < user.friends.length; i++) if (user.friends[i] === friendId) throw new Error('This user is already your friend!');
     const userCollection = await users();
     let updatedUser = await userCollection.findOneAndUpdate(
         {_id: new ObjectId(id)},
-        {$addToSet: {friends: friendId}},
+        {$push: {friends: friendId}},
     );
     // Return the user's list of friends
     updatedUser = await getUserById(id);
@@ -259,8 +258,7 @@ const addFriend = async (id, friendId) => {
 // Remove user from a user's friend list
 const removeFriend = async (id, friendId) => {
     id = helper.checkId(id);
-    friendId = helper.checkId(friendId);
-    if (id === friendId) throw new Error('Cannot add or remove yourself as a friend.');
+    friendId = helper.checkId(id);
     const allUsers = await getAllUsers();
     // Verify that 'id' and 'friendId' exist
     let idFound = false;
@@ -285,36 +283,6 @@ const removeFriend = async (id, friendId) => {
     updatedUser = await getUserById(id);
     return updatedUser.friends;
 }
-
-
-// Get all the users who follow the user with the given id
-const getAllPeopleFollowingThisUser = async(id) => {
-    id = helper.checkId(id);
-    const allUsers = await getAllUsers();
-    // Return an array of all the user objects who have this user listed in their 'friends' list
-    let following = [];
-    for (let i = 0; i < allUsers.length; i++) {
-        if (allUsers[i].friends.includes(id) && id !== allUsers[i]._id.toString()) following.push(allUsers[i]);
-    }
-
-    return following;
-}
-
-
-// Get all the users who follow the user with the given id
-const getFollowingList = async(id) => {
-    id = helper.checkId(id);
-    const user = await getUserById(id);
-    // Return an array of all the user objects this user follows
-    let following = [];
-    for (let i = 0; i < user.friends.length; i++) {
-        let followedUser = await getUserById(user.friends[i]);
-        following.push(followedUser);
-    }
-
-    return following;
-}
-
 
 /* Get all of the user's reviews
 // ****************************************** INCOMPLETE ******************************************
@@ -346,7 +314,5 @@ export default {
     updateUsername,
     verifyUserSignup,
     addFriend,
-    removeFriend,
-    getAllPeopleFollowingThisUser,
-    getFollowingList
+    removeFriend
 }
