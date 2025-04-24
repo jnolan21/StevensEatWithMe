@@ -125,6 +125,11 @@ try {
     console.log(`${e.message}`);
 }
 
+
+
+
+//////PICCOLA ITALIA MENU ITEMS////////////////////
+
 // createMenuItem() (chicken parm)
 let chickenParm;
 try {
@@ -322,7 +327,7 @@ try {
 
 
 
-
+//////PIERCE DINING HALL MENU ITEMS////////////////////
 
 // createMenuItem() (menuItem1)
 let menuItem1;
@@ -333,12 +338,16 @@ try {
         pierceDiningHall._id,
         " Grilled Chicken Cheddar Sandwich ",
         " Grilled chicken, cheddar cheeese, lettuce, tomato, and onion on a whole wheat roll. ",
-        []
+        ["Nut-free"]
     );
-    //console.log(menuItem1);
 } catch (e) {
     console.log(`${e.message}`);
 }
+
+
+//////YELLAS MENU ITEMS////////////////////
+
+
 
 // createMenuItem() (uncleBabe)
 let uncleBabe;
@@ -347,9 +356,8 @@ try {
         yellas._id,
         " The Uncle Babe ",
         " Hot Sub : Deluxe Ham, Salami, Fresh Mozzarella, Roasted Peppers. ",
-        []
+        ["Nut-free"]
     );
-    //console.log(uncleBabe);
 } catch (e) {
     console.log(`${e.message}`);
 }
@@ -361,9 +369,8 @@ try {
         yellas._id,
         " The Fat Angelo ",
         " Hot Sub : Sliced Steak, Roasted Potatoes, Peppers & Onions, American Cheese, Sub Roll. ",
-        []
+        ["Nut-free"]
     );
-    //console.log(menuItem1);
 } catch (e) {
     console.log(`${e.message}`);
 }
@@ -374,13 +381,133 @@ try {
     bennyBrown = await menuItems.createMenuItem(
         yellas._id,
         " The Benny Brown ",
-        " Hot Sub : Sliced Steak, Sauteed Onions, Fresh Mozzarella, Brown Gravy, Sub Roll. ",
-        []
+        " Hot Sub : Sliced Steak, Sauteed Onions, Fresh Mozzarella, Brown Gravy, Sesame Seed Sub Roll. ",
+        ["Nut-free"]
     );
-    //console.log(menuItem1);
 } catch (e) {
     console.log(`${e.message}`);
 }
+
+// createMenuItem() (CHIPOTLE CHIX CHEESESTEAK)
+let chipotleCheeseSteak;
+try {
+    chipotleCheeseSteak = await menuItems.createMenuItem(
+        yellas._id,
+        " Chipotle Chicken Cheesesteak ",
+        " Chicken breast, grilled onions, pepper jack cheese, arugula, tomato, chipotle mayo on a sesame seed roll. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (gpa joe)
+let gpaJoe;
+try {
+    gpaJoe = await menuItems.createMenuItem(
+        yellas._id,
+        " The Grandpa Joe Steak ",
+        " Sliced steak, sauteed onions, provolone cheese, and hot banana peppers on a sesame seed roll. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (lombardi)
+let lombardi;
+try {
+    lombardi = await menuItems.createMenuItem(
+        yellas._id,
+        " The Lombardi ",
+        " Crispy chicken breast, fresh mozzarella, roasted peppers, sundried tomato pesto, sesame seed sub roll. ",
+        []
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (eggplan milanese)
+let eggMil;
+try {
+    eggMil = await menuItems.createMenuItem(
+        yellas._id,
+        " Eggplant Milanese ",
+        " Crispy fried eggplant, provolone cheese, arugula, roasted red peppers, and balsamic glazed on a sesame seeded italian hero. ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (yellas sub)
+let yellassub;
+try {
+    yellassub = await menuItems.createMenuItem(
+        yellas._id,
+        " The Yellas Sub ",
+        " Prosciuttini, hot ham, salami, provolone. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (torpedo sub)
+let torpedo;
+try {
+    torpedo = await menuItems.createMenuItem(
+        yellas._id,
+        " The Torpedo Sub ",
+        " Salami, fresh mozzarella, sundried tomato pesto. ",
+        []
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (nuclear sub)
+let nuclear;
+try {
+    nuclear = await menuItems.createMenuItem(
+        yellas._id,
+        " The Nuclear Sub ",
+        " Hot ham, pepper jack cheese, hot banana peppers. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (talking turkey sub)
+let turkeysub;
+try {
+    turkeysub = await menuItems.createMenuItem(
+        yellas._id,
+        " The Talking Turkey Sub ",
+        " Turkey, pepper jack cheese, chipotle mayo. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( turkey club sub)
+let turkeyClub;
+try {
+    turkeyClub = await menuItems.createMenuItem(
+        yellas._id,
+        " The Turkey Club Sub ",
+        " Turkey, swiss cheese, bacon, mayo. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+
+
+
 
 // getAllMenuItems() (yellas)
 try {
@@ -389,6 +516,8 @@ try {
 } catch (e) {
     console.log(`${e.message}`);
 }
+
+
 
 // getMenuItemById() (The Fat Angelo)
 try {
