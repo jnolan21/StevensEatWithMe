@@ -1,6 +1,7 @@
 // Here is where we will list all of our routes that index.js routes to
 import userRoutes from './users.js';
 import setRoutes from './set.js';
+import profileRoutes from './profile.js';
 import restaurants from '../data/restaurants.js';
 import helpers from '../data/helpers.js';
 
@@ -10,6 +11,7 @@ import {static as staticDir} from 'express';
 const constructorMethod = (app) => {
 
   app.use('/users', userRoutes);
+  app.use('/profile', profileRoutes)
   app.use('/diningList', setRoutes);
   app.use('/meetupPage', setRoutes);
   app.use('/', setRoutes);
@@ -18,15 +20,6 @@ const constructorMethod = (app) => {
     try{
     const restaurantss = await restaurants.ratingFilter();
     let top3 = restaurantss.slice(0,helpers.upTooThree(restaurantss));
-    for (let i = 0; i < top3.length; i++) {
-      const temp = top3[i];
-    
-      if (temp.menuItems && Array.isArray(temp.menuItems)) {
-        temp.menuItems = temp.menuItems.slice(0, helpers.upTooThree(temp.menuItems));
-      } else {
-        temp.menuItems = [];
-      }
-    }
     res.render('landingPage/landingPage', {
       title: "EatWithMe Home",
       topRestaurants: top3

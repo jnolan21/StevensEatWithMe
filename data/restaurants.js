@@ -82,8 +82,6 @@ const ratingFilter = async () => {
     return restaurants;
 }
 
-
-
 const waitTime = async () => {
     let restaurants = await getAllRestaurants();
     restaurants.sort((a,b) => helper.subtractWaitTime(a.averageWaitTime, b.averageWaitTime)); 
