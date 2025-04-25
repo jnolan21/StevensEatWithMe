@@ -506,7 +506,96 @@ try {
     console.log(`${e.message}`);
 }
 
+// createMenuItem() ( crispy chix sam)
+let crispyChix;
+try {
+    crispyChix = await menuItems.createMenuItem(
+        yellas._id,
+        " Crispy Chicken Sandwich ",
+        " Crispy chicken breast, lettuce, pickles, lemon aioli, potato roll ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
 
+// createMenuItem() ( buff chix sam)
+let buffChixSam;
+try {
+    buffChixSam = await menuItems.createMenuItem(
+        yellas._id,
+        " Buffalo Chicken Sandwich ",
+        " Crispy chicken breast, lettuce, buffalo sauce, ranch dressing, potato roll ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( Bacon ranch chix sam)
+let baconRanch;
+try {
+    baconRanch = await menuItems.createMenuItem(
+        yellas._id,
+        " Chicken Bacon Ranch Sandwich ",
+        " Crispy chicken breast, bacon, provolone cheese, lettuce, tomato, ranch dressing, potato roll ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( nashville chix sam)
+let nashville;
+try {
+    nashville = await menuItems.createMenuItem(
+        yellas._id,
+        " Nashville Hot Sandwich ",
+        " Crispy Nashville spiced chicken breast, coleslaw, pickles, potato roll ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( grilled chix sam)
+let grilledChix;
+try {
+    grilledChix = await menuItems.createMenuItem(
+        yellas._id,
+        " Grilled Chicken Sandwich ",
+        " Marinated chicken, lettuce, tomato, lemon aioli, potato roll ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( 3 chix tenders)
+let threecountChix;
+try {
+    threecountChix = await menuItems.createMenuItem(
+        yellas._id,
+        " 3-Count Jumbo Chicken Tenders ",
+        " 3 hand-breaded jumbo chicken tenders, with a choice of flavor (BBQ, plain, buffalo, Nashville hot, garlic parmesan, lemon pepper dry rub). Served with a choice of sauce. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( 6 chix tenders)
+let sixcountChix;
+try {
+    sixcountChix = await menuItems.createMenuItem(
+        yellas._id,
+        " 6-Count Jumbo Chicken Tenders ",
+        " 6 hand-breaded jumbo chicken tenders, with a choice of flavor (BBQ, plain, buffalo, Nashville hot, garlic parmesan, lemon pepper dry rub). Served with a choice of sauce. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
 
 
 

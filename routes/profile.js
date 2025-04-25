@@ -2,6 +2,7 @@ import {Router} from 'express';
 const router = Router();
 import userData from '../data/users.js';
 import helper from '../data/helpers.js';
+import rsvpData from "../data/rsvps.js";
 //import crypto from 'crypto'
 
 
@@ -56,6 +57,22 @@ router
     } catch (e) {
         return res.status(400).json({error: e.message});
     }
+
+    //get the users RSVPS
+    let userPosts= [];
+    try{
+        let allPosts = await rsvpData.getAllRsvps(); // get all RSVPS in DB
+        for(let i=0; i<allPosts.length; i++){ //loop thru and match posts with user id 
+            if(allPosts[i].userId === id){
+                userPosts.push(allPosts[i]);
+            }
+        }
+    }
+    catch(e){
+        res.status(500).json({error: e.message});
+    }
+
+
     // Render the user's profile page
     try {
         res.render('users/profile', {
@@ -67,7 +84,7 @@ router
                 lastName: user.lastName,
                 following: following, // array of user objects
                 followers: followers, // array of user objects
-                RSVPposts: [], // array of RSVP post objects
+                RSVPposts: userPosts, // array of RSVP post objects
                 currentRSVPs: [], // array of RSVP post objects
                 reviews: [] // array of review objects
             }
