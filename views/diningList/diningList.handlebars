@@ -1,8 +1,60 @@
 
 
 
+
     <div id = "restaurantList">
         <h1> All Dining Options </h1>
+
+
+    <div class = "filter-container"></div>
+        <div class = "dropdown filter-group">
+            <button 
+            class="btn btn-default dropdown-toggle" 
+            id="dietaryFilter" 
+            data-toggle="dropdown" 
+            aria-haspopup="true" 
+            aria-expanded="false">Dietary Restrictions<span class = "caret"></span></button>
+                <ul class="dropdown-menu">
+                    {{#each dietary}}
+                    <li><label><input type="checkbox" value={{this}}>{{this}}</label></li>
+                    {{/each}}
+            </ul>
+        </div>
+            <div class = "dropdown filter-group">
+                <button 
+                class="btn btn-default dropdown-toggle" 
+                id="waitTimeFilter" 
+                data-toggle="dropdown" 
+                aria-haspopup="true" 
+                aria-expanded="false">Wait Time<span class = "caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><label><input type="radio" name = "time" value="None">None</label></li>
+                        <li><label><input type="radio" name = "time" value="10">Under 10 Minutes</label></li>
+                        <li><label><input type="radio" name = "time" value="20">Under 20 Minutes</label></li>
+                        <li><label><input type="radio" name = "time" value="30">Under 30 Minutes</label></li>
+                        <li><label><input type="radio" name = "time" value="40">Under 40 Minutes</label></li>
+                        <li><label><input type="radio" name = "time" value="50">Under 50 Minutes</label></li>
+                        <li><label><input type="radio" name = "time" value="60">1 hour or longer</label></li>
+                    </ul>
+            </div>
+             <div class = "dropdown filter-group">
+                <button 
+                class="btn btn-default dropdown-toggle" 
+                id="ratingFilter" 
+                data-toggle="dropdown" 
+                aria-haspopup="true" 
+                aria-expanded="false">Rating<span class = "caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><label><input type="radio" name = 'rating' value="2"><span id = "goldStar">☆ ☆ ☆ ☆ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="3"><span id = "goldStar">★ ☆ ☆ ☆ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="4"><span id = "goldStar">★ ★ ☆ ☆ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="1"><span id = "goldStar">★ ★ ★ ☆ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="5"><span id = "goldStar">★ ★ ★ ★ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="6"><span id = "goldStar">★ ★ ★ ★ ★</span></label></li>
+                    </ul>
+            </div>
+            <button>Clear All Selections</button>
+        </div>
 
         <ol>
         {{#each restaurantss}}
@@ -21,6 +73,10 @@
         </ol>
 </div>
 
-    <p>i should be viewable by all users (logged in or not)</p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="/public/js/filters.js"></script>
+
+    {{!-- <p>i should be viewable by all users (logged in or not)</p> --}}
         
 

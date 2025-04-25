@@ -231,3 +231,7 @@ h2.signup{
   .comments{
     margin-bottom: 50px;
   }
+
+#goldStar {
+  color: gold;
+}
