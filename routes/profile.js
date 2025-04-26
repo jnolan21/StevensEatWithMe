@@ -13,11 +13,7 @@ router
     // Verify that the user is logged in
     if (!req.session.user) {
         // 403 = forbidden page
-        return res.status(403).render('users/login', {
-            title: 'EatWithMe login',
-            hasErrors: true,
-            errors: ["You must be logged in to view your profile."]
-        })
+        return res.status(403).redirect('users/signup');
     }
 
     let id = req.session.user._id;
@@ -28,7 +24,8 @@ router
         return res.status(400).render('users/login', {
             title: 'EatWithMe login',
             hasErrors: true,
-            errors: [e]
+            errors: [e],
+            isLoggedIn: !!req.session.user
         })
     }
 
@@ -37,10 +34,11 @@ router
     try {
         user = await userData.getUserById(id);
     } catch (e) {
-        return res.status(404).render('user/login', {
+        return res.status(404).render('users/login', {
             title: 'EatWithMe login',
             hasErrors: true,
-            errors: [e]
+            errors: [e],
+            isLoggedIn: !!req.session.user
         })
     }
     // Get all of the users who follow this current user
@@ -69,7 +67,7 @@ router
         }
     }
     catch(e){
-        res.status(500).json({error: e.message});
+        return res.status(500).json({error: e.message});
     }
 
 
@@ -87,7 +85,8 @@ router
                 RSVPposts: userPosts, // array of RSVP post objects
                 currentRSVPs: [], // array of RSVP post objects
                 reviews: [] // array of review objects
-            }
+            },
+            isLoggedIn: !!req.session.user
         })
     } catch (e) {
         res.status(500).json({error: e.message});

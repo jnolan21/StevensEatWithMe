@@ -31,7 +31,8 @@ const constructorMethod = (app) => {
     }
     res.render('landingPage/landingPage', {
       title: "EatWithMe Home",
-      topRestaurants: top3
+      topRestaurants: top3,
+      isLoggedIn: !!req.session.user
     });
   }
   catch(e){

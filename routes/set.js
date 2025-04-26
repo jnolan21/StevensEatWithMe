@@ -21,7 +21,8 @@ router.route('/').get(async (req, res) => {
     
     res.render('landingPage/landingPage', {
       title: "EatWithMe Home",
-      topRestaurants: top3
+      topRestaurants: top3,
+      isLoggedIn: !!req.session.user
     });
   }
   catch (e) {
@@ -33,7 +34,8 @@ router.route('/diningList').get(async (req, res) => {
     const restaurantss = await restaurants.ratingFilter();
     res.render('diningList/diningList', 
     {title: "EatWithMe Dining List",
-  restaurantss: restaurantss})  } 
+  restaurantss: restaurantss, isLoggedIn: !!req.session.user})
+  } 
   catch (e) {
     return res.status(400).json({error: e.message});
   }
@@ -43,7 +45,7 @@ router.route('/meetupPage').get(async (req, res) => {
   try{
     let allrsvps = await rsvps.getAllRsvps();
     allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
-    res.render('meetupPage/meetupPage', {title: "EatWithMe Meetup Page", allrsvps: allrsvps})
+    res.render('meetupPage/meetupPage', {title: "EatWithMe Meetup Page", allrsvps: allrsvps, isLoggedIn: !!req.session.user})
   }
   catch (e) {
     return res.status(400).json({error: e.message});

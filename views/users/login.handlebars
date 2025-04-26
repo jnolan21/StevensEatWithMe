@@ -22,14 +22,15 @@
         </div>
     </form>
     <h2 class="signup">Don't have an account?    <a href="/users/signup" class = "signupB">Sign Up</a></h2>
-    {{#if hasErrors}}
+    
     <ul id="login-errors" class="error-list">
+    {{#if hasErrors}}
         {{#each errors}}
         <li>
             {{this}}
         </li>
         {{/each}}
-    </ul>
     {{/if}}
+    </ul>
 
 </article>

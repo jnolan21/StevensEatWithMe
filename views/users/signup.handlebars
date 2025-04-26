@@ -33,14 +33,15 @@
         <h2>Already have an account?<a href="/users/login" class = "signupB"> Login!</a></h2> 
         
     </form>
-    {{#if hasErrors}}
+
     <ul id='signup-errors' class="error-list">
+    {{#if hasErrors}}
         {{#each errors}}
         <li>
             {{this}}
         </li>
         {{/each}}
-    </ul>
     {{/if}}
+    </ul> 
 
 </article>

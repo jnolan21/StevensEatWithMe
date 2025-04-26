@@ -41,16 +41,59 @@ app.use(express.urlencoded({extended: true}));
 // Session middleware
 app.use(
     session({
-        name: "AuthCookie", // Name of the session ID cookie
+        name: "AuthenticationState", // Name of the session ID cookie
         secret: "some secret string!",
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
         cookie: {maxAge: 1000 * 60 * 60 * 1} // The session expires after 1 hour
     })
 )
 
 
 app.use(rewriteUnsupportedBrowserMethods);
+
+
+/* ******************************* MIDDLEWARE ******************************* */
+/* MIDDLEWARE FOR TESTING */
+app.use((req, res, next) => {
+  let date = new Date().toUTCString();
+  let isLoggedIn;
+  if (req.session.user) isLoggedIn = true;
+  else isLoggedIn = false;
+
+  if (isLoggedIn) {
+      // User
+      if (req.session.user.role === 'user')
+          console.log(`[${date}]: ${req.method} ${req.path} (Authenticated User)`);
+  }
+  else console.log(`[${date}]: ${req.method} ${req.path} (Non-Authenticated)`);
+
+  next();
+});
+
+
+/* GET users/profile */
+app.use('/profile', (req, res, next) => {
+  if (req.session.user) next(); // Authenticated user
+  else return res.redirect('users/signup'); // Non-authenticated user
+});
+
+/* GET users/login */
+app.use('/users/login', (req, res, next) => {
+  if (req.session.user) return res.redirect('/profile'); // Authenticated user
+  else next(); // Non-authenticated user
+});
+
+/* GET users/signup */
+app.use('/users/signup', (req, res, next) => {
+  if (req.session.user) return res.redirect('/profile'); // Authenticated user
+  else next(); // Non-authenticated user
+});
+
+
+/* ******************************* MIDDLEWARE ******************************* */
+
+
 
 app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');

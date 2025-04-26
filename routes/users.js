@@ -22,10 +22,10 @@ router
       }
       // Update the user signing up to mark them as verified!
       signupUser = await userData.verifyUserSignup(signupUser._id);
-      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript'});
+      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user});
       return;
     } catch (e) {
-      res.status(400).json({error: e});
+      res.status(400).json({error: e.message});
     }
   });
 
@@ -36,7 +36,7 @@ router
   .get(async (req, res) => {
     // Render the signup page
     try {
-      res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript'});
+      res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript', isLoggedIn: !!req.session.user});
     } catch (e) {
       return res.status(400).json({error: e.message});
     }
@@ -85,7 +85,8 @@ router
         user: user,
         errors: errors,
         hasErrors: true,
-        partial: 'signupScript'
+        partial: 'signupScript',
+        isLoggedIn: !!req.session.user
       });
       return;
     }
@@ -116,11 +117,11 @@ router
       )
       // Send the verification email
       await helper.sendVerificationEmail(newUser._id);
-      res.render('users/login', {title: "EatWithMe login", partial: 'signupScript'});
+      res.render('users/verify', {title: "EatWithMe login", partial: 'signupScript', isLoggedIn: !!req.session.user});
       // Redirect the '/verify' route and wait for user to click the email
       //res.render('users/verify', {email: newUser.email});
     } catch (e) {
-      res.status(500).json({error: e});
+      res.status(500).json({error: e.message});
     }
 });
 
@@ -132,7 +133,7 @@ router
   .get(async (req, res) => {
     // Render the login page
     try {
-      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript'});
+      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user});
     } catch (e) {
       return res.status(400).json({error: e.message});
     }
@@ -159,7 +160,8 @@ router
         user: {email},
         errors: errors,
         hasErrors: true,
-        partial: 'loginScript'
+        partial: 'loginScript',
+        isLoggedIn: !!req.session.user
       });
       return;
     }
@@ -192,7 +194,8 @@ router
               user: {email},
               hasErrors: true,
               errors: errors,
-              partial: 'loginScript'
+              partial: 'loginScript',
+              isLoggedIn: !!req.session.user
             });
             return;
           }
@@ -210,12 +213,22 @@ router
           user: {email},
           errors: errors,
           hasErrors: true,
+          isLoggedIn: !!req.session.user
         });
         return;
       }
     } catch (e) {
       res.status(500).json({error: e.message});
     }
+  });
+
+
+/* Log out */
+router
+  .route('/logout')
+  .get(async (req, res) => {
+    req.session.destroy();
+    return res.redirect('/');
   });
 
 
