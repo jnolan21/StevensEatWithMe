@@ -597,6 +597,213 @@ try {
     console.log(`${e.message}`);
 }
 
+// createMenuItem() ( hamburger)
+let hamburger;
+try {
+    hamburger = await menuItems.createMenuItem(
+        yellas._id,
+        " Hamburger ",
+        " Yellas burger blend, pickles, ketchup, potato roll. *Veggie Burger available* ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( cheeseburger)
+let cheeseburger;
+try {
+    cheeseburger = await menuItems.createMenuItem(
+        yellas._id,
+        " Classic Cheeseburger ",
+        " Yellas burger blend, white American cheese, pickles, ketchup, potato roll. *Veggie Burger available* ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( yella burger )
+let yellaburger;
+try {
+    yellaburger = await menuItems.createMenuItem(
+        yellas._id,
+        " The Yella Burger ",
+        " Yellas burger blend, cheddar cheese, lettuce, tomato, onions, pickles, secret sauce, potato roll. *Veggie Burger available* ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( bacon cheese burger )
+let baconCheeseB;
+try {
+    baconCheeseB = await menuItems.createMenuItem(
+        yellas._id,
+        " Bacon Cheeseburger ",
+        " Yellas burger blend, bacon, cheddar cheese, pickles, secret sauce, potato roll. *Veggie Burger available* ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( jersey smash burger )
+let jerseySmash;
+try {
+    jerseySmash = await menuItems.createMenuItem(
+        yellas._id,
+        " Jersey Smash Burger ",
+        " Yellas burger blend, shaved sweet onions, white American cheese, pickles, secret sauce, potato roll. *Veggie Burger available* ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( cowboy burger )
+let cowboy;
+try {
+    cowboy = await menuItems.createMenuItem(
+        yellas._id,
+        " The Cowboy Burger ",
+        " Double yellas blend burger patties, bacon, cheddar cheese, onion rings, banana peppers, BBQ sauce, potato roll. *Veggie Burger available* ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( milkshakes )
+let milkshake;
+try {
+    milkshake = await menuItems.createMenuItem(
+        yellas._id,
+        " Classic Hand Spun Shake ",
+        " Caramel, Chocolate, Strawberry, or Vanilla ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( waffleFries )
+let waffleFries;
+try {
+    waffleFries = await menuItems.createMenuItem(
+        yellas._id,
+        " Sweet Potato Waffle Fries ",
+        " Crispy criss-cut sweet potatoes. ",
+        ["Nut-free", "Vegetarian", "Dairy-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( onionRings )
+let onionRings;
+try {
+    onionRings = await menuItems.createMenuItem(
+        yellas._id,
+        " Onion Rings ",
+        " Crispy breaded Spanish onion rings. ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( fries )
+let fries;
+try {
+    fries = await menuItems.createMenuItem(
+        yellas._id,
+        " French Fries ",
+        " Crispy skin-on fries. Sea salt.  ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( egg and cheese )
+let eggAndCheese;
+try {
+    eggAndCheese = await menuItems.createMenuItem(
+        yellas._id,
+        " Egg & Cheese ",
+        " Over medium egg, American cheese, potato roll.  ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( bacon egg and cheese )
+let bec;
+try {
+    bec = await menuItems.createMenuItem(
+        yellas._id,
+        " Bacon, Egg & Cheese ",
+        " Over medium egg, bacon, American cheese, potato roll.  ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( sausage egg and cheese )
+let sec;
+try {
+    sec = await menuItems.createMenuItem(
+        yellas._id,
+        " Sausage, Egg & Cheese ",
+        " Over medium egg, sausage, American cheese, potato roll.  ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( taylor ham egg and cheese )
+let tec;
+try {
+    tec = await menuItems.createMenuItem(
+        yellas._id,
+        " Taylor Ham, Egg & Cheese ",
+        " Over medium egg, taylor ham, American cheese, potato roll.  ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( pancakes )
+let pancakes;
+try {
+    pancakes = await menuItems.createMenuItem(
+        yellas._id,
+        " Pancakes ",
+        " Pancakes with syrup.  ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( frnech toast )
+let ftoast;
+try {
+    ftoast = await menuItems.createMenuItem(
+        yellas._id,
+        " French Toast Sticks",
+        " French toast sticks with syrup.  ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
 
 
 // getAllMenuItems() (yellas)
