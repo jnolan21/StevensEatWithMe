@@ -1,7 +1,9 @@
 <article class="landingPage">
     <div class = "landingBox">
+        {{#unless isLoggedIn}}
         <p><a href="/users/signup">Signup</a></p> <!--make this hidden if theyre already logged in and give them a user profile they can click on or just disappear-->
         <p><a href="/users/login">Login</a></p>
+        {{/unless}}
     </div>
 
 </article>
