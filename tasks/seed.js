@@ -48,6 +48,32 @@ try {
     console.error(`${e.message}`);
 }
 
+// createRestaurant() (pom and honey)
+let pom;
+try {
+    pom = await restaurants.createRestaurant(
+        "   Pom & Honey  ",
+        " University Center, 1st Floor  ",
+        [],
+        [" Mediterranean" ],
+        {
+            "Sunday": "11:00AM - 10:00PM",
+            "Monday": "11:00AM - 10:00PM",
+            "Tuesday": "11:00AM - 10:00PM",
+            "Wednesday": "11:00AM - 10:00PM",
+            "Thursday": "11:00AM - 10:00PM",
+            "Friday": "11:00AM - 10:00PM",
+            "Saturday": "11:00AM - 10:00PM"
+        },
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN0lY8SA898YVU4Ud5TTeamDW2T7LpeTWvTw&s",
+        ["Vegan", "Vegetarian", "Dairy-free", "Soy-free", "Nut-free", "Gluten-free"]
+    );
+    //console.log(pierceDiningHall);
+} catch (e) {
+    console.log("POM AND HONEY ERROR")
+    console.log(`${e.message}`);
+}
+
 // createRestaurant() (piccola italia)
 let piccolaItalia;
 try {
@@ -126,6 +152,86 @@ try {
     console.log(`${e.message}`);
 }
 
+
+//////POM AND HONEY  MENU ITEMS////////////////////
+
+// createMenuItem() (chicken bowl)
+let byochix;
+try {
+    byochix = await menuItems.createMenuItem(
+        pom._id,
+        " Build Your Own Chicken Bowl ",
+        "Choose a base of lettuce or rice. Add an extra protein (veggie option available). Choose 4 toppings like cheese, hummus or vegetables. Choose a dressing.",
+        ["Dairy-free", "Soy-free", "Nut-free", "Gluten-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (falafel bowl)
+let byofalafel;
+try {
+    byofalafel = await menuItems.createMenuItem(
+        pom._id,
+        " Build Your Own Falafel Bowl ",
+        "Choose a base of lettuce or rice. Add an extra protein (veggie option available). Choose 4 toppings like cheese, hummus or vegetables. Choose a dressing.",
+        ["Dairy-free", "Vegetarian", "Vegan", "Nut-free", "Gluten-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (meatball bowl)
+let byomeatball;
+try {
+    byomeatball = await menuItems.createMenuItem(
+        pom._id,
+        " Build Your Own Spicy Meatball Bowl ",
+        "Choose a base of lettuce or rice. Add an extra protein (veggie option available). Choose 4 toppings like cheese, hummus or vegetables. Choose a dressing.",
+        ["Nut-free", "Gluten-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (cauliflower bowl)
+let byoveg;
+try {
+    byoveg = await menuItems.createMenuItem(
+        pom._id,
+        " Build Your Own Roasted Cauliflower and Chickpea Bowl ",
+        "Choose a base of lettuce or rice. Add an extra protein (veggie option available). Choose 4 toppings like cheese, hummus or vegetables. Choose a dressing.",
+        ["Vegetarian", "Vegan", "Nut-free", "Gluten-free", "Dairy-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (tomato and cucumber salad)
+let tomsalad;
+try {
+    tomsalad = await menuItems.createMenuItem(
+        pom._id,
+        " Tomato and Cucumber Salad ",
+        "Tomatoes and sliced cucumbers, served with a dressing on the side. ",
+        ["Vegetarian", "Vegan", "Nut-free", "Gluten-free", "Dairy-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (pita chips and hummus)
+let pitahum;
+try {
+    pitahum = await menuItems.createMenuItem(
+        pom._id,
+        " Pita Chips and Hummus ",
+        "Pita chips served with hummus.",
+        ["Vegetarian", "Vegan", "Nut-free", "Gluten-free", "Dairy-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
 
 
 
