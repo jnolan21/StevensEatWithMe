@@ -201,6 +201,28 @@ const deleteReview = async (id) => {
 }
 
 
+const getAllRestaurantReviews = async (restaurantId) => {
+
+    restaurantId = helper.checkId(restaurantId);
+    let restaurant = await restaurantData.getRestaurantById(restaurantId);
+    let reviewIds = restaurant.reviews;
+    let reviews = [];
+    for (let i = 0; i < reviewIds.length; i++) {
+        let review = await getReviewById(reviewIds[i])
+        // if (review.menuItemId !== "") {
+        //     let menuItem = await menuItemData.getMenuItemById(review.menuItemId);
+        //     review.menuItemName = menuItem.name;
+        // }
+        reviews.push(review);
+    }
+
+    return reviews;
+
+}
+
+console.log(await getAllRestaurantReviews("680bd106e7617269f771b315"));
+
+
 
 
 
@@ -211,5 +233,6 @@ export default {
     createRestaurantReview,
     getAllReviews,
     getReviewById,
-    deleteReview
+    deleteReview,
+    getAllRestaurantReviews
 }
