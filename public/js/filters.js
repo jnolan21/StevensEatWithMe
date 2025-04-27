@@ -3,3 +3,6 @@ document.querySelectorAll('.dropdown-menu').forEach(menu => {
       e.stopPropagation(); // prevents dropdown from closing on click
     });
   });
+
+
+let dietaryFilter = document.getElementById('dietaryFilter');

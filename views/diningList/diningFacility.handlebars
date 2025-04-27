@@ -12,3 +12,68 @@
 8. Average Wait Time
 9. All general Reviews about the dining location itself
  --}}
+
+
+
+
+<main>
+    <h1 id = "restaurantName">{{restaurant.name}}</h1>
+    <h2 id = "location">{{restaurant.location}}</h2>
+    <p>Average Wait Time: {{restaurant.averageWaitTime}}</p>
+    <p>Rating: {{restaurant.averageRating}}/5</p>
+    <img id = "restimg" src = {{restaurant.imageURL}} alt = {{restaurant.name}}>
+    <p id = "typeofFood">
+        {{#each restaurant.typeofFood}}
+        {{this}}{{#unless @last}}, {{/unless}}
+        {{/each}}
+    </p>
+    <p id = "dietaryRestrictions">
+        {{#each restaurant.dietaryRestrictions}}
+        {{this}}{{#unless @last}}, {{/unless}}
+        {{/each}}
+    </p>
+    <ul id = "daysOftheWeek">
+        {{#each restaurant.hoursOfOperation}}
+        <li>{{@key}}: {{this}}</li>
+        {{/each}}
+    </ul>
+    <div id="menuItems">
+        <ol>
+            {{#each restaurant.menuItems}}
+            <li class="menuItem">
+            <h3 class="menuItemName">{{this.name}}</h3>
+            
+            <div class="hoverPopup">
+                <p class="menuItemDescription">{{this.description}}</p>
+                
+                <p class="dietaryRestrictions">
+                {{#each this.dietaryRestrictions}}
+                    {{this}}{{#unless @last}}, {{/unless}}
+                {{/each}}
+                </p>
+
+                <p>{{this.rating}}/5</p>
+            </div>
+            </li>
+            {{/each}}
+        </ol>
+    </div>
+
+<div id = "reviews">
+    <ol>
+        {{#each reviews}}
+        <li>
+            {{!-- {{#if this.menuItemName}}
+            <p>Item: {{this.menuItemName}}</p>
+            {{/if}} --}}
+            <p>Review: {{this.review}}</p>
+            <p>Wait Time: {{this.waitTime}}</p>
+            <p>Rating: {{this.rating}}/5</p>
+        </li>
+        {{/each}}
+    </ol>
+    
+</div>
+
+
+</main>

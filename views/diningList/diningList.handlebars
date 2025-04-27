@@ -2,8 +2,13 @@
 
 
 
-    <div id = "restaurantList">
-        <h1> All Dining Options </h1>
+<div id = "restaurantList">
+
+    {{!-- <script id="restaurantData" type="application/json">
+        {{{restaurantList}}}
+    </script> --}}
+
+    <h1> All Dining Options </h1>
 
 
     <div class = "filter-container"></div>
@@ -57,7 +62,7 @@
         </div>
 
         <ol>
-        {{#each restaurantss}}
+        {{#each restaurantList}}
         <li>
             <h2 id = "restName">{{this.name}}</h2>
             <img src = {{this.imageURL}} class = "restaurant_img" alt = {{this.name}} >            
@@ -71,6 +76,8 @@
         {{/each}}
         
         </ol>
+
+
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
