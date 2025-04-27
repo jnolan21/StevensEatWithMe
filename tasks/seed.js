@@ -144,7 +144,7 @@ try {
             "Saturday": "9:00AM - 12:00AM"
         },
         "https://yellas.com/wp-content/uploads/2024/06/yellas-burgers-shakes-deli-sandwiches.jpg",
-        ["Vegan", "Vegeterian"]
+        ["Vegan", "Vegetarian", "Nut-free"]
     );
     //console.log(yellas);
 } catch (e) {
@@ -152,6 +152,137 @@ try {
     console.log(`${e.message}`);
 }
 
+// createRestaurant() (tu taco)
+let tuTaco;
+try {
+    tuTaco = await restaurants.createRestaurant(
+        "   Tu Taco  ",
+        " University Center, 1st Floor ",
+        [],
+        [" Mexican "],
+        {
+            "Sunday": "Closed",
+            "Monday": "11:00AM - 8:00PM",
+            "Tuesday": "11:00AM - 8:00PM",
+            "Wednesday": "11:00AM - 8:00PM",
+            "Thursday": "11:00AM - 8:00PM",
+            "Friday": "11:00AM - 8:00PM",
+            "Saturday": "Closed"
+        },
+        "https://api.dineoncampus.com/files/images/4eb0de8f-4913-4099-bf80-8f7da500dada.png",
+        ["Vegan", "Vegetarian", "Dairy-free", "Nut-free"]
+    );
+} catch (e) {
+    console.log("TU TACO ERROR")
+    console.log(`${e.message}`);
+}
+
+
+//////tu taco MENU ITEMS////////////////////
+
+// createMenuItem() (build your own tacos)
+let byotacos;
+try {
+    byotacos = await menuItems.createMenuItem(
+        tuTaco._id,
+        " Build Your Own Tacos ",
+        "3 Tacos. Choice of flour or hard totrilla (or none). Choice of protein: Chicken Tinga, Slow Roasted Pork, Beef Barbacoa, or None. Choice of Rice and Beans: Cilantro Lime Rice, Brown Rice or None. Refried Beans, Spicy Stewed Black Beans, or None. Choice of 4 toppings: Pico De Gallo, Shredded Lettuce, Pickled Onions, Pickled Jalapeno, Charred Pineapple, Corn, Guacamole, Cotija Cheese, Gluten Free Shredded Cheddar, Shredded Cheddar. Choice of Sauce: Spicy Guava, Cuban Mojo Aioli, Garlic Cilantro Aioli, Spicy Mayo, Mexican Crema, or None.",
+        ["Dairy-free", "Nut-free", "Gluten-free", "Vegan", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (build your own burritos)
+let byoBurrito;
+try {
+    byoBurrito = await menuItems.createMenuItem(
+        tuTaco._id,
+        " Build Your Own Burrito ",
+        " Choice of flour tortilla or gluten free tortilla. Choice of protein: Chicken Tinga, Slow Roasted Pork, Beef Barbacoa, or None. Choice of Rice and Beans: Cilantro Lime Rice, Brown Rice or None. Refried Beans, Spicy Stewed Black Beans, or None. Choice of 4 toppings: Pico De Gallo, Shredded Lettuce, Pickled Onions, Pickled Jalapeno, Charred Pineapple, Corn, Guacamole, Cotija Cheese, Gluten Free Shredded Cheddar, Shredded Cheddar. Choice of Sauce: Spicy Guava, Cuban Mojo Aioli, Garlic Cilantro Aioli, Spicy Mayo, Mexican Crema, or None.",
+        ["Dairy-free", "Nut-free", "Gluten-free", "Vegan", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (build your own burrito bowl)
+let byoBurritoBowl;
+try {
+    byoBurritoBowl = await menuItems.createMenuItem(
+        tuTaco._id,
+        " Build Your Own Burrito Bowl ",
+        " Choice of protein: Chicken Tinga, Slow Roasted Pork, Beef Barbacoa, or None. Choice of Rice and Beans: Cilantro Lime Rice, Brown Rice or None. Refried Beans, Spicy Stewed Black Beans, or None. Choice of 4 toppings: Pico De Gallo, Shredded Lettuce, Pickled Onions, Pickled Jalapeno, Charred Pineapple, Corn, Guacamole, Cotija Cheese, Gluten Free Shredded Cheddar, Shredded Cheddar. Choice of Sauce: Spicy Guava, Cuban Mojo Aioli, Garlic Cilantro Aioli, Spicy Mayo, Mexican Crema, or None.",
+        ["Dairy-free", "Nut-free", "Gluten-free", "Vegan", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (build your own ensalada bowl)
+let byoEnsaladaBowl;
+try {
+    byoEnsaladaBowl = await menuItems.createMenuItem(
+        tuTaco._id,
+        " Build Your Own Ensalada Bowl ",
+        " Shredded lettuce with a choice of protein: Chicken Tinga, Slow Roasted Pork, Beef Barbacoa, or None. Choice of Rice and Beans: Cilantro Lime Rice, Brown Rice or None. Refried Beans, Spicy Stewed Black Beans, or None. Choice of 4 toppings: Pico De Gallo, Shredded Lettuce, Pickled Onions, Pickled Jalapeno, Charred Pineapple, Corn, Guacamole, Cotija Cheese, Gluten Free Shredded Cheddar, Shredded Cheddar. Choice of Sauce: Spicy Guava, Cuban Mojo Aioli, Garlic Cilantro Aioli, Spicy Mayo, Mexican Crema, or None.",
+        ["Dairy-free", "Nut-free", "Gluten-free", "Vegan", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (build your own protein quesadilla)
+let byoQuesadilla;
+try {
+    byoQuesadilla = await menuItems.createMenuItem(
+        tuTaco._id,
+        " Build Your Own Protein Quesadilla ",
+        " Choice of protein: Chicken Tinga, Slow Roasted Pork, Beef Barbacoa, or None. Choice of 4 toppings: Pico De Gallo, Shredded Lettuce, Pickled Onions, Pickled Jalapeno, Charred Pineapple, Corn, Guacamole, Cotija Cheese, Gluten Free Shredded Cheddar, Shredded Cheddar. Choice of Sauce: Spicy Guava, Cuban Mojo Aioli, Garlic Cilantro Aioli, Spicy Mayo, Mexican Crema, or None.",
+        [ "Nut-free", "Vegan", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (build your own cheese quesadilla)
+let byoCheeseQues;
+try {
+    byoCheeseQues = await menuItems.createMenuItem(
+        tuTaco._id,
+        " Build Your Own Cheese Quesadilla ",
+        "  Choice of 4 toppings: Pico De Gallo, Shredded Lettuce, Pickled Onions, Pickled Jalapeno, Charred Pineapple, Corn, Guacamole, Cotija Cheese, Gluten Free Shredded Cheddar, Shredded Cheddar. Choice of Sauce: Spicy Guava, Cuban Mojo Aioli, Garlic Cilantro Aioli, Spicy Mayo, Mexican Crema, or None.",
+        [ "Nut-free", "Vegan", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (chips and pico)
+let chipsAndPico;
+try {
+    chipsAndPico = await menuItems.createMenuItem(
+        tuTaco._id,
+        " Chips and Pico de Gallo ",
+        "Tortilla chips with pico de gallo.",
+        [ "Nut-free", "Vegan", "Vegetarian", "Dairy-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (chips and guac)
+let chipsAndGuac;
+try {
+    chipsAndGuac = await menuItems.createMenuItem(
+        tuTaco._id,
+        " Chips and Guac ",
+        "Tortilla chips with guacamole.",
+        [ "Nut-free", "Vegan", "Vegetarian", "Dairy-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
 
 //////POM AND HONEY  MENU ITEMS////////////////////
 

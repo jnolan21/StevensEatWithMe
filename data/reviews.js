@@ -220,7 +220,7 @@ const getAllRestaurantReviews = async (restaurantId) => {
 
 }
 
-console.log(await getAllRestaurantReviews("680bd106e7617269f771b315"));
+//console.log(await getAllRestaurantReviews("680bd106e7617269f771b315"));
 
 
 
