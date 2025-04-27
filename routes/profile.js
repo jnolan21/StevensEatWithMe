@@ -3,6 +3,9 @@ const router = Router();
 import userData from '../data/users.js';
 import helper from '../data/helpers.js';
 import rsvpData from "../data/rsvps.js";
+import reviews from '../data/reviews.js';
+import restaurants from '../data/restaurants.js';
+import menuItems from '../data/menuItems.js';
 //import crypto from 'crypto'
 
 
@@ -56,20 +59,36 @@ router
         return res.status(400).json({error: e.message});
     }
 
-    //get the users RSVPS
-    let userPosts= [];
+    // Get the users RSVPS
+    let userRSVPPosts = [];
     try{
-        let allPosts = await rsvpData.getAllRsvps(); // get all RSVPS in DB
-        for(let i=0; i<allPosts.length; i++){ //loop thru and match posts with user id 
-            if(allPosts[i].userId === id){
-                userPosts.push(allPosts[i]);
-            }
+        for (let i = 0; i < user.RSVP.length; i++) {
+            userRSVPPosts.push(await rsvpData.getRsvpById(user.RSVP[i]));
         }
     }
     catch(e){
         return res.status(500).json({error: e.message});
     }
 
+    // Get the users reviews
+    let userReviews = [];
+    try{
+        // Get all the information about the review: restaurant name, menu item name, etc.
+        for (let i = 0; i < user.reviews.length; i++) {
+            let review = await reviews.getReviewById(user.reviews[i]);
+            // Get the name of the restaurant and menu item
+            let restaurant = await restaurants.getRestaurantById(review.restaurantId);
+            review['restaurantName'] = restaurant.name;
+            if (review.menuItemId && review.menuItemId.trim() !== '') {
+                let menuItem = await menuItems.getMenuItemById(review.menuItemId);
+                review['menuItemName'] = menuItem.name;
+            }
+            userReviews.push(review);
+        }
+    }
+    catch(e){
+        return res.status(500).json({error: e.message});
+    }
 
     // Render the user's profile page
     try {
@@ -82,9 +101,9 @@ router
                 lastName: user.lastName,
                 following: following, // array of user objects
                 followers: followers, // array of user objects
-                RSVPposts: userPosts, // array of RSVP post objects
-                currentRSVPs: [], // array of RSVP post objects
-                reviews: [] // array of review objects
+                RSVPposts: userRSVPPosts, // array of RSVP post objects
+                currentRSVPs: userRSVPPosts, // array of RSVP post objects
+                reviews: userReviews // array of review objects
             },
             isLoggedIn: !!req.session.user
         })

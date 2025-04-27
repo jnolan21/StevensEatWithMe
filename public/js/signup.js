@@ -10,6 +10,7 @@
   let passwordConfirm = document.getElementById('signup-passwordConfirm');
   let serverForm = document.getElementById('signup-form');
   let errorList = document.getElementById('signup-errors');
+  let submitButton = document.getElementById('signup-button');
 
   let errors = [];
   // Checks the user's first name
@@ -105,6 +106,9 @@
         // Clear the password and passwordConfirm input for security
         password.value = '';
         passwordConfirm.value = '';
+      } else {
+        /* If there are no errors, disable the submit button to prevent multiple requests */
+        submitButton.disabled = true;
       }
       /* If the program reaches this point (passed the error checking if-statement above)
         the form is automatically submitted to the server

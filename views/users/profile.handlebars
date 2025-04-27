@@ -65,4 +65,32 @@ ALL RSVP FIELDS:
         </ul>
     </section>
 
+
+    <!-- "Reviews" Container -->
+    <section class="profile-myRSVPposts">
+        <h2>My Reviews:</h2>
+        <ul>
+            {{#each user.reviews}}
+                <!-- Display each review -->
+                <li>
+                    <!-- Display the restaurant name -->
+                    <p>{{this.restaurantName}}</p>
+                    {{#if this.menuItemName}}
+                        <!-- Display the menu items name -->
+                        <p>{{this.menuItemName}}</p>
+                    {{/if}}
+                    <!-- Display the rating -->
+                    <p>{{this.rating}}</p>
+                    <!-- Display the wait time -->
+                    <p>{{this.waitTime}}</p>
+                    <!-- Display the review text -->
+                    <p>{{this.review}}</p>
+
+                    <!-- Display the review text -->
+                </li>
+
+            {{/each}}
+        </ul>
+    </section>
+
 </article>
