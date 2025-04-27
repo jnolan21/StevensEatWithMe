@@ -6,6 +6,7 @@
     let password = document.getElementById('login-password');
     let serverForm = document.getElementById('login-form');
     let errorList = document.getElementById('login-errors');
+    let submitButton = document.getElementById('login-button');
   
     let errors = [];
     // Checks the user's email
@@ -67,6 +68,9 @@
           errorList.hidden = false;
           // Clear the password input for security
           password.value = '';
+        } else {
+          /* If there are no errors, disable the submit button to prevent multiple requests */
+          submitButton.disabled = true;
         }
         /* If the program reaches this point (passed the error checking if-statement above)
           the form is automatically submitted to the server

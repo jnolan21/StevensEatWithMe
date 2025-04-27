@@ -49,32 +49,32 @@ router
     try {
       user.firstName = helper.checkName(user.firstName, 'firstName', 'POST /users');
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
     try {
       user.lastName = helper.checkName(user.lastName, 'lastName', 'POST /users');
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
     try{
       user.email = helper.checkEmail(user.email);
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
     try {
       user.username = helper.checkUsername(user.username);
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
     try {
       user.password = helper.checkPassword(user.password);
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
     try {
       user.passwordConfirm = helper.checkPassword(user.passwordConfirm);
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
     // Make sure password === passwordConfirm
     if (user.password !== user.passwordConfirm) errors.push("Password and confirm password must match.");
@@ -95,7 +95,7 @@ router
     try {
       allUsers = await userData.getAllUsers();
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
     try {
       // Check if a user already exists with the given email or username
@@ -104,24 +104,54 @@ router
         if (user.username.toLowerCase() === allUsers[i].username.toLowerCase()) throw new Error(`User with username '${user.username}' already exists!`);
       }
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
+    // If there are errors, reload the signup page and display the errors
+    if (errors.length > 0) {
+      return res.status(400).render('users/signup', {
+        title: "EatWithMe signup",
+        user: user,
+        errors: errors,
+        hasErrors: true,
+        partial: 'signupScript',
+        isLoggedIn: !!req.session.user
+      });
+    }
+    let newUser;
     try {
       // Create the new user
-      let newUser = await userData.createUser(
+      newUser = await userData.createUser(
         user.firstName,
         user.lastName,
         user.email,
         user.username,
         user.password,
       )
+    } catch (e) {
+      return res.status(400).render('users/signup', {
+        title: "EatWithMe signup",
+        user: user,
+        errors: errors,
+        hasErrors: true,
+        partial: 'signupScript',
+        isLoggedIn: !!req.session.user
+      });
+    }
+    try {
       // Send the verification email
       await helper.sendVerificationEmail(newUser._id);
       res.render('users/verify', {title: "EatWithMe login", partial: 'signupScript', isLoggedIn: !!req.session.user});
       // Redirect the '/verify' route and wait for user to click the email
       //res.render('users/verify', {email: newUser.email});
     } catch (e) {
-      res.status(500).json({error: e.message});
+      return res.status(500).render('users/signup', {
+        title: "EatWithMe signup",
+        user: user,
+        errors: [e.message],
+        hasErrors: true,
+        partial: 'signupScript',
+        isLoggedIn: !!req.session.user
+      });
     }
 });
 
@@ -135,7 +165,13 @@ router
     try {
       res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user});
     } catch (e) {
-      return res.status(400).json({error: e.message});
+      return res.status(500).render('users/login', {
+        title: "EatWithMe login",
+        errors: [e.message],
+        partial: 'loginScript',
+        hasErrors: true,
+        isLoggedIn: !!req.session.user
+      });
     }
   })
   .post(async (req, res) => {
@@ -146,24 +182,23 @@ router
     try {
       email = helper.checkEmail(user.email);
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
     try {
       password = helper.checkString(user.password, 'password');
     } catch (e) {
-      errors.push(e);
+      errors.push(e.message);
     }
     if (errors.length > 0) {
       // Render login if invalid input supplied
-      res.render('users/login', {
+      return res.render('users/login', {
         title: "EatWithMe login",
-        user: {email},
+        email: email,
         errors: errors,
         hasErrors: true,
         partial: 'loginScript',
         isLoggedIn: !!req.session.user
       });
-      return;
     }
     try {
       let allUsers = await userData.getAllUsers();
@@ -184,42 +219,27 @@ router
               email: allUsers[i].email,
               isAdmin: allUsers[i].isAdmin || false
             }
-            res.redirect(`/profile`); // Redirect the user to the profile route
-            return;
+            return res.redirect(`/profile`); // Redirect the user to the profile route
           } else {
             // Reload the login page if the user is not verified
             errors.push("Invalid login credentials or account not verified.");
-            res.render('users/login', {
-              title: "EatWithMe login",
-              user: {email},
-              hasErrors: true,
-              errors: errors,
-              partial: 'loginScript',
-              isLoggedIn: !!req.session.user
-            });
-            return;
+            break;
           }
         }
       }
-      errors.push('Invalid login credentials.');
+      if (errors.length === 0) errors.push('Invalid login credentials.');
     } catch (e) {
-      errors.push(e)
+      errors.push(e.message)
     }
-    try {
-      if (errors.length > 0) {
-        // Render login if invalid input supplied
-        res.render('users/login', {
-          title: "EatWithMe login",
-          user: {email},
-          errors: errors,
-          hasErrors: true,
-          isLoggedIn: !!req.session.user
-        });
-        return;
-      }
-    } catch (e) {
-      res.status(500).json({error: e.message});
-    }
+    // Render login if invalid input supplied
+    return res.status(403).render('users/login', {
+      title: "EatWithMe login",
+      email: email,
+      errors: errors,
+      hasErrors: true,
+      partial: 'loginScript',
+      isLoggedIn: !!req.session.user
+    });
   });
 
 

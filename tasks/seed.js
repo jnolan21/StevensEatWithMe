@@ -1068,6 +1068,27 @@ try {
 } catch (e) {
     console.error(`${e.message}`);
 }
+// addFriend() - add user4 to user1's friend list
+try {
+    let user1FriendsList = await users.addFriend(user1._id, user4._id);
+    //console.log(user1FriendsList);
+} catch (e) {
+    console.error(`${e.message}`);
+}
+// addFriend() - add user1 to user2's friend list
+try {
+    let user1FriendsList = await users.addFriend(user2._id, user1._id);
+    //console.log(user1FriendsList);
+} catch (e) {
+    console.error(`${e.message}`);
+}
+// addFriend() - add user1 to user3's friend list
+try {
+    let user1FriendsList = await users.addFriend(user3._id, user1._id);
+    //console.log(user1FriendsList);
+} catch (e) {
+    console.error(`${e.message}`);
+}
 
 /* addFriend() - Error user2 is already in user1's friend list
 try {
@@ -1078,13 +1099,14 @@ try {
 }
 */
 
-// removeFriend() - remove user2 from user1's friend list
+/* removeFriend() - remove user2 from user1's friend list
 try {
     let user1FriendsList = await users.removeFriend(user1._id, user2._id);
     //console.log(user1FriendsList);
 } catch (e) {
     console.error(`${e.message}`);
 }
+*/
 
 
 
