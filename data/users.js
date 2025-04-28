@@ -236,8 +236,10 @@ const addFriend = async (id, friendId) => {
     id = helper.checkId(id);
     friendId = helper.checkId(friendId);
     // Prevent self-following
-    if (id === friendId) throw new Error('Cannot add or remove yourself as a friend.');
-    const allUsers = await getAllUsers();
+    if (id === friendId){
+         throw new Error('Cannot add or remove yourself as a friend.');
+    }
+         const allUsers = await getAllUsers();
     // Verify that 'id' and 'friendId' exist
     let idFound = false;
     let friendIdFound = false;
@@ -249,6 +251,7 @@ const addFriend = async (id, friendId) => {
     if (!friendIdFound) throw new Error('Friend id not found!');
     // Add the friend to user's friend list (make sure they're not already in the friends list)
     let user = await getUserById(id);
+    let numFriendsBefore = user.friends.length;
     const userCollection = await users();
     let updatedUser = await userCollection.findOneAndUpdate(
         {_id: new ObjectId(id)},
@@ -256,6 +259,10 @@ const addFriend = async (id, friendId) => {
     );
     // Return the user's list of friends
     updatedUser = await getUserById(id);
+    let numFriendsAfter = updatedUser.friends.length;
+    if (numFriendsAfter === numFriendsBefore) {
+        throw new Error("This user is already in your friends list!")
+    }
     return updatedUser.friends;
 }
 

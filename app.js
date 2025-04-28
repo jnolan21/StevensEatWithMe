@@ -90,7 +90,7 @@ app.use('/users/signup', (req, res, next) => {
   else next(); // Non-authenticated user
 });
 
-/* GET /meetupPage */
+/* GET , POST /meetupPage */
 app.use('/meetupPage', (req, res, next) => {
   if (!req.session.user) return res.redirect('/users/login'); // Non-authenticated user
   else next(); // Authenticated user

@@ -314,6 +314,18 @@ footer{
     width: 55px;
 
   }
+  .followForm {
+    display: block;
+    text-align: right;
+    margin-bottom: 10px; 
+  }
+  .postheader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
 
   .comments{
     margin-bottom: 50px;

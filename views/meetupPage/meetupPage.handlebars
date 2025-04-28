@@ -5,11 +5,35 @@
     <div class = "rsvpBox" >
         
         <h2>Where: {{this.restaurantId}}</h2>
-        <p>User Posted: {{this.user}} <button class = "followButton"> Follow</button></p>
+    <div class="postheader">
+        <p>User Posted: {{this.user}} 
+            <form action="/meetupPage/follow" method="POST" class = "followForm">
+                <input type="hidden" name="friendId" value="{{this.userId}}">
+                <input type="hidden" name="userId" value="{{../currUser._id}}">
+                <button type="submit" class="followButton">Follow</button>
+            </form></p>
+    </div>
         <p>When: {{this.meetUpTime.Date}}</p>
         <p> {{this.meetUpTime.Time}}</p>
         <p class = "comments">Comments: {{this.comment}} </p>
         <button class = "rsvpButton"> RSVP</button>
     </div>
     {{/each}}
+    {{#if error}}
+        <p class = "meetupError">Oh no! {{error}}</p>
+    {{/if}}
+    {{#if message}}
+        <p class = "friendAddMessage">{{message}}</p>
+    {{/if}}
   
+  <!--
+
+<form action="/meetupPage/follow" method="POST">
+  <input type="hidden" name="friendId" value="{{this.userId}}">
+  <button type="submit" class="followButton">Follow</button>
+</form>
+<form action="/meetupPage/follow" method="POST">
+  <button type="submit" class="followButton">Follow</button>
+</form>
+
+    -->
