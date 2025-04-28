@@ -9,7 +9,7 @@ import menuItems from '../data/menuItems.js';
 //import crypto from 'crypto'
 
 
-// General profile route
+// Get the admin page
 router
   .route('/')
   .get(async (req, res) => {
@@ -17,6 +17,10 @@ router
     if (!req.session.user) {
         // 403 = forbidden page
         return res.status(403).redirect('users/login');
+    }
+    // Verify that the user is an admin
+    if (!req.session.user.isAdmin) {
+        res.status(403).redirect('/profile')
     }
 
     let id = req.session.user._id;
@@ -90,10 +94,10 @@ router
         return res.status(500).json({error: e.message});
     }
 
-    // Render the user's profile page
+    // Render the user's admin page
     try {
-        res.render('users/profile', {
-            title: "EatWithMe Profile Page",
+        res.render('users/admin', {
+            title: "EatWithMe Admin Page",
             // Send the relevant information about the user
             user: {
                 username: user.username,
