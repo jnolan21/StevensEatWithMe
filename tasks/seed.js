@@ -570,8 +570,6 @@ try {
 // createMenuItem() (menuItem1)
 let menuItem1;
 try {
-    //console.log(pierceDiningHall)
-    //console.log(yellas);
     menuItem1 = await menuItems.createMenuItem(
         pierceDiningHall._id,
         " Grilled Chicken Cheddar Sandwich ",
@@ -582,6 +580,107 @@ try {
     console.log(`${e.message}`);
 }
 
+// createMenuItem() (hamburgerPierce)
+let hamburgerPierce;
+try {
+
+    hamburgerPierce = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Hamburger ",
+        "Burger patty with lettuce, tomato and onion. Served on a hamburger bun. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+// createMenuItem() (cheeseBurgerPierce)
+let cheeseBurgerPierce;
+try {
+
+    cheeseBurgerPierce = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Cheeseburger ",
+        "Burger patty with cheddar cheese, lettuce, tomato and onion. Served on a hamburger bun. ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+// createMenuItem() (vegBurgerPierce)
+let vegBurgerPierce;
+try {
+
+    vegBurgerPierce = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Veggie Burger ",
+        "Veggie patty with lettuce, tomato and onion. Served on a hamburger bun. ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+// createMenuItem() (philly)
+let philly;
+try {
+    philly = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Philly Cheesesteak ",
+        "Philly chese steak served on a roll. Choice of American cheese, Swiss cheese, Pepper Jack Cheese, or none.",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+// createMenuItem() (quesadilla)
+let quesadillaPierce;
+try {
+    quesadillaPierce = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Quesadilla ",
+        "Cheese quesadilla with salsa and sour cream on the side.",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+// createMenuItem() (chicken tenders)
+let tendersPiece;
+try {
+    tendersPiece = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Chicken Tenders ",
+        "Chicken tenders served with ketchup, honey mustard, or BBQ sauce.",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+// createMenuItem() (chicken tenders)
+let friesPierce;
+try {
+    friesPierce = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " French Fries ",
+        "French fries.",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+// createMenuItem() (pizza slice)
+let pizzaslice;
+try {
+    pizzaslice = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Pizza Slice",
+        "Slice of pizza. Choice of veggie, pepperoni, plain or specialty. ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+//add breakfast items 
 
 //////YELLAS MENU ITEMS////////////////////
 
