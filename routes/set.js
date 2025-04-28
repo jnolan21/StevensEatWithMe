@@ -37,7 +37,7 @@ router.route('/diningList').get(async (req, res) => {
     res.render('diningList/dininglist', 
     {title: "EatWithMe Dining List",
     restaurantList: restaurantss, 
-    isLoggedIn: !!req.session.user,
+    isLoggedIn: !!req.session.user
 })
   } 
   catch (e) {
