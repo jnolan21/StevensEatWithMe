@@ -64,8 +64,10 @@
         <ol>
         {{#each restaurantList}}
         <li>
-            <h2 id = "restName">{{this.name}}</h2>
-            <img src = {{this.imageURL}} class = "restaurant_img" alt = {{this.name}} >            
+            <a href = "/diningList/{{this._id}}">
+                <h2 id = "restName">{{this.name}}</h2>
+                <img src = "{{this.imageURL}}" class = "restaurant_img" alt = "{{this.name}}" >    
+            </a>        
             <ul>
                 {{#each menuItems}}
                 <li>{{name}}</li>

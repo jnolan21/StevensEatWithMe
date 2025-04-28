@@ -216,11 +216,25 @@ const getAllRestaurantReviews = async (restaurantId) => {
         reviews.push(review);
     }
 
+    let menuItems = restaurant.menuItems;
+    for (let i = 0; i < menuItems.length; i++) {
+        const menuItem = menuItems[i];
+        const menuItemReviews = menuItem.reviews;
+        for (let j = 0; j < menuItemReviews.length; j++) {
+            const menuItemReviewId = menuItemReviews[j];
+            const menuItemReview = await getReviewById(menuItemReviewId);
+            menuItemReview.menuItemName = menuItem.name;
+            reviews.push(menuItemReview);
+        }
+        
+
+    }
+
     return reviews;
 
 }
 
-console.log(await getAllRestaurantReviews("680bd106e7617269f771b315"));
+
 
 
 
