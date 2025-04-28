@@ -8,10 +8,10 @@
         {{{restaurantList}}}
     </script> --}}
 
-    <h1> All Dining Options </h1>
+    <h1 class = "h1restlist"> All Dining Options </h1>
 
 
-    <div class = "filter-container"></div>
+    <div class = "filter-container">
         <div class = "dropdown filter-group">
             <button 
             class="btn btn-default dropdown-toggle" 
@@ -60,6 +60,7 @@
             </div>
             <button>Clear All Selections</button>
         </div>
+        </div>
 
         <ol>
         {{#each restaurantList}}
@@ -69,7 +70,7 @@
                 <img src = "{{this.imageURL}}" class = "restaurant_img" alt = "{{this.name}}" >    
             </a>                   
            <details>
-           <summary>Menu Items</summary>
+           <summary class = "caret-summary"> <span class="caret"></span> Menu Items</summary>
             <ul>
                 {{#each menuItems}}
                 <li>{{name}}</li>

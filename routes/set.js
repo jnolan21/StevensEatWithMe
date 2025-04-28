@@ -49,7 +49,10 @@ router.route('/meetupPage').get(async (req, res) => {
   try{
     let allrsvps = await rsvps.getAllRsvps();
     allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
-    res.render('meetupPage/meetupPage', {title: "EatWithMe Meetup Page", allrsvps: allrsvps, isLoggedIn: !!req.session.user})
+    res.render('meetupPage/meetupPage', {
+      title: "EatWithMe Meetup Page", 
+      allrsvps: allrsvps, 
+      isLoggedIn: !!req.session.user})
   }
   catch (e) {
     return res.status(400).json({error: e.message});

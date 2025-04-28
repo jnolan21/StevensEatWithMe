@@ -16,12 +16,20 @@
 
 
 
-<main>
+<main class = "diningFacility">
+    <div class="header-container">
+    <div class = "header-text">
     <h1 id = "restaurantName">{{restaurant.name}}</h1>
     <h2 id = "location">{{restaurant.location}}</h2>
+    </div>
+        <ul id = "daysOftheWeek" class = "daysOftheWeek">
+        {{#each restaurant.hoursOfOperation}}
+        <li>{{@key}}: {{this}}</li>
+        {{/each}}
+    </ul>
+    </div>
     <p>Average Wait Time: {{restaurant.averageWaitTime}}</p>
     <p>Rating: {{restaurant.averageRating}}/5</p>
-    <img id = "restimg" src = {{restaurant.imageURL}} alt = {{restaurant.name}}>
     <p id = "typeofFood">
         {{#each restaurant.typeofFood}}
         {{this}}{{#unless @last}}, {{/unless}}
@@ -32,13 +40,11 @@
         {{this}}{{#unless @last}}, {{/unless}}
         {{/each}}
     </p>
-    <ul id = "daysOftheWeek">
-        {{#each restaurant.hoursOfOperation}}
-        <li>{{@key}}: {{this}}</li>
-        {{/each}}
-    </ul>
+    <img id = "restimg" class="restimgFac" src = {{restaurant.imageURL}} alt = {{restaurant.name}}>
+
+
     <div id="menuItems">
-        <ol>
+        <ol class="menuList">
             {{#each restaurant.menuItems}}
             <li class="menuItem">
             <h3 class="menuItemName">{{this.name}}</h3>
@@ -59,7 +65,9 @@
         </ol>
     </div>
 
-<div id = "reviews">
+<div class = "reviews">
+    <details>
+        <summary class = "caret-summary-reviews"><span class="caret"></span> Reviews</summary>
     <ol>
         {{#each reviews}}
         <li>
@@ -72,7 +80,7 @@
         </li>
         {{/each}}
     </ol>
-    
+    </details>
 </div>
 
 
