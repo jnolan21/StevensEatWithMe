@@ -68,7 +68,7 @@ router.route('/diningList/:id').get(async (req, res) => {
     const restaurant = await restaurants.getRestaurantById(id);
     const restaurantReviews = await reviews.getAllRestaurantReviews(id);
     return res.render('diningList/diningFacility', {title: restaurant.name, restaurant:restaurant,
-      reviews: restaurantReviews
+      reviews: restaurantReviews, isLoggedIn: !!req.session.user
     }); 
   } catch(e) {
     console.log(e);
