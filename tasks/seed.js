@@ -42,7 +42,7 @@ try {
 // createAdminUser() (user4)
 let user4;
 try {
-    user4 = await users.createAdminUser("  The ", " Admin ", " admin@stevens.edu", " admin ", " The_0Admin0_Of_EatWithMe ");
+    user4 = await users.createAdminUser("  The ", " Admin ", " admin@stevens.edu", " admin ", " Hello_world1234 ");
     //console.log(user2);
 } catch (e) {
     console.error(`${e.message}`);

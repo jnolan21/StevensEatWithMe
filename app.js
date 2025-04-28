@@ -72,10 +72,19 @@ app.use((req, res, next) => {
 });
 
 
-/* GET users/profile */
+/* GET /profile */
 app.use('/profile', (req, res, next) => {
   if (req.session.user) next(); // Authenticated user
-  else return res.redirect('users/signup'); // Non-authenticated user
+  else return res.redirect('users/login'); // Non-authenticated user
+});
+
+/* GET /admin */
+app.use('/admin', (req, res, next) => {
+  if (req.session.user) {
+    if (req.session.user.isAdmin) next(); // Authenticated admin
+    else res.redirect('/profile'); // Authenticated non-admin user
+  }
+  else return res.redirect('users/login'); // Non-authenticated user
 });
 
 /* GET users/login */

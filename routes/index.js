@@ -4,6 +4,7 @@ import setRoutes from './set.js';
 import profileRoutes from './profile.js';
 import restaurants from '../data/restaurants.js';
 import meetupRoutes from './meetups.js'; 
+import adminRoutes from './admin.js'
 import helpers from '../data/helpers.js';
 
 //import path from 'path';
@@ -15,6 +16,7 @@ const constructorMethod = (app) => {
   app.use('/diningList', setRoutes);
   app.use('/meetupPage', meetupRoutes);
   app.use('/profile', profileRoutes);
+  app.use('/admin', adminRoutes);
   app.use('/', setRoutes);
   app.use('/public', staticDir('public'));
   app.use('*', async (req, res) => {
