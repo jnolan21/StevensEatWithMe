@@ -68,6 +68,10 @@
                 <h2 id = "restName">{{this.name}}</h2>
                 <img src = "{{this.imageURL}}" class = "restaurant_img" alt = "{{this.name}}" >    
             </a>        
+            <h2 id = "restName">{{this.name}}</h2>
+            <img src = {{this.imageURL}} class = "restaurant_img" alt = {{this.name}} >            
+           <details>
+           <summary>Menu Items</summary>
             <ul>
                 {{#each menuItems}}
                 <li>{{name}}</li>
@@ -75,6 +79,7 @@
             </ul>
 
         </li>
+        </details>
         {{/each}}
         
         </ol>

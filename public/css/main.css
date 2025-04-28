@@ -8,11 +8,18 @@
   }
   /* entire page */
 body {
-    background-color: #f8f9fa;  /* clean, soft, modern */
-    font-family: Georgia, 'Times New Roman', serif;
+    background-color: #e9ebed ; 
+    font-family: Georgia, 'Times New Roman', serif ;
 
 
   }
+
+h1{
+  font-weight: bolder;
+}
+h2{
+  font-weight: bold;
+}
 /* nav bar styling*/
 nav ul{
     list-style-type: none;
@@ -204,6 +211,7 @@ h2.signup{
     border-radius: 10px;
     padding-left: 10px;
     margin-bottom: 20px;
+    margin-left: 10px;
     max-width: 400px;
     box-shadow:12px 6px 30px rgba(0, 0, 0, 0.1); 
     background-color: var(--stevens-light);
@@ -285,3 +293,45 @@ h2.signup{
 #daysOftheWeek {
   list-style-type: none;
 }
+
+
+/* profile page styling */
+ .profile{
+  border: 2px solid var(--stevens-red);
+  width: fit-content;
+  padding-left: 9px;
+  padding-right: 9px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 8px;
+  background-color: var(--stevens-light);
+  box-shadow: 0px 4px 10px #000000;
+ }
+
+ .profileInfo{
+  padding-left: 20px;
+ }
+
+ .reviewLi{
+  border: 2px solid black;
+  border-radius: 8px;
+  padding-bottom: 10px;
+  padding-right: 8px;
+  padding-top: 10px;
+  padding-left: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  width: 400px;
+  position: relative;
+  box-shadow: 0px 2px 5px #000000;
+ }
+
+ .reviewSpan{
+  font-weight: bold;
+ }
+
+ .revItalic{
+  font-style: italic;
+ }
