@@ -283,6 +283,9 @@ footer{
 
 
   /*styling for rsvp boxes on meetup page*/
+  .rsvph1{
+    margin-left: 14px;
+  }
   .rsvpBox{
     position: relative;
     color: black;
@@ -290,7 +293,7 @@ footer{
     border-radius: 10px;
     padding-left: 10px;
     margin-bottom: 20px;
-    margin-left: 10px;
+    margin-left: 14px;
     max-width: 400px;
     box-shadow:12px 6px 30px rgba(0, 0, 0, 0.1); 
     background-color: var(--stevens-light);

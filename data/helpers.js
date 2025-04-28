@@ -304,39 +304,59 @@ function checkMeetUpTime(meetUpTime){
     return meetUpTime;
 }
 
-async function formatAndCheckRSVPS(allrsvps){
+async function formatAndCheckRSVPS(allrsvps){ //change users attending to a list of usernames
     let currentRsvps = [];
     for(let i =0; i< allrsvps.length; i++){
         let [month, day, year] = (allrsvps[i].meetUpTime.Date).split('/');
         let inputDate = new Date(Number(year), Number(month) - 1, Number(day));        
         let today = new Date();
  
-          if(inputDate.getFullYear() === today.getFullYear() && inputDate.getMonth() === today.getMonth() && inputDate.getDate() === today.getDate()){
-            let [time, period] = (allrsvps[i].meetUpTime.Time).split(/(AM|PM)/); // ex: split into "3:45" and "PM"
-            let [hoursStr, minutesStr] = time.split(':'); //seperate mins and hours by colon
-            let hours = Number(hoursStr);
-            const minutes = Number(minutesStr);
-            //convert to military time to comapre to current time
-            if (period === 'PM' && hours !== 12) {
-              hours += 12;
+          if(inputDate.getFullYear() >= today.getFullYear() && inputDate.getMonth() >= today.getMonth() && inputDate.getDate() >= today.getDate()){ //if not a past rsvp
+            if(inputDate.getFullYear() === today.getFullYear() && inputDate.getMonth() === today.getMonth() && inputDate.getDate() === today.getDate()){ //if the rsvp is currently today lets make sure its not expired (by more than an hour)
+                let [time, period] = (allrsvps[i].meetUpTime.Time).split(/(AM|PM)/); // ex: split into "3:45" and "PM"
+                let [hoursStr, minutesStr] = time.split(':'); //seperate mins and hours by colon
+                let hours = Number(hoursStr);
+                const minutes = Number(minutesStr);
+                //convert to military time to comapre to current time
+                if (period === 'PM' && hours !== 12) {
+                hours += 12;
+                }
+                if (period === 'AM' && hours === 12) {
+                hours = 0; //make midnight 0
+                }
+                //get current time in minutes
+                const now = new Date();
+                const currentMinutes = now.getHours() * 60 + now.getMinutes();
+                const inputMinutes = hours * 60 + minutes;
+                if ((inputMinutes+60) >= currentMinutes){ //gives ane extra hour before actually expiring  
+                    let rest = await restaurants.getRestaurantById(allrsvps[i].restaurantId);
+                    allrsvps[i].restaurantId = rest.name;
+                    let userPosted = await users.getUserById(String(allrsvps[i].userId));
+                    allrsvps[i].user = userPosted.firstName;
+                    currentRsvps.push(allrsvps[i]);
+                }
             }
-            if (period === 'AM' && hours === 12) {
-              hours = 0; //make midnight 0
-            }
-            //get current time in minutes
-            const now = new Date();
-            const currentMinutes = now.getHours() * 60 + now.getMinutes();
-            const inputMinutes = hours * 60 + minutes;
-            if (inputMinutes >= currentMinutes){
+            else{ //future rsvp (not current day),just psush 
                 let rest = await restaurants.getRestaurantById(allrsvps[i].restaurantId);
-                        allrsvps[i].restaurantId = rest.name;
-                        let userPosted = await users.getUserById(String(allrsvps[i].userId));
-                        allrsvps[i].user = userPosted.firstName;
-                        currentRsvps.push(allrsvps[i]);
+                allrsvps[i].restaurantId = rest.name;
+                let userPosted = await users.getUserById(String(allrsvps[i].userId));
+                allrsvps[i].user = userPosted.firstName;
+                currentRsvps.push(allrsvps[i]);
             }
+
             }
 
 
+      }
+    //now lets update each list of attenders for each current rsvp with the actual names of the users rather than just IDS
+      for(let i =0; i< currentRsvps.length; i++){
+        let namesAttending = [];
+        let userIdsAttending = currentRsvps[i].usersAttending; //get all IDS of users attending 
+        for (let j=0 ;j<userIdsAttending.length; j++){
+            let currUser = (await userData.getUserById(userIdsAttending[j])).firstName;
+            namesAttending.push(currUser)
+        }
+        currentRsvps[i].usersAttending = namesAttending;
       }
       return currentRsvps;
 }

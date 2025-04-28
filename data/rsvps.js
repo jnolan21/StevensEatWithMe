@@ -117,7 +117,7 @@ const userJoinRsvp = async (
 
     // make sure user is not enrolled in the RSVP
     if (rsvp.usersAttending.includes(userId)){
-        throw new Error("User is enrolled in the RSVP they are trying to join")
+        throw new Error("You are already attending this meetup!")
     }
 
     // Add the user to the rsvp list

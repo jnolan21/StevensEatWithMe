@@ -58,4 +58,29 @@ router
             };
         }
   );
+  router
+  .post('/rsvp', async (req, res) => {
+    //const userJoinRsvp = async (id,userId..returns rsvp object
+    let allrsvps;
+        try{
+            allrsvps = await rsvps.getAllRsvps();
+            allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
+            let userId = req.body.userId;
+            let rsvpId = req.body.rsvpID;
+            let posterId = req.body.posterId;
+            if(posterId === userId) throw new Error("This is your meetup! You are already attending.");
+            let currRSVP = await rsvps.userJoinRsvp(rsvpId, userId);
+            res.redirect('/meetupPage/meetupPage?message=Added+to+Attendees!');
+        }
+        catch(e){
+            return res.status(400).render('meetupPage/meetupPage', {
+                title: "EatWithMe Meetup Page", 
+                allrsvps: allrsvps, 
+                error: e||e.message,
+                currUser: req.session.user,
+                isLoggedIn: !!req.session.user})
+
+        }
+    }
+  );
 export default router;

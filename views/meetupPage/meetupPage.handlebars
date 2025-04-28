@@ -1,5 +1,5 @@
 
-    <h1> Current Meetups </h1>
+    <h1 class = "rsvph1"> Current Meetups </h1>
 
     {{#each allrsvps}}
     <div class = "rsvpBox" >
@@ -16,7 +16,13 @@
         <p>When: {{this.meetUpTime.Date}}</p>
         <p> {{this.meetUpTime.Time}}</p>
         <p class = "comments">Comments: {{this.comment}} </p>
-        <button class = "rsvpButton"> RSVP</button>
+        <p class = "usersAttending">Users Attending: {{this.usersAttending}}</p>
+        <form action="/meetupPage/rsvp" method="POST" class = "rsvpForm"> <!-- in order to add a user to an rsvp as an attendee, we need the rsvp id and the userId of the current user making request. in rsvp function make sure user is not already an attendee-->
+                <input type="hidden" name="userId" value="{{../currUser._id}}">
+                <input type="hidden" name="rsvpID" value="{{this._id}}">
+                 <input type="hidden" name="posterId" value="{{this.userId}}">
+                <button type="submit" class="rsvpButton">RSVP</button>
+            </form></p>
     </div>
     {{/each}}
     {{#if error}}

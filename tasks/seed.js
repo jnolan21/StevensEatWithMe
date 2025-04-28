@@ -1341,6 +1341,23 @@ try {
 
 
 //create RSVPS
+try{
+    const today = new Date();
+    const month = String(today.getMonth() + 1+1).padStart(2, '0');  
+    const day = String(today.getDate()).padStart(2, '0');         
+    const year = today.getFullYear();                            
+    const formattedDate = `${month}/${day}/${year}`;
+
+    let rsvpPost3 = await rsvps.createRsvp(
+        "Hi! Im Foo. Wanna get some FOOd...maybe we go to the Bar?",
+        {Date: formattedDate, Time:"6:00PM"},
+        pom._id,
+        user3._id
+    )
+}
+catch(e){
+    console.error(`${e.message}`)
+}
 
 try{
     const today = new Date();
