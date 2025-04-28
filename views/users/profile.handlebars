@@ -41,26 +41,28 @@ ALL RSVP FIELDS:
 
 
     <!-- "My RSVP Posts" Container -->
+    <!-- <a href="/rsvp/{{this._id}}">{{this.title}} - {{this.meetUpTime.date}}, {{this.meetUpTime.time}}</a> -->
     <section class="profile-rsvps">
         <h2 class = "profile">My RSVP Posts:</h2>
+        <p>(all meetup posts that I have posted, or attended)</p>
         <ul>
             <!-- Display all RSVP posts made by this user -->
             {{#each user.RSVPposts}}
-                <!-- Link that displays RSVP post: title, date, time -->
-                <li><a href="/rsvp/{{this._id}}">{{this.title}} - {{this.meetUpTime.date}}, {{this.meetUpTime.time}}</a></li>
+                <li>{{this.comment}}</li>
             {{/each}}
         </ul>
     </section>
 
 
     <!-- "My Current RSVPs" Container -->
+    <!-- <a href="/rsvp/{{this._id}}">{{this.title}} - {{this.date}}, {{this.time}}</a> -->
     <section class="profile-myRSVPposts">
         <h2 class = "profile">My Current RSVPs:</h2>
+        <p>(current meetups posted by me, or meetups that I am attending)</p>
         <ul>
             <!-- Display all current RSVP posts made by this user -->
-            {{#each user.RSVPposts}}
-                <!-- Link that displays RSVP post: title, date, time -->
-                <li><a href="/rsvp/{{this._id}}">{{this.title}} - {{this.date}}, {{this.time}}</a></li>
+            {{#each user.currentRSVPs}}
+                <li>Posted By: {{this.user}}, Comment: {{this.comment}}</li>
             {{/each}}
         </ul>
     </section>

@@ -304,7 +304,7 @@ function checkMeetUpTime(meetUpTime){
     return meetUpTime;
 }
 
-async function formatAndCheckRSVPS(allrsvps){ //change users attending to a list of usernames
+async function formatAndCheckRSVPS(allrsvps){ //given a list of raw rsvp objects, returns current rsvps with  (non-expired and happening within current year) with list of attendees as user names rather than just IDs, and also restaurant name instead of ID, and same for the user that posted
     let currentRsvps = [];
     for(let i =0; i< allrsvps.length; i++){
         let [month, day, year] = (allrsvps[i].meetUpTime.Date).split('/');

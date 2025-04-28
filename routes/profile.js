@@ -60,11 +60,13 @@ router
     }
 
     // Get the users RSVPS
-    let userRSVPPosts = [];
+    let userRSVPPosts = []; 
+    let currentRSVPPosts = [];
     try{
         for (let i = 0; i < user.RSVP.length; i++) {
             userRSVPPosts.push(await rsvpData.getRsvpById(user.RSVP[i]));
         }
+        currentRSVPPosts = await helper.formatAndCheckRSVPS(userRSVPPosts); //going to return any rsvp posts that are active AND posted by user or that hte user is attending with names instead of ids for posteduser, usersattending and restaurant
     }
     catch(e){
         return res.status(500).json({error: e.message});
@@ -102,7 +104,7 @@ router
                 following: following, // array of user objects
                 followers: followers, // array of user objects
                 RSVPposts: userRSVPPosts, // array of RSVP post objects
-                currentRSVPs: userRSVPPosts, // array of RSVP post objects
+                currentRSVPs: currentRSVPPosts, // array of RSVP post objects
                 reviews: userReviews // array of review objects
             },
             isLoggedIn: !!req.session.user
