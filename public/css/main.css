@@ -390,6 +390,32 @@ footer{
 
 
 /* profile page styling */
+  .profile-container{
+    margin-left: 10px;
+column-count: 2;
+  }
+  .profSection {
+    break-inside: avoid;
+  }
+  .rinfo{
+    margin-left: 12px;
+    font-size: x-small;
+  }
+  .profRsvp{
+    border: 2px solid var(--stevens-gray) ;
+    border-radius: 8px;
+    margin-bottom: 9px;;
+    width: fit-content;
+    padding-right: 8px;
+    padding-left: 8px;
+    box-shadow: 0px 4px 6px #000000;
+  }
+  .caret{
+    margin-right: 5px;
+  }
+  .rsvpli{
+    list-style: none;
+  }
  .profile{
   border: 2px solid var(--stevens-red);
   width: fit-content;

@@ -2,13 +2,16 @@
     <h1 class = "profile">Hi, {{user.firstName}}!</h1>
 
     <!-- Profile Information Container -->
+    <section class = "profSection">
     <section class="profile-info">
         <p class = "profileInfo">Username: {{user.username}}</p>
         <p class = "profileInfo">First Name: {{user.firstName}}</p>
         <p class = "profileInfo">Last Name: {{user.lastName}}</p>
     </section>
-
+    </section>
+    
     <!-- "My Following" Container -->
+    <section class = "profSection">
     <section class="profile-following">
         <h2 class = "profile">My Following:</h2>
         <ul>
@@ -29,7 +32,7 @@
             {{/each}}
         </ul>
     </section>
-
+    </section>
 <!-- PERSONAL COMMENT:
 ALL RSVP FIELDS:
     comment: comment,
@@ -41,32 +44,55 @@ ALL RSVP FIELDS:
 
 
     <!-- "My RSVP Posts" Container -->
+    <!-- <a href="/rsvp/{{this._id}}">{{this.title}} - {{this.meetUpTime.date}}, {{this.meetUpTime.time}}</a> -->
+    <section class = "profSection">
     <section class="profile-rsvps">
-        <h2 class = "profile">My RSVP Posts:</h2>
+        <h2 class = "profile">My Meetup Posts:</h2>
+        <p class="rinfo">all meetup posts that I have posted, or attended</p>
         <ul>
             <!-- Display all RSVP posts made by this user -->
             {{#each user.RSVPposts}}
-                <!-- Link that displays RSVP post: title, date, time -->
-                <li><a href="/rsvp/{{this._id}}">{{this.title}} - {{this.meetUpTime.date}}, {{this.meetUpTime.time}}</a></li>
+                <li class = "rsvpli">
+                    <div class = "profRsvp">
+                        <details><summary class = "caret-summary"><p> <span class="caret"></span>Posted By: {{this.user}} </p></summary>
+                        <p>When: {{this.meetUpTime.Date}}, {{this.meetUpTime.Time}}</p>
+                        <p>Where: {{this.restaurantId}}</p>
+                        <p>Comment: {{this.comment}}</p>
+                        <p>Users Attending: {{this.usersAttending}}</p>
+                        </details>
+                    </div>
+                </li>
             {{/each}}
         </ul>
     </section>
-
+    </section>
 
     <!-- "My Current RSVPs" Container -->
+    <!-- <a href="/rsvp/{{this._id}}">{{this.title}} - {{this.date}}, {{this.time}}</a> -->
+    <section class = "profSection">
     <section class="profile-myRSVPposts">
-        <h2 class = "profile">My Current RSVPs:</h2>
+        <h2 class = "profile">Active Meetup Posts and RSVPs:</h2>
+        <p class="rinfo">current meetups posted by me, or meetups that I am attending</p>
         <ul>
             <!-- Display all current RSVP posts made by this user -->
-            {{#each user.RSVPposts}}
-                <!-- Link that displays RSVP post: title, date, time -->
-                <li><a href="/rsvp/{{this._id}}">{{this.title}} - {{this.date}}, {{this.time}}</a></li>
+            {{#each user.currentRSVPs}}
+                <li class = "rsvpli">
+                    <div class = "profRsvp">
+                        <details><summary class = "caret-summary"><p> <span class="caret"></span>Posted By: {{this.user}} </p></summary>
+                        <p>When: {{this.meetUpTime.Date}}, {{this.meetUpTime.Time}}</p>
+                        <p>Where: {{this.restaurantId}}</p>
+                        <p>Comment: {{this.comment}}</p>
+                        <p>Users Attending: {{this.usersAttending}}</p>
+                        </details>
+                    </div>
+                </li>
             {{/each}}
         </ul>
     </section>
-
+    </section>
 
     <!-- "Reviews" Container -->
+    <section class = "profSection">
     <section class="profile-myReviews">
         <h2 class = "profile">My Reviews:</h2>
         <ul>
@@ -93,5 +119,5 @@ ALL RSVP FIELDS:
             {{/each}}
         </ul>
     </section>
-
+    </section>
 </article>

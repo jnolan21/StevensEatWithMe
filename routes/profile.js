@@ -60,11 +60,28 @@ router
     }
 
     // Get the users RSVPS
-    let userRSVPPosts = [];
+    let userRSVPPosts = []; 
+    let currentRSVPPosts = [];
     try{
         for (let i = 0; i < user.RSVP.length; i++) {
-            userRSVPPosts.push(await rsvpData.getRsvpById(user.RSVP[i]));
+            let curr1 = await rsvpData.getRsvpById(user.RSVP[i]);
+            let curr2 = await rsvpData.getRsvpById(user.RSVP[i]);
+            userRSVPPosts.push(curr1);
+            currentRSVPPosts.push(curr2);
         }
+        currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts); //going to return any rsvp posts that are active AND posted by user or that hte user is attending with names instead of ids for posteduser, usersattending and restaurant
+        //convert restaurantID and usersAttendingIds to names 
+        for(let i =0; i< userRSVPPosts.length; i++){
+            userRSVPPosts[i].restaurantId = (await restaurants.getRestaurantById(userRSVPPosts[i].restaurantId)).name;
+            userRSVPPosts[i].user = (await userData.getUserById(userRSVPPosts[i].userId)).firstName
+            let namesAttending = [];
+            let userIdsAttending = userRSVPPosts[i].usersAttending; //get all IDS of users attending 
+            for (let j=0 ;j<userIdsAttending.length; j++){
+                let currUser = (await userData.getUserById(userIdsAttending[j])).firstName;
+                namesAttending.push(currUser)
+            }
+            userRSVPPosts[i].usersAttending = namesAttending;
+          }
     }
     catch(e){
         return res.status(500).json({error: e.message});
@@ -102,7 +119,7 @@ router
                 following: following, // array of user objects
                 followers: followers, // array of user objects
                 RSVPposts: userRSVPPosts, // array of RSVP post objects
-                currentRSVPs: userRSVPPosts, // array of RSVP post objects
+                currentRSVPs: currentRSVPPosts, // array of RSVP post objects
                 reviews: userReviews // array of review objects
             },
             isLoggedIn: !!req.session.user
