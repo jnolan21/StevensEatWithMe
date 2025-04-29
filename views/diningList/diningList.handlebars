@@ -12,19 +12,20 @@
 
 
     <div class = "filter-container">
-        <div class = "dropdown filter-group">
-            <button 
-            class="btn btn-default dropdown-toggle" 
-            id="dietaryFilter" 
-            data-toggle="dropdown" 
-            aria-haspopup="true" 
-            aria-expanded="false">Dietary Restrictions<span class = "caret"></span></button>
-                <ul class="dropdown-menu">
-                    {{#each dietary}}
-                    <li><label><input type="checkbox" value={{this}}>{{this}}</label></li>
-                    {{/each}}
-            </ul>
-        </div>
+        <form class = "dropdown-form">
+            <div class = "dropdown filter-group">
+                <button 
+                class="btn btn-default dropdown-toggle" 
+                id="dietaryFilter" 
+                data-toggle="dropdown" 
+                aria-haspopup="true" 
+                aria-expanded="false">Dietary Restrictions<span class = "caret"></span></button>
+                    <ul class="dropdown-menu">
+                        {{!-- {{#each dietary}}
+                        <li><label><input type="checkbox" value={{this}}>{{this}}</label></li>
+                        {{/each}} --}}
+                </ul>
+            </div>
             <div class = "dropdown filter-group">
                 <button 
                 class="btn btn-default dropdown-toggle" 
@@ -58,30 +59,16 @@
                         <li><label><input type="radio" name = 'rating' value="6"><span id = "goldStar">★ ★ ★ ★ ★</span></label></li>
                     </ul>
             </div>
-            <button>Clear All Selections</button>
+            </form>
+            <button id = "clear">Clear All Selections</button>
         </div>
-        </div>
+    </div>
 
-        <ol>
-        {{#each restaurantList}}
-        <li>
-            <a href = "/diningList/{{this._id}}">
-                <h2 id = "restName">{{this.name}}</h2>
-                <img src = "{{this.imageURL}}" class = "restaurant_img" alt = "{{this.name}}" >    
-            </a>                   
-           <details>
-           <summary class = "caret-summary"> <span class="caret"></span> Menu Items</summary>
-            <ul>
-                {{#each menuItems}}
-                <li>{{name}}</li>
-                {{/each}}
-            </ul>
-
-        </li>
-        </details>
-        {{/each}}
-        
-        </ol>
+    <div class = "printedRestaurants">
+        <ul id = "listRestaurants">  
+        </ul>
+    </div>
+    
 
 
 </div>

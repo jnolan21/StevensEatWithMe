@@ -6,13 +6,13 @@ import users from '../data/users.js'
 import helpers from '../data/helpers.js';
 import reviews from '../data/reviews.js';
 import menuData from '../data/menuItems.js';
+import xss from 'xss';
 
 router.route('/').get(async (req, res) => {
   
   try{
     const restaurantss = await restaurants.ratingFilter();
     let top3 = restaurantss.slice(0,helpers.upTooThree(restaurantss));
-    let topItems;
     for (let i = 0; i < top3.length; i++) {
       const restaurant = top3[i];
       const menuItems = await menuData.ratingFilter(restaurant._id.toString());
@@ -31,11 +31,8 @@ router.route('/').get(async (req, res) => {
 });
 router.route('/diningList').get(async (req, res) => {
   try {
-    const restaurantss = await restaurants.getAllRestaurants();
-    console.log(restaurantss.menuItems);
     res.render('diningList/dininglist', 
     {title: "EatWithMe Dining List",
-    restaurantList: restaurantss, 
     isLoggedIn: !!req.session.user
 })
   } 
@@ -48,7 +45,6 @@ router.route('/diningList').get(async (req, res) => {
 
 router.route('/diningList/:id').get(async (req, res) => {
 
-  
 
   try {
     const id = helpers.checkId(req.params.id);
@@ -58,10 +54,31 @@ router.route('/diningList/:id').get(async (req, res) => {
       reviews: restaurantReviews, isLoggedIn: !!req.session.user
     }); 
   } catch(e) {
-    console.log(e);
+    res.json({error: e});
   }
 
 });
+
+
+router
+  .route('/api/diningList')
+  .get(async (req, res) => {
+    try {
+    let serverRestaurants = await restaurants.getAllRestaurants();
+    res.json(serverRestaurants);
+    } catch(e) {
+      console.log(e);
+      res.json(e);
+    }
+  })
+  .post(async (req, res) => {
+    //let cleanName = req.body.name;
+    //let cleanDesc = req.body.description;
+
+    let cleanName = xss(req.body.name);
+    let cleanDesc = xss(req.body.description);
+    res.json({success: true, todo: true});
+  });
 
 
 export default router;

@@ -257,7 +257,6 @@ footer{
     padding-bottom: 4px;
     padding-left: 2px;;
     background-color: var(--stevens-light);
-
   }
   .caret-summary-reviews{
     cursor: pointer;
@@ -479,3 +478,38 @@ footer{
  .revItalic{
   font-style: italic;
  }
+
+ #listRestaurants {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none; 
+  padding: 0;
+  margin: 0;
+}
+
+#listRestaurants li {
+  flex: 0 1 300px; 
+  margin: 10px;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 10px; 
+  justify-content: center; 
+  margin-bottom: 20px; 
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+}
+
+.dropdown-form {
+  display: flex; 
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+
+
