@@ -127,6 +127,27 @@ const getAllReviews = async () => {
 }
 
 
+// Get an array of all review objects with the filled in information
+const getAllReviewsWithInfo = async () => {
+    let reviews = [];
+    let allReviews = await getAllReviews();
+    // Get all the information about the review: restaurant name, menu item name, etc.
+    for (let i = 0; i < allReviews.length; i++) {
+        // Get the user's username and the name of the restaurant and menu item
+        let user = await userData.getUserById(allReviews[i].userId);
+        allReviews[i]['username'] = user.username;
+        let restaurant = await restaurantData.getRestaurantById(allReviews[i].restaurantId);
+        allReviews[i]['restaurantName'] = restaurant.name;
+        if (allReviews[i].menuItemId && allReviews[i].menuItemId.trim() !== '') {
+            let menuItem = await menuItemData.getMenuItemById(allReviews[i].menuItemId);
+            allReviews[i]['menuItemName'] = menuItem.name;
+        }
+        reviews.push(allReviews[i]);
+    }
+    return reviews;
+}
+
+
 // Get a review by their id
 const getReviewById = async (id) => {
     // Validate id
@@ -157,7 +178,7 @@ const deleteReview = async (id) => {
         {$pull: {reviews: id}}
     )
     // Remove the review from the restaurant OR menu item depending on what it was written for
-    if (review.menuItemId !== "") {
+    if (review.menuItemId && review.menuItemId.trim() !== "") {
         // Menu item review
         // Remove the review
         await restaurantCollection.updateOne(
@@ -246,6 +267,7 @@ export default {
     createMenuItemReview,
     createRestaurantReview,
     getAllReviews,
+    getAllReviewsWithInfo,
     getReviewById,
     deleteReview,
     getAllRestaurantReviews

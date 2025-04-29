@@ -184,26 +184,33 @@ function checkStringArray(arr, arr_name) {
 
 //Checks hours of operation for a full thing
 function checkHoursOfOperation(ho) {
-    if (typeof ho !== 'object' || Array.isArray(ho)) throw new Error ("Hours of Operation Must be an object.");
+    if (typeof ho !== 'object' || Array.isArray(ho)) throw new Error ("Hours of Operation must be an object.");
     const days = Object.keys(ho);
-    const times = Object.values(ho);
+    const dayTimePairs = Object.entries(ho);
     const validDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     if (days.length !== validDays.length || !days.every(day => validDays.includes(day))) {
         throw new Error("Hours of Operation must have Monday-Sunday");
     }
     
     const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm])) - ((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$/;
-  
-    times.forEach(time => {
-        if(time !== "closed" && (typeof time !== 'string' || !regex.test(time))) {
-            throw new Error("Time must be in the form HH:MM AM/PM");
+    // Check that each value is a string
+    for (let [day, time] of dayTimePairs) {
+        if (typeof time !== 'string') throw new Error("Daily hours of operation must be a string.");
+        time = time.trim();
+        if (time === '') continue;
+        if (time.toLowerCase() === 'closed') {
+            ho[day] = 'closed';
+            continue;
         }
-    });
+        if(!regex.test(time)) throw new Error("Time must be in the form HH:MM AM/PM, or 'Closed'.");
+        ho[day] = ho[day].trim();
+    }
+    return ho;
 }
 
 function checkHours(time) {
     const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$/
-    if(time !== "closed" && (typeof time !== 'string' || !regex.test(time))) {
+    if(time.toLowerCase() !== "closed" && (typeof time !== 'string' || !regex.test(time))) {
         throw new Error("Time must be in the form HH:MM AM/PM");
     }
 }
@@ -217,7 +224,6 @@ function checkHours(time) {
     for (let i = 0; i < reviewsArray.length; i++) {
         // Get the full review object's rating
         let review = await reviewData.getReviewById(reviewsArray[i]);
-        //console.log(review.rating)
         overallRating += review.rating;
     }
     // Calculate the average menu item rating and truncate it
@@ -234,7 +240,6 @@ function checkHours(time) {
     for (let i = 0; i < reviewsArray.length; i++) {
         // Get the full review object's rating
         let review = await reviewData.getReviewById(reviewsArray[i]);
-        //console.log(review.rating)
         overallRating += review.rating;
     }
     // Calculate the average rating and truncate it
@@ -363,6 +368,29 @@ async function formatAndCheckRSVPS(allrsvps){ //given a list of raw rsvp objects
 
 
 
+function stringToArray(str, strName) {
+    str = checkString(str, strName);
+    let stringArray = [];
+    let currentWord = '';
+    const regex = /^[A-Za-z]+$/;
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] === ' ') {
+            if (currentWord.length > 0) {
+                stringArray.push(currentWord);
+                currentWord = '';
+            }
+        } else if (regex.test(str[i])) {
+            currentWord += str[i];
+        } else {
+            throw new Error(`${strName} can only contain letters separated by spaces`);
+        }
+    }
+    if (currentWord.length > 0) stringArray.push(currentWord);
+    return stringArray;
+}
+
+
+
 // Export all the functions
 export default {
     checkString,
@@ -383,5 +411,7 @@ export default {
     checkHoursOfOperation,
     upTooThree,
     checkMeetUpTime,
-    formatAndCheckRSVPS
+    formatAndCheckRSVPS,
+    checkHoursOfOperation,
+    stringToArray
 };

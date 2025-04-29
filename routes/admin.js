@@ -3,11 +3,11 @@ const router = Router();
 import userData from '../data/users.js';
 import helper from '../data/helpers.js';
 import rsvpData from "../data/rsvps.js";
-import reviews from '../data/reviews.js';
+import reviewData from '../data/reviews.js';
 import restaurants from '../data/restaurants.js';
 import menuItems from '../data/menuItems.js';
 //import crypto from 'crypto'
-
+const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 // Get the admin page
 router
@@ -16,7 +16,7 @@ router
     // Verify that the user is logged in
     if (!req.session.user) {
         // 403 = forbidden page
-        return res.status(403).redirect('users/login');
+        return res.status(403).redirect('/users/login');
     }
     // Verify that the user is an admin
     if (!req.session.user.isAdmin) {
@@ -44,59 +44,12 @@ router
     }
 
     // Get the user
-    let user;
-    try {
-        user = await userData.getUserById(id);
-    } catch (e) {
-        return res.status(404).render('users/login', {
-            title: 'EatWithMe login',
-            hasErrors: true,
-            errors: [e],
-            isLoggedIn: !!req.session.user,
-            isAdmin
-        })
-    }
-    // Get all of the users who follow this current user
-    let followers;
-    try {
-        followers = await userData.getAllPeopleFollowingThisUser(id);
-    } catch (e) {
-        return res.status(400).json({error: e.message});
-    }
-    // Get all of the users this user is following
-    let following;
-    try {
-        following = await userData.getFollowingList(id);
-    } catch (e) {
-        return res.status(400).json({error: e.message});
-    }
+    let user = req.session.user;
 
-    // Get the users RSVPS
-    let userRSVPPosts = [];
+    // Get all users reviews
+    let reviews = [];
     try{
-        for (let i = 0; i < user.RSVP.length; i++) {
-            userRSVPPosts.push(await rsvpData.getRsvpById(user.RSVP[i]));
-        }
-    }
-    catch(e){
-        return res.status(500).json({error: e.message});
-    }
-
-    // Get the users reviews
-    let userReviews = [];
-    try{
-        // Get all the information about the review: restaurant name, menu item name, etc.
-        for (let i = 0; i < user.reviews.length; i++) {
-            let review = await reviews.getReviewById(user.reviews[i]);
-            // Get the name of the restaurant and menu item
-            let restaurant = await restaurants.getRestaurantById(review.restaurantId);
-            review['restaurantName'] = restaurant.name;
-            if (review.menuItemId && review.menuItemId.trim() !== '') {
-                let menuItem = await menuItems.getMenuItemById(review.menuItemId);
-                review['menuItemName'] = menuItem.name;
-            }
-            userReviews.push(review);
-        }
+        reviews = await reviewData.getAllReviewsWithInfo();
     }
     catch(e){
         return res.status(500).json({error: e.message});
@@ -111,12 +64,10 @@ router
                 username: user.username,
                 firstName: user.firstName,
                 lastName: user.lastName,
-                following: following, // array of user objects
-                followers: followers, // array of user objects
-                RSVPposts: userRSVPPosts, // array of RSVP post objects
-                currentRSVPs: userRSVPPosts, // array of RSVP post objects
-                reviews: userReviews // array of review objects
+                reviews: reviews // array of review objects
             },
+            days: days,
+            script: 'adminScript',
             isLoggedIn: !!req.session.user,
             isAdmin
         })
@@ -124,6 +75,119 @@ router
         res.status(500).json({error: e.message});
     }
 
+  });
+
+
+/* Delete reviews */
+router 
+.post('/delete', async (req, res) => {
+    try{
+        //receive reviewId, userId and session.user.userId
+        let reviewId = req.body.reviewId;
+        let loggedInUserId = req.session.user._id;
+        let reviewPosterId= req.body.userId; 
+        await reviewData.deleteReview(reviewId);
+        req.session.message = "Deleted Review!"; 
+        res.redirect('/admin');
+    }
+    catch (e){
+        req.session.message = e.message || "Something went wrong deleting the review.";
+        res.redirect('/admin');
+    }
+});
+
+
+
+// Restaurant routes
+router
+  .route('/restaurant')
+  .post(async (req, res) => {
+    // Create a new restaurant
+    let errors = [];
+    // Verify all restaurant fields
+    let restaurant = req.body;
+    try {
+        restaurant.name = helper.checkString(restaurant.name, 'Restaurant name');
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        restaurant.location = helper.checkString(restaurant.location, 'Restaurant location');
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        restaurant.typesOfFood = helper.stringToArray(restaurant.typesOfFood, 'Restaurant types of food');
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        restaurant.hoursOfOperation = helper.checkHoursOfOperation(restaurant.hoursOfOperation);
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        restaurant.imageURL = helper.checkString(restaurant.imageURL, 'Restaurant image URL');
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        restaurant.dietaryRestrictions = helper.stringToArray(restaurant.dietaryRestrictions, 'Restaurant dietary restrictions');
+    } catch (e) {
+        errors.push(e.message);
+    }
+    // Get all users reviews
+    let user = req.session.user;
+    let reviews = [];
+    try{
+        reviews = await reviewData.getAllReviewsWithInfo();
+    }
+    catch(e){
+        return res.status(500).json({error: e.message});
+    }
+    // Reload with errors if needed
+    if (errors.length > 0) {
+        return res.render('users/admin', {
+          title: "EatWithMe Admin Page",
+          user: {
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            reviews: reviews // array of review objects
+          },
+          errors: errors,
+          hasErrors: true,
+          partial: 'adminScript',
+          days: days,
+          isLoggedIn: !!req.session.user,
+          isAdmin: true,
+          // Submitted info
+          name: restaurant.name,
+          location: restaurant.location,
+          typesOfFood: restaurant.typesOfFood,
+          //hoursOfOperation: restaurant.hoursOfOperation,
+          hoursOfOperation: restaurant.hoursOfOperation,
+          imageURL: restaurant.imageURL,
+          dietaryRestrictions: restaurant.dietaryRestrictions
+        });
+      }
+
+    // Add the restaurant to the database
+    try {
+        await restaurants.createRestaurant(
+            restaurant.name,
+            restaurant.location,
+            [],
+            restaurant.typesOfFood,
+            restaurant.hoursOfOperation,
+            restaurant.imageURL,
+            restaurant.dietaryRestrictions
+        );
+        return res.redirect('/admin');
+    } catch (e) {
+        req.session.message = e.message || "Server error.";
+        return res.redirect('/admin');
+    }
   });
 
 

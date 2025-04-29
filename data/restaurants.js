@@ -19,6 +19,9 @@ const createRestaurant = async (
     location = helper.checkString(location, 'restaurant location');
     menuItems = helper.checkIdArray(menuItems, 'menuItems');
     typeOfFood = helper.checkStringArray(typeOfFood, 'typeOfFood');
+    hoursOfOperation = helper.checkHoursOfOperation(hoursOfOperation);
+    imageURL = helper.checkString(imageURL, "Image URL");
+    dietaryRestrictions = helper.checkStringArray(dietaryRestrictions, "Dietary restrictions");
     // Add the restaurant to the database
     const newRestaurant = {
         name: name,
