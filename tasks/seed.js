@@ -1202,7 +1202,7 @@ let reviewData = [
     },
     {
         user: user1._id,
-        restaurant: yellas._id,
+        restaurant: pierceDiningHall._id,
         menuItem: menuItem1._id.toString(),
         text: "Tasted like cardboard with cheese on it.",
         rating: 2,

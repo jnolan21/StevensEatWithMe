@@ -1,4 +1,10 @@
 
+  {{#if error}}
+        <p class = "meetupError">Oh no! {{error}}</p>
+    {{/if}}
+    {{#if message}}
+        <p class = "friendAddMessage">{{message}}</p>
+    {{/if}}
     <h1 class = "rsvph1"> Current Meetups </h1>
 
     {{#each allrsvps}}
@@ -25,12 +31,7 @@
             </form></p>
     </div>
     {{/each}}
-    {{#if error}}
-        <p class = "meetupError">Oh no! {{error}}</p>
-    {{/if}}
-    {{#if message}}
-        <p class = "friendAddMessage">{{message}}</p>
-    {{/if}}
+
   
   <!--
 

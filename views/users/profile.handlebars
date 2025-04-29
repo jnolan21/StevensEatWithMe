@@ -21,8 +21,10 @@
             {{/each}}
         </ul>
     </section>
+    </section>
 
     <!-- "My Followers" Container -->
+    <section class = "profSection">
     <section class="profile-followers">
         <h2 class = "profile">My Followers:</h2>
         <ul>
@@ -90,16 +92,31 @@ ALL RSVP FIELDS:
         </ul>
     </section>
     </section>
-
     <!-- "Reviews" Container -->
     <section class = "profSection">
     <section class="profile-myReviews">
        <h2 class = "profile">My Reviews:</h2>
+         {{#if message}}
+        <p class = "deletedReview">{{message}}</p>
+        {{/if}}
        <details open><summary class = "caret-summary"><p> <span class="caret"></span> All Reviews </p></summary>
         <ul>
             {{#each user.reviews}}
+
                 <!-- Display each review -->
+                <!-- <form action="/meetupPage/rsvp" method="POST" class = "rsvpForm"> -->
                 <li class = "reviewLi">
+            <div class="buttonGroup">
+                <form>
+                    <button type="submit" class="EditandDeleteButton">Edit</button>
+                </form>
+                <form action="/profile/delete" method="POST" class = "deleteReveiwForm">
+                    <input type="hidden" name="reviewId" value="{{this._id}}">
+                    <input type="hidden" name="userId" value="{{this.userId}}">
+                    <button type="submit" class="EditandDeleteButton">Delete</button>
+                </form>
+            </div>
+            <div class = "reviewInfo">
                     <!-- Display the restaurant name -->
                     {{#if this.menuItemName}}
                         <!-- Display the menu items name -->
@@ -116,10 +133,12 @@ ALL RSVP FIELDS:
 
                     <!-- Display the review text -->
                 </li>
-
+            </div>
             {{/each}}
         </ul>
         </details> 
-    </section>
-    </section>
+        </section>
+        </section>
+
+        
 </article>

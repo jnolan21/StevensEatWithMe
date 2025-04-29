@@ -109,6 +109,8 @@ router
 
     // Render the user's profile page
     try {
+        const message = req.session.message || null;  
+        req.session.message = null;   
         res.render('users/profile', {
             title: "EatWithMe Profile Page",
             // Send the relevant information about the user
@@ -120,16 +122,33 @@ router
                 followers: followers, // array of user objects
                 RSVPposts: userRSVPPosts, // array of RSVP post objects
                 currentRSVPs: currentRSVPPosts, // array of RSVP post objects
-                reviews: userReviews // array of review objects
+                reviews: userReviews, // array of review objects
             },
-            isLoggedIn: !!req.session.user
+            isLoggedIn: !!req.session.user,
+            message: message
         })
     } catch (e) {
         res.status(500).json({error: e.message});
     }
 
   });
-
+  router 
+  .post('/delete', async (req, res) => {
+    try{
+        //receive reviewId, userId and session.user.userId
+        let reviewId = req.body.reviewId;
+        let loggedInUserId = req.session.user._id;
+        let reviewPosterId= req.body.userId; 
+        if(reviewPosterId !== loggedInUserId) throw "Error: User not authorized to delete this review."
+        await reviews.deleteReview(reviewId);
+        req.session.message = "Deleted Review!"; 
+        res.redirect('/profile');
+    }
+    catch (e){
+        req.session.message = e.message || "Something went wrong deleting the review.";
+        res.redirect('/profile');
+    }
+  });
 
 
 

@@ -20,6 +20,8 @@ router
     .route('/meetupPage')
     .get(async (req, res) => {
         try{
+          const message = req.session.message || null; 
+          req.session.message = null;   
         let allrsvps = await rsvps.getAllRsvps();
         allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
         res.render('meetupPage/meetupPage', {
@@ -27,7 +29,7 @@ router
             allrsvps: allrsvps, 
             currUser: req.session.user,
             isLoggedIn: !!req.session.user,
-            message: req.query.message || null
+            message: message
                 })
         }
         catch (e) {
@@ -42,20 +44,16 @@ router
             allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
             const friendId = req.body.friendId;
             const currUserId = req.body.userId;
-            if(friendId === currUserId) throw "Can only add other users, not yourself!"
+            if(friendId === currUserId) throw new Error("Can only add other users, not yourself!")
             //const addFriend = async (id, friendId) => {
             await users.addFriend(currUserId, friendId);
-            res.redirect('/meetupPage/meetupPage?message=Friend+Added');
+            req.session.message = "Friend Added!"; 
+            res.redirect('/meetupPage/meetupPage');
         }
         catch(e){
-
-            return res.status(400).render('meetupPage/meetupPage', {
-                title: "EatWithMe Meetup Page", 
-                allrsvps: allrsvps, 
-                error: e||e.message,
-                currUser: req.session.user,
-                isLoggedIn: !!req.session.user})
-            };
+          req.session.message = e.message || "Something went wrong. Cannot follow this user."
+            res.redirect('/meetupPage/meetupPage')
+            }
         }
   );
   router
@@ -70,17 +68,12 @@ router
             let posterId = req.body.posterId;
             if(posterId === userId) throw new Error("This is your meetup! You are already attending.");
             let currRSVP = await rsvps.userJoinRsvp(rsvpId, userId);
-            res.redirect('/meetupPage/meetupPage?message=Added+to+Attendees!');
+            req.session.message = "Added to attendees!"; 
+            res.redirect('/meetupPage/meetupPage');
         }
         catch(e){
-            return res.status(400).render('meetupPage/meetupPage', {
-                title: "EatWithMe Meetup Page", 
-                allrsvps: allrsvps, 
-                error: e||e.message,
-                currUser: req.session.user,
-                isLoggedIn: !!req.session.user})
-
-        }
+          req.session.message = e.message || "Something went wrong. Cannot RSVP to this meetup."
+            res.redirect('/meetupPage/meetupPage')
     }
-  );
+  });
 export default router;
