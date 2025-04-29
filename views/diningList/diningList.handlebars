@@ -20,7 +20,7 @@
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
                 aria-expanded="false">Dietary Restrictions<span class = "caret"></span></button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" id = "dietary">
                         {{!-- {{#each dietary}}
                         <li><label><input type="checkbox" value={{this}}>{{this}}</label></li>
                         {{/each}} --}}
@@ -33,14 +33,14 @@
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
                 aria-expanded="false">Wait Time<span class = "caret"></span></button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" id = "waitTime">
                         <li><label><input type="radio" name = "time" value="None">None</label></li>
                         <li><label><input type="radio" name = "time" value="10">Under 10 Minutes</label></li>
                         <li><label><input type="radio" name = "time" value="20">Under 20 Minutes</label></li>
                         <li><label><input type="radio" name = "time" value="30">Under 30 Minutes</label></li>
                         <li><label><input type="radio" name = "time" value="40">Under 40 Minutes</label></li>
                         <li><label><input type="radio" name = "time" value="50">Under 50 Minutes</label></li>
-                        <li><label><input type="radio" name = "time" value="60">1 hour or longer</label></li>
+                        <li><label><input type="radio" name = "time" value="60">Under 1 Hour</label></li>
                     </ul>
             </div>
              <div class = "dropdown filter-group">
@@ -50,13 +50,13 @@
                 data-toggle="dropdown" 
                 aria-haspopup="true" 
                 aria-expanded="false">Rating<span class = "caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><label><input type="radio" name = 'rating' value="2"><span id = "goldStar">☆ ☆ ☆ ☆ ☆</span></label></li>
-                        <li><label><input type="radio" name = 'rating' value="3"><span id = "goldStar">★ ☆ ☆ ☆ ☆</span></label></li>
-                        <li><label><input type="radio" name = 'rating' value="4"><span id = "goldStar">★ ★ ☆ ☆ ☆</span></label></li>
-                        <li><label><input type="radio" name = 'rating' value="1"><span id = "goldStar">★ ★ ★ ☆ ☆</span></label></li>
-                        <li><label><input type="radio" name = 'rating' value="5"><span id = "goldStar">★ ★ ★ ★ ☆</span></label></li>
-                        <li><label><input type="radio" name = 'rating' value="6"><span id = "goldStar">★ ★ ★ ★ ★</span></label></li>
+                    <ul class="dropdown-menu" id = "rating">
+                        <li><label><input type="radio" name = 'rating' value="0"><span id = "goldStar">☆ ☆ ☆ ☆ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="1"><span id = "goldStar">★ ☆ ☆ ☆ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="2"><span id = "goldStar">★ ★ ☆ ☆ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="3"><span id = "goldStar">★ ★ ★ ☆ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="4"><span id = "goldStar">★ ★ ★ ★ ☆</span></label></li>
+                        <li><label><input type="radio" name = 'rating' value="5"><span id = "goldStar">★ ★ ★ ★ ★</span></label></li>
                     </ul>
             </div>
             </form>
