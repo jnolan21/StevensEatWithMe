@@ -1,5 +1,5 @@
 <article class="profile-container">
-    <h1 class = "profile">Hi, {{user.firstName}}! Welcome to your admin page!</h1>
+    <h1 class = "profile">Welcome to the admin page!</h1>
 
     <!-- Profile Information Container -->
     <section class="profile-info">
@@ -8,27 +8,6 @@
         <p class = "profileInfo">Last Name: {{user.lastName}}</p>
     </section>
 
-    <!-- "My Following" Container -->
-    <section class="profile-following">
-        <h2 class = "profile">My Following:</h2>
-        <ul>
-            <!-- Display each user this user is following -->
-            {{#each user.following}}
-                <li>Username: {{this.username}}</li>
-            {{/each}}
-        </ul>
-    </section>
-
-    <!-- "My Followers" Container -->
-    <section class="profile-followers">
-        <h2 class = "profile">My Followers:</h2>
-        <ul>
-            <!-- Display each user who is following this user -->
-            {{#each user.followers}}
-                <li>Username: {{this.username}}</li>
-            {{/each}}
-        </ul>
-    </section>
 
 <!-- PERSONAL COMMENT:
 ALL RSVP FIELDS:
@@ -40,43 +19,36 @@ ALL RSVP FIELDS:
 -->
 
 
-    <!-- "My RSVP Posts" Container -->
-    <section class="profile-rsvps">
-        <h2 class = "profile">My RSVP Posts:</h2>
-        <ul>
-            <!-- Display all RSVP posts made by this user -->
-            {{#each user.RSVPposts}}
-                <!-- Link that displays RSVP post: title, date, time -->
-                <li><a href="/rsvp/{{this._id}}">{{this.title}} - {{this.meetUpTime.date}}, {{this.meetUpTime.time}}</a></li>
-            {{/each}}
-        </ul>
-    </section>
-
-
-    <!-- "My Current RSVPs" Container -->
-    <section class="profile-myRSVPposts">
-        <h2 class = "profile">My Current RSVPs:</h2>
-        <ul>
-            <!-- Display all current RSVP posts made by this user -->
-            {{#each user.RSVPposts}}
-                <!-- Link that displays RSVP post: title, date, time -->
-                <li><a href="/rsvp/{{this._id}}">{{this.title}} - {{this.date}}, {{this.time}}</a></li>
-            {{/each}}
-        </ul>
-    </section>
-
 
     <!-- "Reviews" Container -->
+    <section class = "profSection">
     <section class="profile-myReviews">
-        <h2 class = "profile">My Reviews:</h2>
+       <h2 class = "profile">All User Reviews:</h2>
+         {{#if message}}
+        <p class = "deletedReview">{{message}}</p>
+        {{/if}}
+       <details open><summary class = "caret-summary"><p> <span class="caret"></span> All Reviews </p></summary>
         <ul>
             {{#each user.reviews}}
-                <!-- Display each review -->
-                <li class = "reviewLi">
+            <!-- Display each review -->
+            <!-- <form action="/meetupPage/rsvp" method="POST" class = "rsvpForm"> -->
+            <li class = "reviewLi">
+            <div class="buttonGroup">
+                <form action="/admin/delete" method="POST" class = "deleteReveiwForm">
+                    <input type="hidden" name="reviewId" value="{{this._id}}">
+                    <input type="hidden" name="userId" value="{{this.userId}}">
+                    <button type="submit" class="EditandDeleteButton">Delete</button>
+                </form>
+            </div>
+            <div class = "reviewInfo">
+                    <!-- Display the username of the user who wrote it -->
+                    {{#if this.userId}}
+                    <p><span class = "reviewSpan">This review was written by:</span> {{this.username}}</p>
+                    {{/if}}
                     <!-- Display the restaurant name -->
                     {{#if this.menuItemName}}
-                        <!-- Display the menu items name -->
-                        <p><span class = "reviewSpan">{{this.restaurantName}}:</span> <span class = "revItalic">{{this.menuItemName}}</span></p>
+                    <!-- Display the menu items name -->
+                    <p><span class = "reviewSpan">{{this.restaurantName}}:</span> <span class = "revItalic">{{this.menuItemName}}</span></p>
                     {{else}}
                         <p><span class = "reviewSpan">{{this.restaurantName}}</span></p>
                     {{/if}}
@@ -87,11 +59,88 @@ ALL RSVP FIELDS:
                     <!-- Display the review text -->
                     <p><span class = "reviewSpan">Review:</span> {{this.review}}</p>
 
-                    <!-- Display the review text -->
                 </li>
-
+            </div>
             {{/each}}
         </ul>
+        </details> 
+        </section>
+        </section>
+
+
+    <!-- CREATE/EDIT/DELETE restaurant form -->
+    <section class = "profSection">
+    <section class="profile-myRSVPposts">
+        <h2 class = "profile">Create a New Restaurant:</h2>
+        <!-- Form to create a restaurant -->
+        <form action="/admin/restaurant" method="POST" id="restaurant-form" class="restaurant-form">
+            <div class="loginBox">
+                <!-- Name -->
+                <div class="loginForm">
+                    <label for="restaurant-name">
+                        Name:
+                    </label> 
+                    <input type="text" id="restaurant-name" name="name" placeholder="Name..." value="{{name}}" class="login-input">
+                </div>
+
+                <!-- Location -->
+                <div class="loginForm">
+                    <label for="restaurant-location">
+                        Location: 
+                    </label>
+                        <input type="text" id="restaurant-location" name="location" placeholder="Location..." value="{{location}}" class="login-input">
+                </div>
+
+                <!-- Types of Food -->
+                <div class="loginForm">
+                    <label for="restaurant-typesOfFodd">
+                        Types of food: 
+                    </label>
+                        <input type="text" id="restaurant-typesOfFood" name="typesOfFood" placeholder="Types of food..." value="{{typesOfFood}}" class="login-input">
+                </div>
+
+                <!-- Hours of Operation -->
+                <div class="loginForm">
+                    <fieldset>
+                        <legend>Hours of operation:</legend>
+                        {{#each days}}
+                        <label for="restaurant-hoursOfOperation-{{this}}">{{this}}:</label>
+                        <input type="text" id="restaurant-hoursOfOperation-{{this}}" name="hoursOfOperation[{{this}}]" placeholder="ex. '8:00AM - 5:00PM' or 'closed'" value="{{@root.hoursOfOperation.[this]}}" class="login-input">
+                        {{/each}}
+                    </fieldset>
+                </div>
+
+                <!-- Image URL -->
+                <div class="loginForm">
+                    <label for="restaurant-imageURL">
+                        Image URL: 
+                    </label>
+                        <input type="text" id="restaurant-imageURL" name="imageURL" placeholder="Image URL..." value="{{imageURL}}" class="login-input">
+                </div>
+
+                <!-- Dietary Restrictions -->
+                <div class="loginForm">
+                    <label for="restaurant-dietaryRestrictions">
+                        Dietary restrictions: 
+                    </label>
+                        <input type="text" id="restaurant-dietaryRestrictions" name="dietaryRestrictions" placeholder="Dietary restrictions..." value="{{dietaryRestrictions}}" class="login-input">
+                </div>
+                <!-- Button to submit restaurant -->
+                <button id="restaurant-button" type="submit"  class="loginButton">Submit</button>
+
+            </div>
+        </form>
+        
+        <ul id="restaurant-errors" class="error-list">
+        {{#if hasErrors}}
+            {{#each errors}}
+            <li>
+                {{this}}
+            </li>
+            {{/each}}
+        {{/if}}
+        </ul>
+    </section>
     </section>
 
 </article>

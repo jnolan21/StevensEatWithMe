@@ -84,7 +84,7 @@ app.use('/admin', (req, res, next) => {
     if (req.session.user.isAdmin) next(); // Authenticated admin
     else res.redirect('/profile'); // Authenticated non-admin user
   }
-  else return res.redirect('users/login'); // Non-authenticated user
+  else return res.redirect('/users/login'); // Non-authenticated user
 });
 
 /* GET users/login */
