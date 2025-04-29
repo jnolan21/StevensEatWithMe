@@ -17,7 +17,7 @@ router.route('/meetupPage/follow').post(async (req, res) => {
   
 });*/
 router
-    .route('/meetupPage')
+    .route('/')
     .get(async (req, res) => {
         try{
           const message = req.session.message || null; 
