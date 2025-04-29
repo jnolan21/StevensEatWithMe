@@ -55,11 +55,11 @@ router
             //const addFriend = async (id, friendId) => {
             await users.addFriend(currUserId, friendId);
             req.session.message = "Friend Added!"; 
-            res.redirect('/meetupPage/meetupPage');
+            res.redirect('/meetupPage');
         }
         catch(e){
           req.session.message = e.message || "Something went wrong. Cannot follow this user."
-            res.redirect('/meetupPage/meetupPage')
+            res.redirect('/meetupPage')
             }
         }
   );
@@ -76,11 +76,11 @@ router
             if(posterId === userId) throw new Error("This is your meetup! You are already attending.");
             let currRSVP = await rsvps.userJoinRsvp(rsvpId, userId);
             req.session.message = "Added to attendees!"; 
-            res.redirect('/meetupPage/meetupPage');
+            res.redirect('/meetupPage');
         }
         catch(e){
           req.session.message = e.message || "Something went wrong. Cannot RSVP to this meetup."
-            res.redirect('/meetupPage/meetupPage')
+            res.redirect('/meetupPage')
     }
   });
 export default router;
