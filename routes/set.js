@@ -19,10 +19,17 @@ router.route('/').get(async (req, res) => {
       const topItems = menuItems.slice(0, helpers.upTooThree(menuItems));
       restaurant.topMenuItems = topItems;
     }
+    // Determine if an admin is logged in
+    let isAdmin;
+    if (req.session.user) {
+      if (req.session.user.isAdmin) isAdmin = true;
+      else isAdmin = false;
+    }
     res.render('landingPage/landingPage', {
       title: "EatWithMe Home",
       topRestaurants: top3,
-      isLoggedIn: !!req.session.user
+      isLoggedIn: !!req.session.user,
+      isAdmin
     });
   }
   catch (e) {
@@ -31,9 +38,15 @@ router.route('/').get(async (req, res) => {
 });
 router.route('/diningList').get(async (req, res) => {
   try {
+    let isAdmin;
+    if (req.session.user) {
+      if (req.session.user.isAdmin) isAdmin = true;
+      else isAdmin = false;
+    }
     res.render('diningList/dininglist', 
     {title: "EatWithMe Dining List",
-    isLoggedIn: !!req.session.user
+    isLoggedIn: !!req.session.user,
+    isAdmin
 })
   } 
   catch (e) {
@@ -50,8 +63,13 @@ router.route('/diningList/:id').get(async (req, res) => {
     const id = helpers.checkId(req.params.id);
     const restaurant = await restaurants.getRestaurantById(id);
     const restaurantReviews = await reviews.getAllRestaurantReviews(id);
+    let isAdmin;
+    if (req.session.user) {
+      if (req.session.user.isAdmin) isAdmin = true;
+      else isAdmin = false;
+    }
     return res.render('diningList/diningFacility', {title: restaurant.name, restaurant:restaurant,
-      reviews: restaurantReviews, isLoggedIn: !!req.session.user
+      reviews: restaurantReviews, isLoggedIn: !!req.session.user, isAdmin
     }); 
   } catch(e) {
     res.json({error: e});

@@ -12,6 +12,12 @@ router
   .route('/verifyEmail')
   .get(async (req, res) => {
     try {
+      // Determine if an admin is logged in
+      let isAdmin;
+      if (req.session.user) {
+        if (req.session.user.isAdmin) isAdmin = true;
+        else isAdmin = false;
+      }
       // Get the token from the verification email link
       const verificationToken = req.query.token;
       let signupUser = await userData.getUserByVerificationToken(verificationToken);
@@ -22,7 +28,7 @@ router
       }
       // Update the user signing up to mark them as verified!
       signupUser = await userData.verifyUserSignup(signupUser._id);
-      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user});
+      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user, isAdmin});
       return;
     } catch (e) {
       res.status(400).json({error: e.message});
@@ -36,12 +42,24 @@ router
   .get(async (req, res) => {
     // Render the signup page
     try {
-      res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript', isLoggedIn: !!req.session.user});
+      // Determine if an admin is logged in
+      let isAdmin;
+      if (req.session.user) {
+        if (req.session.user.isAdmin) isAdmin = true;
+        else isAdmin = false;
+      }
+      res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript', isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
       return res.status(400).json({error: e.message});
     }
   })
   .post(async (req, res) => {
+    // Determine if an admin is logged in
+    let isAdmin;
+    if (req.session.user) {
+      if (req.session.user.isAdmin) isAdmin = true;
+      else isAdmin = false;
+    }
     // Create a new user via signup page
     let user = req.body;
     let errors = [];
@@ -86,7 +104,8 @@ router
         errors: errors,
         hasErrors: true,
         partial: 'signupScript',
-        isLoggedIn: !!req.session.user
+        isLoggedIn: !!req.session.user,
+        isAdmin
       });
       return;
     }
@@ -114,7 +133,8 @@ router
         errors: errors,
         hasErrors: true,
         partial: 'signupScript',
-        isLoggedIn: !!req.session.user
+        isLoggedIn: !!req.session.user,
+        isAdmin
       });
     }
     let newUser;
@@ -134,13 +154,14 @@ router
         errors: errors,
         hasErrors: true,
         partial: 'signupScript',
-        isLoggedIn: !!req.session.user
+        isLoggedIn: !!req.session.user,
+        isAdmin
       });
     }
     try {
       // Send the verification email
       await helper.sendVerificationEmail(newUser._id);
-      res.render('users/verify', {title: "EatWithMe login", partial: 'signupScript', isLoggedIn: !!req.session.user});
+      res.render('users/verify', {title: "EatWithMe login", partial: 'signupScript', isLoggedIn: !!req.session.user, isAdmin});
       // Redirect the '/verify' route and wait for user to click the email
       //res.render('users/verify', {email: newUser.email});
     } catch (e) {
@@ -150,7 +171,8 @@ router
         errors: [e.message],
         hasErrors: true,
         partial: 'signupScript',
-        isLoggedIn: !!req.session.user
+        isLoggedIn: !!req.session.user,
+        isAdmin
       });
     }
 });
@@ -162,20 +184,33 @@ router
   .route('/login')
   .get(async (req, res) => {
     // Render the login page
+    // Determine if an admin is logged in
+    let isAdmin;
+    if (req.session.user) {
+      if (req.session.user.isAdmin) isAdmin = true;
+      else isAdmin = false;
+    }
     try {
-      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user});
+      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
       return res.status(500).render('users/login', {
         title: "EatWithMe login",
         errors: [e.message],
         partial: 'loginScript',
         hasErrors: true,
-        isLoggedIn: !!req.session.user
+        isLoggedIn: !!req.session.user,
+        isAdmin
       });
     }
   })
   .post(async (req, res) => {
     // Attempt to login given user input
+    // Determine if an admin is logged in
+    let isAdmin;
+    if (req.session.user) {
+      if (req.session.user.isAdmin) isAdmin = true;
+      else isAdmin = false;
+    }
     const user = req.body;
     let errors = [];
     let email, password;
@@ -197,7 +232,8 @@ router
         errors: errors,
         hasErrors: true,
         partial: 'loginScript',
-        isLoggedIn: !!req.session.user
+        isLoggedIn: !!req.session.user,
+        isAdmin
       });
     }
     try {
@@ -238,7 +274,8 @@ router
       errors: errors,
       hasErrors: true,
       partial: 'loginScript',
-      isLoggedIn: !!req.session.user
+      isLoggedIn: !!req.session.user,
+      isAdmin
     });
   });
 

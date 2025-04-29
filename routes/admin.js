@@ -24,6 +24,12 @@ router
     }
 
     let id = req.session.user._id;
+    // Determine if an admin is logged in
+    let isAdmin;
+    if (req.session.user) {
+      if (req.session.user.isAdmin) isAdmin = true;
+      else isAdmin = false;
+    }
     try {
         id = helper.checkId(id);
     } catch (e) {
@@ -32,7 +38,8 @@ router
             title: 'EatWithMe login',
             hasErrors: true,
             errors: [e],
-            isLoggedIn: !!req.session.user
+            isLoggedIn: !!req.session.user,
+            isAdmin
         })
     }
 
@@ -45,7 +52,8 @@ router
             title: 'EatWithMe login',
             hasErrors: true,
             errors: [e],
-            isLoggedIn: !!req.session.user
+            isLoggedIn: !!req.session.user,
+            isAdmin
         })
     }
     // Get all of the users who follow this current user
@@ -109,7 +117,8 @@ router
                 currentRSVPs: userRSVPPosts, // array of RSVP post objects
                 reviews: userReviews // array of review objects
             },
-            isLoggedIn: !!req.session.user
+            isLoggedIn: !!req.session.user,
+            isAdmin
         })
     } catch (e) {
         res.status(500).json({error: e.message});
