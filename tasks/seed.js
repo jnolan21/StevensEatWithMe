@@ -66,7 +66,7 @@ try {
             "Saturday": "11:00AM - 10:00PM"
         },
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN0lY8SA898YVU4Ud5TTeamDW2T7LpeTWvTw&s",
-        ["Vegan", "Vegetarian", "Dairy-free", "Soy-free", "Nut-free", "Gluten-free"]
+        ["Vegan", "Vegetarian", "Dairy-free", "Nut-free", "Gluten-free"]
     );
     //console.log(pierceDiningHall);
 } catch (e) {
@@ -118,7 +118,7 @@ try {
             "Saturday": "10:00AM - 10:00PM"
         },
         "https://www.stevens.edu/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fmviowpldu823%2F41klnCv1DtziHVpmeNc0ga%2Fdfc437bb7c8fa978efd6b1eae344dd09%2FPierce_Dining_Hall__9_.jpg%3Fw%3D640%26h%3D360%26f%3Dcenter%26q%3D80%26fit%3Dfill&w=2400&q=80",
-        ["Vegan", "Vegetarian", "Dairy-free", "Soy-free", "Nut-free", "Gluten-free"]
+        ["Vegan", "Vegetarian", "Dairy-free", "Nut-free", "Gluten-free"]
     );
     //console.log(pierceDiningHall);
 } catch (e) {
@@ -293,7 +293,7 @@ try {
         pom._id,
         " Build Your Own Chicken Bowl ",
         "Choose a base of lettuce or rice. Add an extra protein (veggie option available). Choose 4 toppings like cheese, hummus or vegetables. Choose a dressing.",
-        ["Dairy-free", "Soy-free", "Nut-free", "Gluten-free"]
+        ["Dairy-free", "Nut-free", "Gluten-free"]
     );
 } catch (e) {
     console.log(`${e.message}`);
