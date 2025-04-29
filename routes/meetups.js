@@ -20,6 +20,12 @@ router
     .route('/')
     .get(async (req, res) => {
         try{
+          // Determine if an admin is logged in
+          let isAdmin;
+          if (req.session.user) {
+            if (req.session.user.isAdmin) isAdmin = true;
+            else isAdmin = false;
+          }
           const message = req.session.message || null; 
           req.session.message = null;   
         let allrsvps = await rsvps.getAllRsvps();
@@ -29,7 +35,8 @@ router
             allrsvps: allrsvps, 
             currUser: req.session.user,
             isLoggedIn: !!req.session.user,
-            message: message
+            message: message,
+            isAdmin
                 })
         }
         catch (e) {

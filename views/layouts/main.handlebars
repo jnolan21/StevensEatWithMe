@@ -18,6 +18,10 @@
               <li><a href="/diningList">Dining Facilities</a></li>
               <li><a href="/meetupPage">Meetups</a></li>
               <li><a href="/profile">Profile</a></li>
+              <!-- Only show the ADMIN PAGE button if the user is an admin -->
+              {{#if isAdmin}}
+                <li><a href="/admin">Admin Page</a></li>
+              {{/if}}
               <!-- Only show the SIGN OUT button if the user is logged in -->
               {{#if isLoggedIn}}
                 <li><a href="/users/logout">Log Out</a></li>
