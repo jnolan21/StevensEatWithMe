@@ -94,7 +94,8 @@ ALL RSVP FIELDS:
     <!-- "Reviews" Container -->
     <section class = "profSection">
     <section class="profile-myReviews">
-        <h2 class = "profile">My Reviews:</h2>
+       <h2 class = "profile">My Reviews:</h2>
+       <details open><summary class = "caret-summary"><p> <span class="caret"></span> All Reviews </p></summary>
         <ul>
             {{#each user.reviews}}
                 <!-- Display each review -->
@@ -118,6 +119,7 @@ ALL RSVP FIELDS:
 
             {{/each}}
         </ul>
+        </details> 
     </section>
     </section>
 </article>
