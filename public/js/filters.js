@@ -1,4 +1,4 @@
-document.querySelectorAll('.dropdown-menu').forEach(menu => {
+document.getElementById('.dropdown-menu').forEach(menu => {
     menu.addEventListener('click', function (e) {
       e.stopPropagation(); // prevents dropdown from closing on click
     });
@@ -6,3 +6,4 @@ document.querySelectorAll('.dropdown-menu').forEach(menu => {
 
 
 let dietaryFilter = document.getElementById('dietaryFilter');
+ 

@@ -104,6 +104,19 @@ const removeMenuItem = async (id) => {
     return updatedMenuItem;
 }
 
+const ratingFilter = async (restaurantId) => {
+
+    restaurantId = helper.checkId(restaurantId);
+    let restaurants = await restaurantData.getRestaurantById(restaurantId);
+
+    let menuItems = restaurants.menuItems;
+
+    menuItems.sort((a,b) =>  b.rating - a.rating);
+    return menuItems;
+
+}
+
+
 
 
 
@@ -115,5 +128,6 @@ export default {
     getAllMenuItems,
     getMenuItemById,
     getRestaurantId,
-    removeMenuItem
+    removeMenuItem,
+    ratingFilter
 }
