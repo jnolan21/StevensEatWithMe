@@ -1,0 +1,17 @@
+{{#each restaurantList}}
+        <li>
+            <a href = "/diningList/{{this._id}}">
+                <h2 id = "restName">{{this.name}}</h2>
+                <img src = "{{this.imageURL}}" class = "restaurant_img" alt = "{{this.name}}" >    
+            </a>                   
+           <details>
+            <summary class = "caret-summary"> <span class="caret"></span> Menu Items</summary>
+                <ul>
+                    {{#each menuItems}}
+                    <li>{{name}}</li>
+                    {{/each}}
+                </ul>
+            </details>
+        </li>
+            
+{{/each}}
