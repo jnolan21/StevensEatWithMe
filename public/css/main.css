@@ -521,8 +521,31 @@ footer{
 }
 
 .admin-leftside, .admin-rightside {
-  flex: 1 1 400px;
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   min-width: 350px;
+  overflow-x: auto; /* Allow the user to scroll horizontally */
+}
+
+.admin-data-sections {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.admin-data-sections section {
+  min-width: 300px;
+  max-width: 350px;
+}
+
+.admin-panel {
+  flex: 1;
+  min-width: 300px;
+  max-width: 350px;
 }
 
 .restaurantHoursOfOperation {
