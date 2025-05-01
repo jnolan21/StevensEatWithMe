@@ -75,7 +75,13 @@ app.use((req, res, next) => {
 /* GET /profile */
 app.use('/profile', (req, res, next) => {
   if (req.session.user) next(); // Authenticated user
-  else return res.redirect('users/login'); // Non-authenticated user
+  else return res.redirect('/users/login'); // Non-authenticated user
+});
+
+/* GET /profile/:id */
+app.use('/profile/:id', (req, res, next) => {
+  if (req.session.user) next(); // Authenticated user
+  else return res.redirect('/users/login'); // Non-authenticated user
 });
 
 /* GET /admin */
