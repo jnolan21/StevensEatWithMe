@@ -1,4 +1,6 @@
-<article class="profile-container">
+<article class="admin-container">
+
+    <section class="admin-leftside">
     <h1 class = "profile">Welcome to the admin page!</h1>
 
     <!-- Profile Information Container -->
@@ -18,8 +20,6 @@ ALL RSVP FIELDS:
     usersAttending: [userId]
 -->
 
-
-
     <!-- "Reviews" Container -->
     <section class = "profSection">
     <section class="profile-myReviews">
@@ -27,7 +27,7 @@ ALL RSVP FIELDS:
          {{#if message}}
         <p class = "deletedReview">{{message}}</p>
         {{/if}}
-       <details open><summary class = "caret-summary"><p> <span class="caret"></span> All Reviews </p></summary>
+       <details close><summary class = "caret-summary"><p> <span class="caret"></span> All Reviews </p></summary>
         <ul>
             {{#each user.reviews}}
             <!-- Display each review -->
@@ -66,15 +66,17 @@ ALL RSVP FIELDS:
         </details> 
         </section>
         </section>
+    </section>
 
 
+    <section class="admin-rightside">
     <!-- CREATE/EDIT/DELETE restaurant form -->
     <section class = "profSection">
     <section class="profile-myRSVPposts">
         <h2 class = "profile">Create a New Restaurant:</h2>
         <!-- Form to create a restaurant -->
         <form action="/admin/restaurant" method="POST" id="restaurant-form" class="restaurant-form">
-            <div class="loginBox">
+            <div class="adminBox">
                 <!-- Name -->
                 <div class="loginForm">
                     <label for="restaurant-name">
@@ -100,15 +102,32 @@ ALL RSVP FIELDS:
                 </div>
 
                 <!-- Hours of Operation -->
-                <div class="loginForm">
+                
+                <div class="restaurantHoursOfOperation">
                     <fieldset>
-                        <legend>Hours of operation:</legend>
-                        {{#each days}}
-                        <label for="restaurant-hoursOfOperation-{{this}}">{{this}}:</label>
-                        <input type="text" id="restaurant-hoursOfOperation-{{this}}" name="hoursOfOperation[{{this}}]" placeholder="ex. '8:00AM - 5:00PM' or 'closed'" value="{{@root.hoursOfOperation.[this]}}" class="login-input">
-                        {{/each}}
+                        <div class="hoursOfOperation-section">
+                            <legend>Hours of operation:</legend>
+                            {{#each days}}
+                            <label for="restaurant-hoursOfOperation-{{this}}">{{this}}:</label>
+                            <input type="text" id="restaurant-hoursOfOperation-{{this}}" name="hoursOfOperation[{{this}}]" placeholder="ex. '8:00AM - 5:00PM' or 'closed'" value="{{lookup ../hoursOfOperation this}}" class="login-input">
+                            {{/each}}
+                        </div>
                     </fieldset>
                 </div>
+                
+                <!--
+                <div class="restaurantHoursOfOperation">
+                    <p>Hours of operation:</p>
+                    <div class="hoursOfOperation-section">
+                        {{#each days}}
+                        <div class="hoursOfOperation-row">
+                            <label for="restaurant-hoursOfOperation-{{this}}">{{this}}:</label>
+                            <input type="text" id="restaurant-hoursOfOperation-{{this}}" name="hoursOfOperation[{{this}}]" placeholder="ex. '8:00AM - 5:00PM' or 'closed'" value="{{lookup ../hoursOfOperation this}}" class="login-input">
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+                -->
 
                 <!-- Image URL -->
                 <div class="loginForm">

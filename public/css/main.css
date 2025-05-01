@@ -511,5 +511,58 @@ footer{
   gap: 10px;
 }
 
+/* Admin Page Styling */
+.admin-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 20px;
+  justify-content: space-between;
+}
 
+.admin-leftside, .admin-rightside {
+  flex: 1 1 400px;
+  min-width: 350px;
+}
 
+.restaurantHoursOfOperation {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+
+.adminBox {
+  margin-left: 75px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  border: 1px solid rgb(149, 147, 147);
+  border-radius: 8px;
+  padding-bottom: 8px;
+  background-color: var(--stevens-light);
+}
+
+.restaurantHoursOfOperation label {
+  margin-bottom: 12px;
+  margin-top: 12px;
+  width: 80px;
+}
+
+.hoursOfOperation-section {
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 10px;
+  background-color: white; /* match your other inputs' background */
+}
+
+.hoursOfOperation-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.hoursOfOperation-row input {
+  width: 100%;
+}
