@@ -23,15 +23,20 @@ router
       let signupUser = await userData.getUserByVerificationToken(verificationToken);
       // User could not be found
       if (!signupUser) {
-        res.status(400).json({error: 'Invalid verification token!'});
-        return;
+        return res.status(404).json({
+          title: "404 Page Not Found",
+          error: "User Not Found",
+          status: 404});
       }
       // Update the user signing up to mark them as verified!
       signupUser = await userData.verifyUserSignup(signupUser._id);
       res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user, isAdmin});
       return;
     } catch (e) {
-      res.status(400).json({error: e.message});
+      return res.status(500).json({
+        title: "500 Internal Server Error",
+        error: e.message,
+        status: 500});
     }
   });
 
@@ -50,7 +55,10 @@ router
       }
       res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript', isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
-      return res.status(400).json({error: e.message});
+      return res.status(500).json({
+        title: "500 Internal Server Error",
+        error: e.message,
+        status: 500});
     }
   })
   .post(async (req, res) => {
@@ -240,10 +248,11 @@ router
       let allUsers = await userData.getAllUsers();
       // Make sure a user exists with this email
       for (let i = 0; i < allUsers.length; i++) {
-        // Compare the user's hashed password
-        let comparePasswords = await bcrypt.compare(password, allUsers[i].password);
         // Render user's profile page
-        if (email.toLowerCase() === allUsers[i].email.toLowerCase() && comparePasswords) {
+        if (email.toLowerCase() === allUsers[i].email.toLowerCase()) {
+          // Compare the user's hashed password
+          let comparePasswords = await bcrypt.compare(password, allUsers[i].password);
+          if (!comparePasswords) break; //if the passwords do not match then it goes to error
           // ** Make sure the user is verified before they're allowed to log in! **
           if (allUsers[i].isVerified) {
             // Store the user's information in the session
