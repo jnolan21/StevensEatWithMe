@@ -54,6 +54,20 @@ router
     catch(e){
         return res.status(500).json({error: e.message});
     }
+    // Get all the users
+    let allUsers = [];
+    try {
+        allUsers = await userData.getAllUsers();
+    } catch (e) {
+        return res.status(500).json({error: e.message});
+    }
+    // Get all the restaurants
+    let allRestaurants = [];
+    try {
+        allRestaurants = await restaurants.getAllRestaurants();
+    } catch (e) {
+        return res.status(500).json({error: e.message});
+    }
 
     // Render the user's admin page
     try {
@@ -66,7 +80,10 @@ router
                 lastName: user.lastName,
                 reviews: reviews // array of review objects
             },
+            partial: 'adminScript',
             days: days,
+            allUsers: allUsers,
+            allRestaurants: allRestaurants,
             script: 'adminScript',
             isLoggedIn: !!req.session.user,
             isAdmin

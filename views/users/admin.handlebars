@@ -20,14 +20,15 @@ ALL RSVP FIELDS:
     usersAttending: [userId]
 -->
 
-    <!-- "Reviews" Container -->
+    <section class="admin-data-sections">
+    <!-- All Reviews! -->
     <section class = "profSection">
     <section class="profile-myReviews">
        <h2 class = "profile">All User Reviews:</h2>
          {{#if message}}
         <p class = "deletedReview">{{message}}</p>
         {{/if}}
-       <details close><summary class = "caret-summary"><p> <span class="caret"></span> All Reviews </p></summary>
+       <details close><summary class = "caret-summary"><p> <span class="caret"></span> All Reviews</p></summary>
         <ul>
             {{#each user.reviews}}
             <!-- Display each review -->
@@ -66,6 +67,48 @@ ALL RSVP FIELDS:
         </details> 
         </section>
         </section>
+
+    <!-- All Users List! -->
+    <section class="profile-myUsers">
+        <h2 class="profile">All Users:</h2>
+        <details close>
+            <summary class="caret-summary"><p><span class="caret"></span> All Users</p></summary>
+            <ul>
+            {{#each allUsers}}
+            <li class="reviewLi">
+                <p><span class="reviewSpan">Username:</span> {{this.username}}</p>
+                <p><span class="reviewSpan">Name:</span> {{this.firstName}}</p>
+                {{#if this.isAdmin}}
+                <p><span class="reviewSpan">Role: </span>Admin</p>
+                {{else}}
+                <p><span class="reviewSpan">Role: </span>Regular User</p>
+                {{/if}}
+                <!-- Add more fields as needed -->
+            </li>
+            {{/each}}
+            </ul>
+        </details>
+    </section>
+
+    <!-- Restaurant List! -->
+    <section class="profile-myRestaurants">
+        <h2 class="profile">All Restaurants:</h2>
+        <details close>
+            <summary class="caret-summary"><p><span class="caret"></span> All Restaurants</p></summary>
+            <ul>
+            {{#each allRestaurants}}
+            <li class="reviewLi">
+                <p><span class="reviewSpan">Name:</span> {{this.name}}</p>
+                <p><span class="reviewSpan">Location:</span> {{this.location}}</p>
+                <!-- Add more fields as needed -->
+            </li>
+            {{/each}}
+            </ul>
+        </details>
+    </section>
+
+    </section>
+
     </section>
 
 
@@ -95,7 +138,7 @@ ALL RSVP FIELDS:
 
                 <!-- Types of Food -->
                 <div class="loginForm">
-                    <label for="restaurant-typesOfFodd">
+                    <label for="restaurant-typesOfFood">
                         Types of food: 
                     </label>
                         <input type="text" id="restaurant-typesOfFood" name="typesOfFood" placeholder="Types of food..." value="{{typesOfFood}}" class="login-input">
@@ -114,20 +157,6 @@ ALL RSVP FIELDS:
                         </div>
                     </fieldset>
                 </div>
-                
-                <!--
-                <div class="restaurantHoursOfOperation">
-                    <p>Hours of operation:</p>
-                    <div class="hoursOfOperation-section">
-                        {{#each days}}
-                        <div class="hoursOfOperation-row">
-                            <label for="restaurant-hoursOfOperation-{{this}}">{{this}}:</label>
-                            <input type="text" id="restaurant-hoursOfOperation-{{this}}" name="hoursOfOperation[{{this}}]" placeholder="ex. '8:00AM - 5:00PM' or 'closed'" value="{{lookup ../hoursOfOperation this}}" class="login-input">
-                        </div>
-                        {{/each}}
-                    </div>
-                </div>
-                -->
 
                 <!-- Image URL -->
                 <div class="loginForm">
