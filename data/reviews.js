@@ -254,6 +254,57 @@ const getAllRestaurantReviews = async (restaurantId) => {
     return reviews;
 
 }
+const updateReview = async (reviewId, updateFields, isMenuItem, properId) => {
+    //need to update ratings too. 
+    //going to need either restaurantid or menuitemid
+    //based on this, call the proper helper function and perform another update 
+    let oldReview = null;
+    try {
+        const reviewCollection = await reviews(); // get collection
+        const restaurantCollection = await restaurants();
+        let newOverallRating;
+        oldReview = await reviewCollection.findOne({ _id: new ObjectId(reviewId) });
+        if (!oldReview) throw new Error("Review not found before update.");
+        const updateResult = await reviewCollection.findOneAndUpdate(
+          { _id: new ObjectId(reviewId) },
+          { $set: updateFields }
+        );
+        if (isMenuItem==="true") {
+            const menuItem = await menuItemData.getMenuItemById(properId);
+            newOverallRating = await helper.calculateMenuItemRating(menuItem);
+        
+            await restaurantCollection.updateOne(
+                {
+                    _id: new ObjectId(menuItem.restaurantId),
+                    'menuItems._id': new ObjectId(properId)
+                },
+                {
+                    $set: { 'menuItems.$.rating': newOverallRating }
+                }
+            );
+        } else {
+            const restaurant = await restaurantData.getRestaurantById(properId);
+            newOverallRating = await helper.calculateRestaurantRating(restaurant);
+        
+            await restaurantCollection.updateOne(
+                { _id: new ObjectId(properId) },
+                { $set: { averageRating: newOverallRating } }
+            );
+        }
+
+        return updateResult;
+    
+      } catch (e) {
+        if (oldReview) {
+            await reviewCollection.updateOne(
+              { _id: new ObjectId(reviewId) },
+              { $set: oldReview }
+            );
+          }
+        throw new Error(`Error updating review: ${e.message}`);
+      }
+  };
+  
 
 
 
@@ -270,5 +321,6 @@ export default {
     getAllReviewsWithInfo,
     getReviewById,
     deleteReview,
-    getAllRestaurantReviews
+    getAllRestaurantReviews,
+    updateReview
 }

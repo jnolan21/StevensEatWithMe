@@ -148,15 +148,85 @@ router
         let reviewId = req.body.reviewId;
         let loggedInUserId = req.session.user._id;
         let reviewPosterId= req.body.userId; 
-        if(reviewPosterId !== loggedInUserId) throw "Error: User not authorized to delete this review."
+        if(reviewPosterId !== loggedInUserId) throw new Error("User not authorized to delete this review.")
         await reviews.deleteReview(reviewId);
         req.session.message = "Deleted Review!"; 
         res.redirect('/profile');
     }
     catch (e){
         req.session.message = e.message || "Something went wrong deleting the review.";
-        res.redirect('/profile');
+        res.status(400).redirect('/profile');
     }
+  });
+  router 
+  .post('/edit', async (req, res) => {
+    try{
+        let properId = req.body.properId;
+        let isMenuItem = req.body.isMenuItem;
+        //process the review changes here. check if wait time empty, if it is dont update. for rating and review grab the values and update. do type checking 
+        if(req.body.waitMinutes == undefined || req.body.waitHours == undefined || req.body.rating == undefined ){
+            throw new Error("Undefined fields when updating review.")
+        }
+        let minutes = req.body.waitMinutes.toString().padStart(2, "0"); //make sure minutes is two digits 
+        let rating = Number(req.body.rating);
+        let waitTime = req.body.waitHours + "h " + req.body.waitMinutes + "min" ;
+        if(waitTime.trim() === "h min") waitTime = req.body.oldTime;
+        let review = (req.body.comment).trim();
+        if(typeof review !== "string" || review === "") throw new Error("Review must be a string. Cannot be empty.")
+        let reviewId = req.body.reviewId
+        //update review: waittime, rating, review
+        let oldReview = await reviews.getReviewById(reviewId); //make sure it exists 
+
+        await reviews.updateReview(reviewId, {
+            rating: rating,
+            review: review,
+            waitTime: waitTime
+          },isMenuItem, properId);
+    
+
+        req.session.message = "Updated Review!"
+        res.redirect('/profile')
+    }
+    catch (e){
+        req.session.message = e.message || "Something went wrong trying to edit the review.";
+        res.status(400).redirect('/profile');
+    }
+  });
+  router
+  .route('/editReview').get( async (req, res) =>{
+        try{
+            let reviewObj = req.query.revieww
+            let userId = req.query.userId
+            let reviewId= req.query.reviewId;
+            let reviewComment = req.query.reviewComment
+            reviewComment = reviewComment.trim()
+            let reviewRating = req.query.reviewRating
+            let reviewWaitTime = req.query.reviewWaitTime
+            let reviewRestaurant = req.query.reviewRestaurant
+            let reviewMenuItem = req.query.reviewMenuItem
+            let properId = req.query.properId;
+            let isMenuItem = req.query.isMenuItem;
+
+            res.render('users/editReview', {
+                reviewObj: reviewObj,
+                userId: userId,
+                reviewId: reviewId,
+                reviewComment: reviewComment,
+                reviewRating: reviewRating,
+                reviewWaitTime: reviewWaitTime,
+                reviewRestaurant: reviewRestaurant,
+                reviewMenuItem: reviewMenuItem,
+                properId: properId,
+                isMenuItem: isMenuItem,
+                isLoggedIn: !!req.session.user,
+                partial: 'editReviewScript'
+            }) //need to send it the review info so we can set up the review, maybe have an ol
+        
+        }
+        catch(e){
+            req.session.message = e.message || "Something went wrong trying to edit the review.";
+            res.status(400).redirect('/profile');
+        }
   });
 
 

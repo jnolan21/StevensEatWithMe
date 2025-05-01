@@ -107,8 +107,25 @@ ALL RSVP FIELDS:
                 <!-- <form action="/meetupPage/rsvp" method="POST" class = "rsvpForm"> -->
                 <li class = "reviewLi">
             <div class="buttonGroup">
-                <form>
+                <form action = "/profile/editReview" method = "GET" class = "editReviewForm">
+                    <input type="hidden" name="revieww" value="{{this}}">
+                     
+                    <input type="hidden" name="reviewId" value="{{this._id}}">
+                    <input type="hidden" name="userId" value="{{this.userId}}">
+                    <input type="hidden" name="reviewComment" value="{{this.review}}">
+                    <input type="hidden" name="reviewRestaurant" value="{{this.restaurantName}}">
+                    <input type="hidden" name="reviewMenuItem" value="{{this.menuItemName}}">
+                    <input type="hidden" name="reviewRating" value="{{this.rating}}">
+                     <input type="hidden" name="reviewWaitTime" value="{{this.waitTime}}">
                     <button type="submit" class="EditandDeleteButton">Edit</button>
+                    {{#if this.menuItemName}}
+                        <input type="hidden" name="properId" value="{{this.menuItemId}}">
+                        <input type="hidden" name="isMenuItem" value="true">
+                    {{else}}
+                        <input type="hidden" name="properId" value="{{this.restaurantId}}">
+                        <input type="hidden" name="isMenuItem" value="false">
+                    {{/if}}
+                
                 </form>
                 <form action="/profile/delete" method="POST" class = "deleteReveiwForm">
                     <input type="hidden" name="reviewId" value="{{this._id}}">
@@ -122,8 +139,10 @@ ALL RSVP FIELDS:
                     {{#if this.menuItemName}}
                         <!-- Display the menu items name -->
                         <p><span class = "reviewSpan">{{this.restaurantName}}:</span> <span class = "revItalic">{{this.menuItemName}}</span></p>
+                        <input type="hidden" name="properId" value="{{this.menuItemId}}">
                     {{else}}
                         <p><span class = "reviewSpan">{{this.restaurantName}}</span></p>
+                        <input type="hidden" name="properId" value="{{this.restaurantId}}">
                     {{/if}}
                     <!-- Display the rating -->
                     <p><span class = "reviewSpan">Rating:</span> {{this.rating}}</p>
