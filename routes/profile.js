@@ -6,6 +6,7 @@ import rsvpData from "../data/rsvps.js";
 import reviews from '../data/reviews.js';
 import restaurants from '../data/restaurants.js';
 import menuItems from '../data/menuItems.js';
+import {ObjectId} from 'mongodb';
 //import crypto from 'crypto'
 
 
@@ -131,10 +132,16 @@ router
                 RSVPposts: userRSVPPosts, // array of RSVP post objects
                 currentRSVPs: currentRSVPPosts, // array of RSVP post objects
                 reviews: userReviews, // array of review objects
+                _id: user._id
+            },
+            currUser: {
+                _id: user._id,
+                username: user.username
             },
             isLoggedIn: !!req.session.user,
             message: message,
-            isAdmin
+            isAdmin,
+            isOwnProfile: true
         })
     } catch (e) {
         res.status(500).json({error: e.message});
@@ -154,11 +161,178 @@ router
         res.redirect('/profile');
     }
     catch (e){
-        req.session.message = e.message || "Something went wrong deleting the review.";
         res.redirect('/profile');
     }
   });
 
+// view other users' profiles
+router
+  .route('/:id')
+  .get(async (req, res) => {
+    // verify user is logged in
+    if (!req.session.user) {
+        return res.status(403).redirect('/users/login');
+    }
+    let targetUserId = req.params.id;
+    let currentUserId = req.session.user._id;
+    let isAdmin = req.session.user.isAdmin || false;
 
+    try {
+        targetUserId = helper.checkId(targetUserId);
+        currentUserId = helper.checkId(currentUserId);
+    } catch (e) {
+        return res.status(400).redirect('/users/login');
+    }
+    // get target user and current user
+    let targetUser;
+    let currentUser;
+    try {
+        targetUser = await userData.getUserById(targetUserId);
+        currentUser = await userData.getUserById(currentUserId);
+    } catch (e) {
+        return res.status(404).render('users/login', {
+            title: 'EatWithMe login',
+            hasErrors: true,
+            errors: [e],
+            isLoggedIn: !!req.session.user,
+            isAdmin
+        });
+    }
+    // get followers and following for target user
+    let followers;
+    let following;
+    try {
+        followers = await userData.getAllPeopleFollowingThisUser(targetUserId);
+        following = await userData.getFollowingList(targetUserId);
+    } catch (e) {
+        return res.status(400).json({error: e.message});
+    }
+    // get target user's rsvps
+    let userRSVPPosts = [];
+    let currentRSVPPosts = [];
+    try {
+        for (let i = 0; i < targetUser.RSVP.length; i++) {
+            let curr1 = await rsvpData.getRsvpById(targetUser.RSVP[i]);
+            userRSVPPosts.push(curr1);
+            let curr2 = await rsvpData.getRsvpById(targetUser.RSVP[i]);
+            currentRSVPPosts.push(curr2);
+        }
+        currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts);
+        
+        for(let i = 0; i < userRSVPPosts.length; i++) {
+            userRSVPPosts[i].restaurantId = (await restaurants.getRestaurantById(userRSVPPosts[i].restaurantId)).name;
+            userRSVPPosts[i].user = (await userData.getUserById(userRSVPPosts[i].userId)).firstName;
+            let namesAttending = [];
+            let userIdsAttending = userRSVPPosts[i].usersAttending;
+            for (let j = 0; j < userIdsAttending.length; j++) {
+                let currUser = (await userData.getUserById(userIdsAttending[j])).firstName;
+                namesAttending.push(currUser);
+            }
+            userRSVPPosts[i].usersAttending = namesAttending;
+        }
+    } catch (e) {
+        return res.status(500).json({error: e.message});
+    }
+
+    // get the target user's reviews
+    let userReviews = [];
+    try {
+        for (let i = 0; i < targetUser.reviews.length; i++) {
+            let review = await reviews.getReviewById(targetUser.reviews[i]);
+            let restaurant = await restaurants.getRestaurantById(review.restaurantId);
+            review['restaurantName'] = restaurant.name;
+            if (review.menuItemId && review.menuItemId.trim() !== '') {
+                let menuItem = await menuItems.getMenuItemById(review.menuItemId);
+                review['menuItemName'] = menuItem.name;
+            }
+            userReviews.push(review);
+        }
+    } catch (e) {
+        return res.status(500).json({error: e.message});
+    }
+
+    // check if current user is following target user
+    let isFollowing = currentUser.friends.includes(targetUserId);
+
+    // render the profile page
+    try {
+        const message = req.session.message || null;
+        req.session.message = null;
+        res.render('users/profile', {
+            title: `${targetUser.firstName}'s Profile`,
+            user: {
+                username: targetUser.username,
+                firstName: targetUser.firstName,
+                lastName: targetUser.lastName,
+                following: following,
+                followers: followers,
+                RSVPposts: userRSVPPosts,
+                currentRSVPs: currentRSVPPosts,
+                reviews: userReviews,
+                _id: targetUser._id
+            },
+            currUser: {
+                _id: currentUser._id.toString(),
+                username: currentUser.username
+            },
+            isLoggedIn: !!req.session.user,
+            message: message,
+            isAdmin,
+            isFollowing,
+            isOwnProfile: currentUserId === targetUserId
+        });
+    } catch (e) {
+        res.status(500).json({error: e.message});
+    }
+  });
+
+router
+  .post('/follow', async (req, res) => {
+    try {
+        const friendId = req.body.friendId;
+        const currUserId = req.body.userId;
+        const action = req.body.action; // 'follow' or 'unfollow'
+
+        // Validate IDs
+        if (!friendId || !currUserId) {
+            throw new Error("Both user IDs are required");
+        }
+
+        // Check if IDs are valid
+        try {
+            helper.checkId(friendId);
+            helper.checkId(currUserId);
+        } catch (e) {
+            throw new Error("Invalid user ID format");
+        }
+
+        if(friendId === currUserId) throw new Error("Can only add other users, not yourself!");
+        
+        // Get current user to check if they're already following
+        const currentUser = await userData.getUserById(currUserId);
+        const isFollowing = currentUser.friends.includes(friendId);
+        
+        if (action === 'unfollow') {
+            if (!isFollowing) {
+                throw new Error("You are not following this user!");
+            }
+            await userData.removeFriend(currUserId, friendId);
+            req.session.message = "Friend Removed!";
+        } else {
+            if (isFollowing) {
+                throw new Error("You are already following this user!");
+            }
+            await userData.addFriend(currUserId, friendId);
+            req.session.message = "Friend Added!";
+        }
+        
+        res.redirect(`/profile/${friendId}`);
+    }
+    catch(e) {
+        console.log("Follow error:", e);
+        req.session.message = e.message || "Something went wrong. Cannot follow/unfollow this user.";
+        res.redirect(`/profile/${req.body.friendId}`);
+    }
+  });
 
 export default router;
