@@ -116,27 +116,46 @@ ALL RSVP FIELDS:
         <ul>
             {{#each user.reviews}}
                 <li class="reviewLi">
+                    
                     {{#if ../isOwnProfile}}
-                    <form>
-                        <button type="submit" class="EditandDeleteButton">Edit</button>
-                    </form>
+                    <form action = "/profile/editReview" method = "GET" class = "editReviewForm">
+                     <input type="hidden" name="revieww" value="{{this}}">
+                      
+                     <input type="hidden" name="reviewId" value="{{this._id}}">
+                     <input type="hidden" name="userId" value="{{this.userId}}">
+                     <input type="hidden" name="reviewComment" value="{{this.review}}">
+                     <input type="hidden" name="reviewRestaurant" value="{{this.restaurantName}}">
+                     <input type="hidden" name="reviewMenuItem" value="{{this.menuItemName}}">
+                     <input type="hidden" name="reviewRating" value="{{this.rating}}">
+                      <input type="hidden" name="reviewWaitTime" value="{{this.waitTime}}">
+                     <button type="submit" class="EditandDeleteButton">Edit</button>
+                     {{#if this.menuItemName}}
+                         <input type="hidden" name="properId" value="{{this.menuItemId}}">
+                         <input type="hidden" name="isMenuItem" value="true">
+                     {{else}}
+                         <input type="hidden" name="properId" value="{{this.restaurantId}}">
+                         <input type="hidden" name="isMenuItem" value="false">
+                     {{/if}} 
+                     </form>
                     <form action="/profile/delete" method="POST" class="deleteReveiwForm">
                         <input type="hidden" name="reviewId" value="{{this._id}}">
                         <input type="hidden" name="userId" value="{{this.userId}}">
                         <button type="submit" class="EditandDeleteButton">Delete</button>
                     </form>
                     <div id="delete-error" class="meetupError" hidden></div>
+                    </div>
                     {{/if}}
                     <div class="reviewInfo">
                         {{#if this.menuItemName}}
                             <p><span class="reviewSpan">{{this.restaurantName}}:</span> <span class="revItalic">{{this.menuItemName}}</span></p>
+                         <input type="hidden" name="properId" value="{{this.menuItemId}}">
                         {{else}}
                             <p><span class="reviewSpan">{{this.restaurantName}}</span></p>
+                        <input type="hidden" name="properId" value="{{this.restaurantId}}">
                         {{/if}}
                         <p><span class="reviewSpan">Rating:</span> {{this.rating}}</p>
                         <p><span class="reviewSpan">Wait Time:</span> {{this.waitTime}}</p>
                         <p><span class="reviewSpan">Review:</span> {{this.review}}</p>
-                    </div>
                 </li>
             {{/each}}
         </ul>
@@ -145,6 +164,7 @@ ALL RSVP FIELDS:
     </section>
 </article>
 
-<script src="/js/formValidation.js"></script>
+<script src="/public/js/formValidation.js"></script>
 </body>
 </html>
+

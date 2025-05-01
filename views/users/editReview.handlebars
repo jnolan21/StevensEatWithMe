@@ -1,0 +1,75 @@
+
+<h1>Edit Your Review!</h1>
+
+<ul>
+  <li class="reviewLi">
+    <form action="/profile/edit" method="POST" class="doneEdit">
+      <div class="reviewInfo"> 
+        <input type="hidden" name="isMenuItem" value="{{this.isMenuItem}}" />
+        <input type="hidden" name="properId" value="{{this.properId}}" />
+        {{#if reviewMenuItem}}
+             <p><span class = "reviewSpan">{{this.reviewRestaurant}}:</span> <span class = "revItalic">{{this.reviewMenuItem}}</span></p>
+
+        {{else}}
+           <p><span class = "reviewSpan">{{this.reviewRestaurant}}:</span> </p>
+
+        {{/if}}
+        <p>
+            <label>
+        Rating:
+    <select name="rating">
+        <option value="0">0</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>        
+    </label>
+    </p>
+
+        <p><label>
+          Wait Time:
+<input type="number" name="waitHours" min="0" max="5" /> h
+  <input type="number" name="waitMinutes" min="0" max="59"  /> min        </label>
+   <input type="hidden" name="oldTime" value="{{this.reviewWaitTime}}">
+   <input type="hidden" name="reviewId" value="{{this.reviewId}}">
+
+        </p>
+
+        <p>
+        <label>
+          Review:
+          <textarea name="comment">{{reviewComment}}</textarea>
+        </label>
+        </p>
+
+        <button type="submit" class="doneEditButton">Done</button>
+      </div>
+    </form>
+  </li>
+</ul>
+
+
+<ul>
+  <h3> Old Review: </h3>
+<li class = "reviewLi">
+            <div class = "reviewInfo">
+                    <!-- Display the restaurant name -->
+                    {{#if this.reviewMenuItem}}
+                        <!-- Display the menu items name -->
+                        <p><span class = "reviewSpan">{{this.reviewRestaurant}}:</span> <span class = "revItalic">{{this.reviewMenuItem}}</span></p>
+                    {{else}}
+                        <p><span class = "reviewSpan">{{this.reviewRestaurant}}</span></p>
+                    {{/if}}
+                    <!-- Display the rating -->
+                    <p><span class = "reviewSpan">Rating:</span> {{this.reviewRating}}</p>
+                    <!-- Display the wait time -->
+                    <p><span class = "reviewSpan">Wait Time:</span> {{this.reviewWaitTime}}</p>
+                    <!-- Display the review text -->
+                    <p><span class = "reviewSpan">Review:</span> {{this.reviewComment}}</p>
+
+                    <!-- Display the review text -->
+                </li>
+            </div>
+</ul>
