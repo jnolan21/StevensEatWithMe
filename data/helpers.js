@@ -374,18 +374,20 @@ function stringToArray(str, strName) {
     let currentWord = '';
     const regex = /^[A-Za-z]+$/;
     for (let i = 0; i < str.length; i++) {
-        if (str[i] === ' ') {
+        if (str[i] == ',' || str[i] === ' ') {
             if (currentWord.length > 0) {
+                if (!regex.test(currentWord)) throw new Error(`${strName} can only contain letters separated by commas or spaces`);
                 stringArray.push(currentWord);
                 currentWord = '';
             }
-        } else if (regex.test(str[i])) {
-            currentWord += str[i];
         } else {
-            throw new Error(`${strName} can only contain letters separated by spaces`);
+            currentWord += str[i];
         }
     }
-    if (currentWord.length > 0) stringArray.push(currentWord);
+    if (currentWord.length > 0) {
+        if (!regex.test(currentWord)) throw new Error(`${strName} can only contain letters separated by commas or spaces`);
+        stringArray.push(currentWord);
+    }
     return stringArray;
 }
 
