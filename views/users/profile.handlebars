@@ -1,4 +1,7 @@
 <article class="profile-container">
+            {{#if message}}
+        <p class="deletedReview">{{message}}</p>
+        {{/if}}
     <h1 class="profile">{{#if isOwnProfile}}Hi, {{user.firstName}}!{{else}}{{user.firstName}}'s Profile{{/if}}</h1>
 
     <!-- Profile Information Container -->
@@ -16,9 +19,7 @@
                 <button type="submit" class="followButton">{{#if isFollowing}}Unfollow{{else}}Follow{{/if}}</button>
             </form>
         {{/if}}
-        {{#if message}}
-        <p class="deletedReview">{{message}}</p>
-        {{/if}}
+
     </section>
     </section>
     
