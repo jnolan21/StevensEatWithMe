@@ -7,8 +7,8 @@ document.querySelectorAll('.dropdown-menu').forEach(menu => {
 
   
 let dietary = [];
-let waitTime = Infinity;
-let rating = 5;
+let waitTime = 70;
+let rating = 0;
 
 
 let requestConfig = {
@@ -27,16 +27,9 @@ $.ajax(requestConfig).then(function (responseMessage) {
 
     dietaryRestrictions = [...new Set(dietaryRestrictions)];
 
-    dietaryRestrictions.map((restrictions) => {
-      let element = $(
-        `<li><label><input type="checkbox" value="${restrictions}">${restrictions}</label></li>
-        `
-      );
-      
-      //append the restriction
-      $(filter).append(element);
-      
-      
+    dietaryRestrictions.forEach((restrictions) => {
+        let element = $(`<li><label><input type="checkbox" value="${restrictions}">${restrictions}</label></li>`);
+        $(filter).append(element);
     });
 
     $('#dietary input').change(function() {
@@ -47,6 +40,7 @@ $.ajax(requestConfig).then(function (responseMessage) {
             dietary.splice(index, 1); 
             }
         }
+        console.log(dietary);
         rerender();
       });
   });
@@ -54,12 +48,12 @@ $.ajax(requestConfig).then(function (responseMessage) {
 
 $('#waitTime input').click(function() {
     waitTime = this.value;
-    if (waitTime === 'None') waitTime = Infinity;
+    if (waitTime === 'None') waitTime = 70;
     rerender();
   });
 
 $('#rating input').click(function() {
-    rating = this.value;
+    rating = Number(this.value);
     rerender();
   });
 
@@ -68,30 +62,29 @@ function waitTimeConversion (time) {
     if (time === "") return 0;
 
     const [hour, minutes] = time.split(" ");
+    
 
     let h = parseInt(hour);
     let m = parseInt(minutes);
 
     h = h * 60
     m = h + m
+
     return m;
 
 }
 
 function filt (d, w, r, rest) {
-    for (let i = 0; i < rest.length; i++) {
+    for (let i = rest.length - 1; i >= 0; i--) {
         const restI = rest[i];
-        if (waitTimeConversion(restI.averageWaitTime) > w) {
-            const index = rest.indexOf(i);
-            rest.splice(index, 1); 
-        }
-        if (restI.averageRating > r) {
-            const index = rest.indexOf(i);
-            rest.splice(index, 1);
-        }
-        if ((!d.some(item => restI.dietaryRestrictions.includes(item))) && (d.length != 0) && (restI.dietaryRestrictions.length != 0)) {
-            const index = rest.indexOf(i);
-            rest.splice(index, 1);
+        if (
+            waitTimeConversion(restI.averageWaitTime) > w ||
+            restI.averageRating < r ||
+            (d.length !== 0 &&
+             restI.dietaryRestrictions.length !== 0 &&
+             !d.some(item => restI.dietaryRestrictions.includes(item)))
+        ) {
+            rest.splice(i, 1);
         }
     }
     return rest;
@@ -120,7 +113,7 @@ $.ajax(requestConfig).then(function (responseMessage) {
             <summary class = "caret-summary"> <span class="caret"></span> Menu Items</summary>
             <ul class = "menuItems" >
                 ${menuList}
-            <ul>
+            </ul>
             </details> 
         </li>
         `
@@ -132,6 +125,10 @@ $.ajax(requestConfig).then(function (responseMessage) {
     });
   });
 }
+
+
+  
+  
 
   
 

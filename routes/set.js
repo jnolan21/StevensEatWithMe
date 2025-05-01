@@ -33,7 +33,10 @@ router.route('/').get(async (req, res) => {
     });
   }
   catch (e) {
-    return res.status(400).json({error: e.message});
+    return res.status(500).json({
+      title: "500 Internal Server Error",
+      error: e.message,
+      status: 500});
   }
 });
 router.route('/diningList').get(async (req, res) => {
@@ -50,7 +53,10 @@ router.route('/diningList').get(async (req, res) => {
 })
   } 
   catch (e) {
-    return res.status(400).json({error: e.message});
+    return res.status(500).json({
+      title: "500 Internal Server Error",
+      error: e.message,
+      status: 500});
   }
   
 });
@@ -72,7 +78,10 @@ router.route('/diningList/:id').get(async (req, res) => {
       reviews: restaurantReviews, isLoggedIn: !!req.session.user, isAdmin
     }); 
   } catch(e) {
-    res.json({error: e});
+    return res.status(404).json({
+      title: "404 Page Not Found",
+      error: "Restaurant Could Not be Found, If it does exist Reload and try again",
+      status: 404});
   }
 
 });
@@ -85,17 +94,11 @@ router
     let serverRestaurants = await restaurants.getAllRestaurants();
     res.json(serverRestaurants);
     } catch(e) {
-      console.log(e);
-      res.json(e);
+      return res.status(500).json({
+      title: "500 Internal Server Error",
+      error: e.message,
+      status: 500});
     }
-  })
-  .post(async (req, res) => {
-    //let cleanName = req.body.name;
-    //let cleanDesc = req.body.description;
-
-    let cleanName = xss(req.body.name);
-    let cleanDesc = xss(req.body.description);
-    res.json({success: true, todo: true});
   });
 
 

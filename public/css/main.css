@@ -589,3 +589,15 @@ footer{
 .hoursOfOperation-row input {
   width: 100%;
 }
+
+#errorStatus {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 20px;
+}
+
+#errorMessage {
+  text-align: center;
+  font-size: 1rem;
+  margin-top: 10px;
+}

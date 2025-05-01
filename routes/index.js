@@ -11,6 +11,7 @@ import helpers from '../data/helpers.js';
 import {static as staticDir} from 'express';
 
 const constructorMethod = (app) => {
+  app.use('/public', staticDir('public'));
   app.use('/', setRoutes);
   app.use('/diningList', setRoutes);
   app.use('/api/diningList', setRoutes);
@@ -18,9 +19,7 @@ const constructorMethod = (app) => {
   app.use('/meetupPage', meetupRoutes);
   app.use('/profile', profileRoutes);
   app.use('/admin', adminRoutes);
-  app.use('/public', staticDir('public'));
   app.use('*', async (req, res) => {
-    console.log("failed");
     res.redirect('/');
   });
 };

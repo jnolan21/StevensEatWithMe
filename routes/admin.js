@@ -52,21 +52,33 @@ router
         reviews = await reviewData.getAllReviewsWithInfo();
     }
     catch(e){
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('error', {
+            title: "500 Internal Server Error",
+            error: e.message,
+            status: 500
+        });
     }
     // Get all the users
     let allUsers = [];
     try {
         allUsers = await userData.getAllUsers();
     } catch (e) {
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('error', {
+            title: "500 Internal Server Error",
+            error: e.message,
+            status: 500
+        });
     }
     // Get all the restaurants
     let allRestaurants = [];
     try {
         allRestaurants = await restaurants.getAllRestaurants();
     } catch (e) {
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('error', {
+            title: "500 Internal Server Error",
+            error: e.message,
+            status: 500
+        });
     }
 
     // Render the user's admin page
@@ -89,7 +101,11 @@ router
             isAdmin
         })
     } catch (e) {
-        res.status(500).json({error: e.message});
+        return res.status(500).render('error', {
+            title: "500 Internal Server Error",
+            error: e.message,
+            status: 500
+        });
     }
 
   });
@@ -109,7 +125,7 @@ router
     }
     catch (e){
         req.session.message = e.message || "Something went wrong deleting the review.";
-        res.redirect('/admin');
+        return res.status(500).redirect('/admin');
     }
 });
 
@@ -160,7 +176,11 @@ router
         reviews = await reviewData.getAllReviewsWithInfo();
     }
     catch(e){
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('error', {
+            title: "500 Internal Server Error",
+            error: e.message,
+            status: 500
+        });
     }
     // Reload with errors if needed
     if (errors.length > 0) {
@@ -203,7 +223,7 @@ router
         return res.redirect('/admin');
     } catch (e) {
         req.session.message = e.message || "Server error.";
-        return res.redirect('/admin');
+        return res.status(500).redirect('/admin');
     }
   });
 
