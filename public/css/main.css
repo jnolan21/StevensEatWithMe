@@ -595,3 +595,129 @@ footer{
   font-size: 1rem;
   margin-top: 10px;
 }
+
+
+.overview {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px 25px;
+  background-color: var(--stevens-white);
+  border: 1px solid var(--stevens-light);
+  border-radius: 10px;
+  line-height: 26px;
+  color: #333;
+}
+
+.overview {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.overview p {
+  margin-bottom: 16px;
+  font-size: 16px;
+}
+
+.overview h2 {
+  margin-top: 24px;
+  font-size: 24px;
+  color: var(--stevens-red);
+}
+
+.dropdown-menu {
+  max-height: 200px;     
+  overflow-y: auto;      
+  overflow-x: hidden;    
+}
+
+/* Create Review Form */
+
+#createReviewContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.formContainer {
+  background-color: var(--stevens-white);
+  padding: 2rem 2.5rem;
+  border: 1px solid var(--stevens-red);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px black;
+  max-width: 500px;
+  width: 100%;
+}
+
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid var(--stevens-light);
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+
+#rating {
+  max-width: 100px;
+}
+
+#waitTimeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.time-field {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.time-field input {
+  width: 80px;
+  padding: 0.5rem;
+}
+
+.dropdown {
+  margin-bottom: 1rem;
+}
+
+#submit_button {
+  width: 100%;
+  background-color: var(--stevens-red);
+  color: white;
+  font-size: 1rem;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+#submit_button:hover {
+  background-color: var(--stevens-red);
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}

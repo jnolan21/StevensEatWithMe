@@ -81,8 +81,7 @@ function filt (d, w, r, rest) {
             waitTimeConversion(restI.averageWaitTime) > w ||
             restI.averageRating < r ||
             (d.length !== 0 &&
-             restI.dietaryRestrictions.length !== 0 &&
-             !d.some(item => restI.dietaryRestrictions.includes(item)))
+            !d.every(restriction => restI.dietaryRestrictions.includes(restriction)))
         ) {
             rest.splice(i, 1);
         }

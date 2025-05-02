@@ -116,6 +116,23 @@ router
         return res.status(500).json({error: e.message});
     }
 
+    //Get the restaurants and menuItems for the create review
+    let restaurantss;
+    let menu = [];
+    
+    try {
+        restaurantss = await restaurants.getAllRestaurants();
+        for (let i = 0; i < restaurantss.length; i++) {
+            restaurantss[i].menuItems.forEach((menuItem) => menu.push(menuItem));
+        } 
+    } catch(e) {
+        res.status(404).res.render('error', {
+            title: "404 Page Not Found",
+            error: "Restaurants could not be found",
+            status: 404
+        })
+    }
+
     // Render the user's profile page
     try {
         const message = req.session.message || null;  
@@ -141,13 +158,59 @@ router
             isLoggedIn: !!req.session.user,
             message: message,
             isAdmin,
-            isOwnProfile: true
+            isOwnProfile: true,
+            restaurant: restaurantss, 
+            menuItem: menu
         })
     } catch (e) {
-        res.status(500).json({error: e.message});
+        return res.status(500).json({error: e.message});
+    }
+    
+  })
+  .post(async (req, res) => {
+
+    let restaurantId = req.body.restaurantId;
+    let menuId = req.body.menuId || null;
+    let review = req.body.review;
+    let rating = Number(req.body.rating);
+    let [hour, minute] = req.body.waitTime;
+    let waitTime = `${hour}h ${minute}min`;
+
+    console.log(restaurantId + " " + menuId + " " + review + " " + rating + " " + waitTime);
+
+    try {
+    restaurantId = helper.checkId(restaurantId);
+    if (menuId !== null) menuId = helper.checkId(menuId);
+    review = helper.checkReview(review);
+    rating = helper.checkReviewRating(rating);
+    waitTime = helper.checkWaitTime(waitTime);
+    } catch(e) {
+        return res.status(500).json({error: e.message});
     }
 
+
+    try {
+        if (menuId !== null) {
+            await reviews.createMenuItemReview(req.session.user._id, 
+                                        restaurantId,
+                                        menuId,
+                                        review,
+                                        rating,
+                                        waitTime );
+        } else {
+            await reviews.createRestaurantReview(req.session.userId, 
+                                        restaurantId,
+                                        review,
+                                        rating,
+                                        waitTime);
+        }
+        return res.redirect('/profile');
+    } catch(e) {res.status(500).json({error: e.message})};
+
+
   });
+
+
   router 
   .post('/delete', async (req, res) => {
     try{
@@ -325,8 +388,11 @@ router
     // check if current user is following target user
     let isFollowing = currentUser.friends.includes(targetUserId);
 
+    
+
     // render the profile page
     try {
+        console.log(restaurants);
         const message = req.session.message || null;
         req.session.message = null;
         res.render('users/profile', {
@@ -350,7 +416,7 @@ router
             message: message,
             isAdmin,
             isFollowing,
-            isOwnProfile: currentUserId === targetUserId
+            isOwnProfile: currentUserId === targetUserId,
         });
     } catch (e) {
         res.status(500).json({error: e.message});
@@ -572,6 +638,20 @@ router
         console.log("Follow error:", e);
         req.session.message = e.message || "Something went wrong. Cannot follow/unfollow this user.";
         res.redirect(`/profile/${req.body.friendId}`);
+    }
+  });
+
+router  
+.route('/api/diningList')
+  .get(async (req, res) => {
+    try {
+    let serverRestaurants = await restaurants.getAllRestaurants();
+    res.json(serverRestaurants);
+    } catch(e) {
+      return res.status(500).json({
+      title: "500 Internal Server Error",
+      error: e.message,
+      status: 500});
     }
   });
 
