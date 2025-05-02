@@ -28,7 +28,12 @@ ALL RSVP FIELDS:
          {{#if message}}
         <p class = "deletedReview">{{message}}</p>
         {{/if}}
-       <details close><summary class = "caret-summary"><p> <span class="caret"></span> All Reviews</p></summary>
+        {{#if reviewDeleted}}
+        <details open>
+        {{else}}
+        <details close>
+        {{/if}}
+        <summary class = "caret-summary"><p> <span class="caret"></span> All Reviews</p></summary>
         <ul>
             {{#each user.reviews}}
             <!-- Display each review -->
@@ -93,14 +98,32 @@ ALL RSVP FIELDS:
     <!-- Restaurant List! -->
     <section class="profile-myRestaurants">
         <h2 class="profile">All Restaurants:</h2>
+        {{#if restaurantDeleted}}
+        <details open>
+        {{else}}
         <details close>
+        {{/if}}
             <summary class="caret-summary"><p><span class="caret"></span> All Restaurants</p></summary>
             <ul>
             {{#each allRestaurants}}
             <li class="reviewLi">
-                <p><span class="reviewSpan">Name:</span> {{this.name}}</p>
-                <p><span class="reviewSpan">Location:</span> {{this.location}}</p>
-                <!-- Add more fields as needed -->
+                <div class="buttonGroup">
+                    <!-- Delete Restaurant Button -->
+                    <form action="/admin/restaurant/delete" method="POST" class="deleteRestaurantForm">
+                        <input type="hidden" name="restaurantId" value="{{this._id}}">
+                        <button type="submit" class="EditandDeleteButton">Delete</button>
+                    </form>
+                    <!-- Edit Restaurant Button -->
+                    <form action="/admin/restaurant/edit" method="GET" class="editRestaurantForm">
+                        <input type="hidden" name="restaurantId" value="{{this._id}}">
+                        <button type="submit" class="EditandDeleteButton">Edit</button>
+                    </form>
+                </div>
+                <!-- Restaurant Info! -->
+                <div class="reviewInfo">
+                    <p><span class="reviewSpan">Name:</span> {{this.name}}</p>
+                    <p><span class="reviewSpan">Location:</span> {{this.location}}</p>
+                </div>
             </li>
             {{/each}}
             </ul>
