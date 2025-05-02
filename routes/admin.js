@@ -46,6 +46,10 @@ router
     // Get the user
     let user = req.session.user;
 
+    // Determine if a review/restaurant was just deleted
+    const reviewDeleted = req.session.reviewDeleted || false;
+    const restaurantDeleted = req.session.restaurantDeleted || false;
+
     // Get all users reviews
     let reviews = [];
     try{
@@ -96,10 +100,16 @@ router
             days: days,
             allUsers: allUsers,
             allRestaurants: allRestaurants,
+            reviewDeleted,
+            restaurantDeleted,
             script: 'adminScript',
             isLoggedIn: !!req.session.user,
             isAdmin
-        })
+        });
+        // Clear the 'deleted' flags
+        req.session.reviewDeleted = false;
+        req.session.restaurantDeleted = false;
+        return;
     } catch (e) {
         return res.status(500).render('error', {
             title: "500 Internal Server Error",
@@ -117,10 +127,12 @@ router
     try{
         //receive reviewId, userId and session.user.userId
         let reviewId = req.body.reviewId;
+        reviewId = helper.checkId(reviewId);
         let loggedInUserId = req.session.user._id;
         let reviewPosterId= req.body.userId; 
         await reviewData.deleteReview(reviewId);
         req.session.message = "Deleted Review!"; 
+        req.session.reviewDeleted = true;
         res.redirect('/admin');
     }
     catch (e){
@@ -130,8 +142,27 @@ router
 });
 
 
+/* Delete restaurants */
+router 
+.post('/restaurant/delete', async (req, res) => {
+    try{
+        //receive restaurantId
+        let restaurantId = req.body.restaurantId;
+        restaurantId = helper.checkId(restaurantId);
+        await restaurants.removeRestaurant(restaurantId);
+        req.session.message = "Deleted Restaurant!"; 
+        req.session.restaurantDeleted = true;
+        res.redirect('/admin');
+    }
+    catch (e){
+        req.session.message = e.message || "Something went wrong deleting the restaurant.";
+        return res.status(500).redirect('/admin');
+    }
+});
 
-// Restaurant routes
+
+
+/* Create restaurants */
 router
   .route('/restaurant')
   .post(async (req, res) => {
