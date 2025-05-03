@@ -4,10 +4,9 @@
     // Get the restaurants's name, location, types of food, hours of operation, image URL, dietary restrictions, form, and list of errors
     let name = document.getElementById('restaurant-name');
     let location = document.getElementById('restaurant-location');
-    let typesOfFood = document.getElementById('restaurant-typesOfFood');
+    let typesOfFood = document.getElementById('restaurant-typeOfFood');
     let imageURL = document.getElementById('restaurant-imageURL');
-    let dietaryRestrictions = document.getElementById('restaurant-dietaryRestrictions');
-    let serverForm = document.getElementById('restaurant-form');
+    let serverForm = document.getElementById('restaurant-create-form') || document.getElementById('restaurant-edit-form');
     let errorList = document.getElementById('restaurant-errors');
     let submitButton = document.getElementById('restaurant-button');
   
@@ -78,60 +77,101 @@
       imageURL = checkString(imageURL, 'Restaurant image URL');
       try {
         let checkingURL = new URL(imageURL);
-        if (!checkingURL.protocol.startsWith('http')) throw new Error('Invalid URL');
+        if (!checkingURL.protocol.startsWith('http')) return errors.push('Invalid URL');
       } catch (e) {
         return errors.push('Image URL must be a valid absolute URL starting with http:// or https://');
       }
       return imageURL;
     }
 
+    // Verify the dietary restrictions
+    function checkDietaryRestrictions(dr) {
+      if (dr === undefined) return errors.push(`Restaurant dietary restrictions cannot be empty.`);
+      if (!Array.isArray(dr)) return errors.push(`Restaurant dietary restrictions must be an array.`);
+      let dietaryRestrictions = ['vegetarian', 'nut-free', 'vegan', 'dairy-free', 'gluten-free'];
+      let drSet = new Set();
+      for (let i = 0; i < dr.length; i++) {
+          let element;
+          try {
+              element = checkString(dr[i], 'Dietary restriction element');
+          } catch (e) {
+              return errors.push(`Invalid dietary restriction: ${e.message}.`);
+          }
+          // Check if this is a valid dietary restriction
+          if (!dietaryRestrictions.includes(element.toLowerCase())) return errors.push(`${element} is not a valid dietary restriction.`);
+          element = element.toLowerCase();
+          // Capitalize the first letter
+          element = element.charAt(0).toUpperCase() + element.slice(1);
+          drSet.add(element);
+      }
+      // Return the dietaryRestrictions sorted for consistency
+      return Array.from(drSet).sort();
+    }
+
     // If a form was submitted, this executes
     if (serverForm) {
       serverForm.addEventListener('submit', (event) => {
-        errors = [];
-        // Make sure all previous errors in the list are removed (if they exist)
-        errorList.innerHTML = '';
-        // Hide the error list
-        if (errorList) errorList.hidden = true;
-  
-        // Check all input
-        let nameValue = name.value.trim();
-        let locationValue = location.value.trim();
-        let typesOfFoodValue = typesOfFood.value.trim();
-        let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        let hoursOfOperationValue = {};
-        for (let day of days) {
-          let input = document.getElementById(`restaurant-hoursOfOperation-${day}`);
-          if (input) hoursOfOperationValue[day] = input.value.trim();
-        }
-        let imageURLValue = imageURL.value.trim();
-        let dietaryRestrictionsValue = dietaryRestrictions.value.trim();
-        nameValue = checkString(nameValue, "Restaurant name");
-        locationValue = checkString(locationValue, "Restaurant location");
-        typesOfFoodValue = stringToArray(typesOfFoodValue, "Restaurant types of food");
-        hoursOfOperationValue = checkHoursOfOperation(hoursOfOperationValue);
-        imageURLValue = checkImgURL(imageURLValue);
-        dietaryRestrictionsValue = stringToArray(dietaryRestrictionsValue, "Restaurant dietary restrictions");
-
-        // Display all errors that have been caught
-        if (errors.length > 0) {
-  
-          // Since there are errors, we prevent the form from going to the server
-          event.preventDefault();
-          // Display all errors found!
-          for (let i = 0; i < errors.length; i++) {
-            let myLi = document.createElement('li');
-            myLi.classList.add('error');
-            myLi.innerHTML = errors[i];
-            errorList.appendChild(myLi);
+          errors = [];
+          // Make sure all previous errors in the list are removed (if they exist)
+          errorList.innerHTML = '';
+          // Hide the error list
+          if (errorList) errorList.hidden = true;
+    
+          // Check all input
+          let nameValue = name.value.trim();
+          let locationValue = location.value.trim();
+          let typesOfFoodValue = typesOfFood.value.trim();
+          let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          let hoursOfOperationValue = {};
+          for (let day of days) {
+            let input = document.getElementById(`restaurant-hoursOfOperation-${day}`);
+            if (input) hoursOfOperationValue[day] = input.value.trim();
           }
-          // Display the error list
-          errorList.hidden = false;
-        } else {
-          /* If there are no errors, disable the submit button to prevent multiple requests */
-          submitButton.disabled = true;
-        }
+          let imageURLValue = imageURL.value.trim();
+          nameValue = checkString(nameValue, "Restaurant name");
+          locationValue = checkString(locationValue, "Restaurant location");
+          typesOfFoodValue = stringToArray(typesOfFoodValue, "Restaurant types of food");
+          hoursOfOperationValue = checkHoursOfOperation(hoursOfOperationValue);
+          imageURLValue = checkImgURL(imageURLValue);
+          // Get all checked dietary restriction values
+          let selectedDietaryRestrictions = document.querySelectorAll('input[name="dietaryRestrictions"]:checked');
+          let dietaryRestrictions = [];
+          // Convert the node list, into a list of the values
+          for (let i = 0; i < selectedDietaryRestrictions.length; i++) {
+            dietaryRestrictions.push(selectedDietaryRestrictions[i].value);
+          }
+          dietaryRestrictions = checkDietaryRestrictions(dietaryRestrictions);
 
-    });
-  }
+          // Display all errors that have been caught
+          if (errors.length > 0) {
+    
+            // Since there are errors, we prevent the form from going to the server
+            event.preventDefault();
+            // Display all errors found!
+            for (let i = 0; i < errors.length; i++) {
+              let myLi = document.createElement('li');
+              myLi.classList.add('error');
+              myLi.innerHTML = errors[i];
+              errorList.appendChild(myLi);
+            }
+            // Display the error list
+            errorList.hidden = false;
+          } else {
+            /* If there are no errors, disable the submit button to prevent multiple requests */
+            submitButton.disabled = true;
+          }
+
+      });
+    }
+
+
+    // Validation for the DELETE review button
+    // Get each form with class='deleteReviewForm' and add an event listener that executes when it is submitted
+    document.querySelectorAll('.deleteReviewForm').forEach((reviewForm) => {
+      reviewForm.addEventListener('submit', (event) => {
+        const reviewId = reviewForm.querySelector()
+      })
+    })
+
+
 })();

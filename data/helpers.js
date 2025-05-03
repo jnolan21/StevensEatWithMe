@@ -391,6 +391,42 @@ function stringToArray(str, strName) {
     return stringArray;
 }
 
+function stringArrayToString(arr, arrName) {
+    if (arr === undefined) throw new Error(`${arrName} cannot be empty.`);
+    if (!Array.isArray(arr)) throw new Error(`${arrName} must be an array.`);
+    let str = "";
+    for (let i = 0; i < arr.length; i++) {
+        if (typeof arr[i] !== 'string') throw new Error(`${arrName} cannot contain non-string elements.`);
+        arr[i] = arr[i].trim();
+        if (i != arr.length - 1) str += arr[i] + ', ';
+        else str += arr[i];
+    }
+    return str;
+}
+
+function checkDietaryRestrictions(dr) {
+    if (dr === undefined) throw new Error(`Restaurant dietary restrictions cannot be empty.`);
+    if (!Array.isArray(dr)) throw new Error(`Restaurant dietary restrictions must be an array.`);
+    let dietaryRestrictions = ['vegetarian', 'nut-free', 'vegan', 'dairy-free', 'gluten-free'];
+    let drSet = new Set();
+    for (let i = 0; i < dr.length; i++) {
+        let element;
+        try {
+            element = checkString(dr[i], 'Dietary restriction element');
+        } catch (e) {
+            throw new Error(`Invalid dietary restriction: ${e.message}.`);
+        }
+        // Check if this is a valid dietary restriction
+        if (!dietaryRestrictions.includes(element.toLowerCase())) throw new Error(`${element} is not a valid dietary restriction.`);
+        element = element.toLowerCase();
+        // Capitalize the first letter
+        element = element.charAt(0).toUpperCase() + element.slice(1);
+        drSet.add(element);
+    }
+    // Return the dietaryRestrictions sorted for consistency
+    return Array.from(drSet).sort();
+}
+
 
 
 // Export all the functions
@@ -415,5 +451,7 @@ export default {
     checkMeetUpTime,
     formatAndCheckRSVPS,
     checkHoursOfOperation,
-    stringToArray
+    stringToArray,
+    stringArrayToString,
+    checkDietaryRestrictions
 };

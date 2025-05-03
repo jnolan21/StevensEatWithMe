@@ -8,6 +8,7 @@ import restaurants from '../data/restaurants.js';
 import menuItems from '../data/menuItems.js';
 //import crypto from 'crypto'
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const dietaryRestrictions = ['Vegetarian', 'Nut-free', 'Vegan', 'Dairy-free', 'Gluten-free'];
 
 // Get the admin page
 router
@@ -25,11 +26,7 @@ router
 
     let id = req.session.user._id;
     // Determine if an admin is logged in
-    let isAdmin;
-    if (req.session.user) {
-      if (req.session.user.isAdmin) isAdmin = true;
-      else isAdmin = false;
-    }
+    let isAdmin = !!(req.session.user && req.session.user.isAdmin);
     try {
         id = helper.checkId(id);
     } catch (e) {
@@ -46,9 +43,13 @@ router
     // Get the user
     let user = req.session.user;
 
-    // Determine if a review/restaurant was just deleted
+    // Store the relevant req.session parameters
     const reviewDeleted = req.session.reviewDeleted || false;
     const restaurantDeleted = req.session.restaurantDeleted || false;
+    const editingRestaurant = req.session.editingRestaurant || false;
+    const restaurant = req.session.restaurantInfo || false;
+    const message = req.session.message || null;
+    const dietaryCheckBox = req.session.dietaryCheckBox || null;
 
     // Get all users reviews
     let reviews = [];
@@ -102,6 +103,10 @@ router
             allRestaurants: allRestaurants,
             reviewDeleted,
             restaurantDeleted,
+            editingRestaurant,
+            restaurant,
+            dietaryCheckBox,
+            message,
             script: 'adminScript',
             isLoggedIn: !!req.session.user,
             isAdmin
@@ -109,13 +114,24 @@ router
         // Clear the 'deleted' flags
         req.session.reviewDeleted = false;
         req.session.restaurantDeleted = false;
+        req.session.editingRestaurant = false;
+        req.session.restaurantInfo = null;
+        req.session.message = null;
+        req.session.dietaryCheckBox = null;
         return;
     } catch (e) {
-        return res.status(500).render('error', {
+        res.status(500).render('error', {
             title: "500 Internal Server Error",
             error: e.message,
             status: 500
         });
+        req.session.reviewDeleted = false;
+        req.session.restaurantDeleted = false;
+        req.session.editingRestaurant = false;
+        req.session.restaurantInfo = null;
+        req.session.message = null;
+        req.session.dietaryCheckBox = null;
+        return;
     }
 
   });
@@ -160,6 +176,70 @@ router
     }
 });
 
+/* Get restaurant info for editing */
+router
+.get('/restaurant/edit/:id', async (req, res) => {
+    try {
+        let id = req.params.id;
+        id = helper.checkId(id);
+        let restaurant = await restaurants.getRestaurantById(id);
+        // Convert the array of strings, to strings
+        restaurant.typeOfFood = helper.stringArrayToString(restaurant.typeOfFood, "Restaurant types of food");
+        restaurant.dietaryRestrictions = helper.checkDietaryRestrictions(restaurant.dietaryRestrictions);
+        // Create the dietaryCheckBox object
+        let dietaryCheckBox = {};
+        dietaryRestrictions.forEach(dr => {
+            dietaryCheckBox[dr] = restaurant.dietaryRestrictions.includes(dr);
+        });
+        req.session.editingRestaurant = true;
+        req.session.restaurantInfo = restaurant;
+        req.session.dietaryCheckBox = dietaryCheckBox;
+    } catch (e) {
+        req.session.message = e.message || "Failed to load restaurant for editing.";
+        return res.status(400).redirect('/admin');
+    }
+    try {
+        return res.redirect('/admin');
+    } catch (e) {
+        req.session.message = e.message || "Failed to load restaurant for editing.";
+        return res.status(500).redirect('/admin');
+    }
+})
+
+
+/* Edit restaurants */
+router
+.put('/restaurant/edit', async (req, res) => {
+    try{
+        // Verify the restaurant info
+        let restaurantId = helper.checkId(req.body.restaurantId);
+        let name = helper.checkString(req.body.name, "Restaurant name");
+        let location = helper.checkString(req.body.location, "Restaurant location");
+        let typeOfFood = helper.stringToArray(req.body.typeOfFood, "Restaurant types of food");
+        let hoursOfOperation = helper.checkHoursOfOperation(req.body.hoursOfOperation);
+        let imageURL = helper.checkString(req.body.imageURL, "Restaurant image URL");
+        let dietaryRestrictions = helper.checkDietaryRestrictions(req.body.dietaryRestrictions);
+        // Update the restaurant
+        await restaurants.updateRestaurant(
+            restaurantId,
+            name,
+            location,
+            typeOfFood,
+            hoursOfOperation,
+            imageURL,
+            dietaryRestrictions
+        );
+        req.session.editingRestaurant = false;
+        req.session.message = null;
+        req.session.message = "Restaurant updated successfully!";
+        res.redirect('/admin');
+    }
+    catch (e){
+        req.session.message = e.message || "Something went wrong updating the restaurant.";
+        return res.status(400).redirect('/admin');
+    }
+});
+
 
 
 /* Create restaurants */
@@ -175,13 +255,16 @@ router
     } catch (e) {
         errors.push(e.message);
     }
+    // Check if restaurant already exists with that name
+    let checkRestaurantName = await restaurants.getRestaurantByName(restaurant.name);
+    if (checkRestaurantName !== null) errors.push(`Restaurant already exists with the name '${restaurant.name}'`);
     try {
         restaurant.location = helper.checkString(restaurant.location, 'Restaurant location');
     } catch (e) {
         errors.push(e.message);
     }
     try {
-        restaurant.typesOfFood = helper.stringToArray(restaurant.typesOfFood, 'Restaurant types of food');
+        restaurant.typeOfFood = helper.stringToArray(restaurant.typeOfFood, 'Restaurant types of food');
     } catch (e) {
         errors.push(e.message);
     }
@@ -196,7 +279,10 @@ router
         errors.push(e.message);
     }
     try {
-        restaurant.dietaryRestrictions = helper.stringToArray(restaurant.dietaryRestrictions, 'Restaurant dietary restrictions');
+        // Make dietaryRestrictions into an array
+        if (!restaurant.dietaryRestrictions) restaurant.dietaryRestrictions = [];
+        if (!Array.isArray(restaurant.dietaryRestrictions)) restaurant.dietaryRestrictions = [restaurant.dietaryRestrictions];
+        restaurant.dietaryRestrictions = helper.checkDietaryRestrictions(restaurant.dietaryRestrictions);
     } catch (e) {
         errors.push(e.message);
     }
@@ -213,6 +299,11 @@ router
             status: 500
         });
     }
+    // Create the dietaryCheckBox object
+    let dietaryCheckBox = {};
+    dietaryRestrictions.forEach(dr => {
+        dietaryCheckBox[dr] = restaurant.dietaryRestrictions.includes(dr);
+    });
     // Reload with errors if needed
     if (errors.length > 0) {
         return res.render('users/admin', {
@@ -232,7 +323,8 @@ router
           // Submitted info
           name: restaurant.name,
           location: restaurant.location,
-          typesOfFood: restaurant.typesOfFood,
+          typeOfFood: restaurant.typeOfFood,
+          dietaryCheckBox: dietaryCheckBox,
           //hoursOfOperation: restaurant.hoursOfOperation,
           hoursOfOperation: restaurant.hoursOfOperation,
           imageURL: restaurant.imageURL,
@@ -246,11 +338,12 @@ router
             restaurant.name,
             restaurant.location,
             [],
-            restaurant.typesOfFood,
+            restaurant.typeOfFood,
             restaurant.hoursOfOperation,
             restaurant.imageURL,
             restaurant.dietaryRestrictions
         );
+        req.session.message = `New restaunt, '${restaurant.name}', created successfully!`;
         return res.redirect('/admin');
     } catch (e) {
         req.session.message = e.message || "Server error.";
