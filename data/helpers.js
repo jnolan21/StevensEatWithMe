@@ -85,6 +85,7 @@ function checkReviewRating(rating) {
     if (rating === undefined) throw new Error('Rating cannot be empty.');
     if (typeof rating !== 'number') throw new Error('Rating must be a number.');
     if (rating !== 0 && rating !== 1 && rating !== 2 && rating !== 3 && rating !== 4 && rating !== 5) throw new Error('Rating must be a whole number 0 - 5.');
+    return rating;
 }
 
 function checkWaitTime(time) {
@@ -391,6 +392,7 @@ function stringToArray(str, strName) {
     return stringArray;
 }
 
+
 function stringArrayToString(arr, arrName) {
     if (arr === undefined) throw new Error(`${arrName} cannot be empty.`);
     if (!Array.isArray(arr)) throw new Error(`${arrName} must be an array.`);
@@ -427,6 +429,15 @@ function checkDietaryRestrictions(dr) {
     return Array.from(drSet).sort();
 }
 
+function checkReview(review) {
+
+    if (typeof review !== 'string') throw "Review Must be a valid input";
+    review.trim();
+    if (review.length < 10 && review.length > 1000) throw "Review Must be between 10-1000 characters";
+    return review;
+  }
+
+
 
 
 // Export all the functions
@@ -453,5 +464,6 @@ export default {
     checkHoursOfOperation,
     stringToArray,
     stringArrayToString,
-    checkDietaryRestrictions
+    checkDietaryRestrictions,
+    checkReview
 };

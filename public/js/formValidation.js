@@ -90,3 +90,117 @@
     });
   }
 })();
+
+function checkReview(review) {
+
+  if (typeof review !== 'string') throw "Review must be a string";
+  review = review.trim();
+  if (review.length === 0) throw "Review cannot be empty";
+  if (review.length > 1000) throw "Review is too long";
+  return review;
+}
+
+function checkRating(rating) {
+  if (rating === '') throw "Rating is required.";
+  const numberRating = Number(rating);
+  if (isNaN(numberRating) || numberRating < 1 || numberRating > 5) throw "Rating must be between 1 and 5.";
+  return numberRating;
+}
+
+function checkWaitTime(hour, minute) {
+
+  hour = hour.trim();
+  minute = minute.trim();
+  if (hour === '' || minute === '') throw "Please enter both hour and minute values.";
+  
+
+  hour = Number(hour);
+  minute = Number(minute);
+
+  if (isNaN(hour) || isNaN(minute)) throw "Time must be entered as a number";
+  if (hour < 0) throw "Hours must be a positive number";
+  if (minute < 0 || minute > 59) throw "Minutes must be between 0-59";
+
+  let h = hour.toString();
+  let m = minute.toString().padStart(2, '0');
+
+  return `${h}h ${m}min`;
+
+}
+
+const validateId = (id, field) => {
+  if (!id) throw `you must provide a ${field}`;
+  if (typeof id !== 'string') throw `${field} must be a string`;
+  id = id.trim();
+  if (id.length === 0) throw `${field} cannot be an empty string`;
+  return id;
+};
+
+
+  // create review form validation
+const reviewForm = document.getElementById('review-form');
+if (reviewForm) {
+  reviewForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  document.querySelectorAll('.error').forEach(e => e.innerText = '');
+
+  let errors = {};
+  let restaurantId;
+  
+  try {
+    restaurantId = document.querySelector('#restaurant input:checked').value;
+  } catch(e) {
+    errors.Restaurant = "Must enter a restaurant";
+  }
+  
+
+  try {
+    restaurantId = validateId(restaurantId, "restaurantId");
+  } catch(e) {
+    errors.Restaurant = e.message || "Must enter a restaurant";
+  }
+  let menuItemId;
+  
+  try {
+  menuItemId = document.querySelector('#menuItems input:checked').value;
+  menuItemId = validateId(menuItemId), "menuItemId"
+  } catch(e) {
+    
+  }
+  let review;
+  try {
+    review = document.getElementById('review').value;
+    review = checkReview(review);
+  } catch(e) {
+    errors.Review = e.message || "Enter a valid review";
+  }
+  let rating;
+  try {
+    rating = document.getElementById('rating').value;
+    rating = checkRating(rating);
+  } catch(e) {
+    errors.Rating = e.message || "Enter a valid rating";
+  }
+  let time;
+  try {
+    hour = document.getElementById('waitTimeHour').value;
+    minute = document.getElementById('waitTimeMinute').value
+    time = checkWaitTime(hour, minute);
+  } catch(e) {
+    errors.Time = e.message || "Enter a valid time";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    for (const key in errors) {
+        const errorElement = document.getElementById(`error${key}`);
+        if (errorElement) errorElement.innerText = errors[key];
+    }
+} else {
+    reviewForm.submit();
+}      
+
+
+    });
+};
+
+
