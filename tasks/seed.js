@@ -107,7 +107,7 @@ try {
         "   Pierce Dining Hall  ",
         " 2nd Floor of Wesley J. Howe Center ",
         [],
-        [" Mixed-Cuisine ", " Comfort Food ", " Fast Food  "],
+        [" Mixed Cuisine ", " Comfort Food ", " Fast Food  "],
         {
             "Sunday": "10:00AM - 10:00PM",
             "Monday": "7:00AM - 12:00AM",
@@ -133,7 +133,7 @@ try {
         "   Yellas  ",
         " University Center, 1st Floor ",
         [],
-        [" Mixed-Cuisin ", " Comfort Food ", " Fast Food  "],
+        [" Mixed Cuisine ", " Comfort Food ", " Fast Food  "],
         {
             "Sunday": "9:00AM - 12:00AM",
             "Monday": "9:00AM - 12:00AM",

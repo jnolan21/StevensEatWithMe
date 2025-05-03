@@ -21,13 +21,13 @@ const createRestaurant = async (
     typeOfFood = helper.checkStringArray(typeOfFood, 'typeOfFood');
     hoursOfOperation = helper.checkHoursOfOperation(hoursOfOperation);
     imageURL = helper.checkString(imageURL, "Image URL");
-    dietaryRestrictions = helper.checkStringArray(dietaryRestrictions, "Dietary restrictions");
+    dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
     // Add the restaurant to the database
     const newRestaurant = {
         name: name,
         location: location,
         menuItems: [],
-        typeofFood: typeOfFood,
+        typeOfFood: typeOfFood,
         averageWaitTime: "0h 0min",
         reviews: [],
         hoursOfOperation: hoursOfOperation,
@@ -46,7 +46,8 @@ const createRestaurant = async (
 // Get an array of all restaurant objects
 const getAllRestaurants = async () => {
     const rCollection = await restaurants();
-    const restaurantList = rCollection.find({}).toArray();
+    // Sort the restaurant's alphabetically
+    const restaurantList = rCollection.find({}).sort({name: 1}).toArray();
     return restaurantList;
 }
 
@@ -105,6 +106,58 @@ const preferredWaitTime = async (time) => {
     return preferredRestaurants;
 }
 
+const updateRestaurant = async (
+    id,
+    name,
+    location,
+    typeOfFood,
+    hoursOfOperation,
+    imageURL,
+    dietaryRestrictions
+) => {
+    // Verify all the input
+    id = helper.checkId(id);
+    name = helper.checkString(name, 'restaurant name');
+    location = helper.checkString(location, 'restaurant location');
+    typeOfFood = helper.checkStringArray(typeOfFood, 'typeOfFood');
+    hoursOfOperation = helper.checkHoursOfOperation(hoursOfOperation);
+    imageURL = helper.checkString(imageURL, "Image URL");
+    dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
+    // Update the restaurant
+    let restaurant = await getRestaurantById(id);
+    if (!restaurant) throw new Error("Restaurant not found.");
+    const rCollection = await restaurants();
+    const updatedInfo = await rCollection.updateOne(
+        {_id: new ObjectId(id)},
+        {$set:
+            {name: name,
+            location: location,
+            typeOfFood: typeOfFood,
+            hoursOfOperation: hoursOfOperation,
+            imageURL: imageURL,
+            dietaryRestrictions: dietaryRestrictions}}
+    );
+    if (updatedInfo.modifiedCount === 0) throw new Error("Failed to update the restaurant.");
+    const returnRestaurant = await getRestaurantById(id);
+    return returnRestaurant;
+}
+
+
+const getRestaurantByName = async (name) => {
+    name = helper.checkString(name, "Restaurant name");
+    const rCollection = await restaurants();
+    // Search for the case-insensitive name match
+    const restaurant = await rCollection.findOne({
+        name: {
+            $regex: `^${name}`,
+            $options: 'i' // case -insensitive matching option
+        }
+    });
+    if (!restaurant) return null;
+    restaurant._id = restaurant._id.toString();
+    return restaurant;
+}
+
 
 
 
@@ -116,8 +169,9 @@ export default {
     getAllRestaurants,
     getRestaurantById,
     removeRestaurant,
-    removeRestaurant,
     ratingFilter,
     waitTime,
-    preferredWaitTime
+    preferredWaitTime,
+    updateRestaurant,
+    getRestaurantByName
 }
