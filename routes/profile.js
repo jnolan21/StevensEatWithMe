@@ -173,7 +173,8 @@ router
     let menuId = req.body.menuId || null;
     let review = req.body.review;
     let rating = Number(req.body.rating);
-    let [hour, minute] = req.body.waitTime;
+    let hour = req.body.waitTimeHour;
+    let minute = req.body.waitTimeMinute;
     let waitTime = `${hour}h ${minute}min`;
 
     console.log(restaurantId + " " + menuId + " " + review + " " + rating + " " + waitTime);
