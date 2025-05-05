@@ -38,6 +38,13 @@ const createMenuItemReview = async (
     const rCollection = await restaurants();
     // Add the review to the database and the corresponding user, restaurant, and menu item
     const reviewCollection = await reviews();
+
+    for (const review in reviewCollection) {
+        if (review.restaurantId === restaurantId && review.menuId === menuId && review.userId === userId) {
+            throw "Cannot create multiple reviews of the same item";
+        }
+    }
+
     const newReviewInfo = await reviewCollection.insertOne(newReview);
     if (!newReviewInfo.acknowledged || !newReviewInfo.insertedId) throw new Error("Review insert failed!");
     // Add the review to the user
@@ -90,10 +97,20 @@ const createRestaurantReview = async (
         rating: rating,
         waitTime: waitTime
     };
+
     const userCollection = await users();
     const rCollection = await restaurants();
     // Add the review to the database and the corresponding user, restaurant, and menu item
     const reviewCollection = await reviews();
+
+    //check if review already exists;
+    for (const review in reviewCollection) {
+        if (review.restaurantId === restaurantId && review.userId === userId) {
+            throw "Cannot create multiple reviews of the same place";
+        }
+    }
+
+
     const newReviewInfo = await reviewCollection.insertOne(newReview);
     if (!newReviewInfo.acknowledged || !newReviewInfo.insertedId) throw new Error("Review insert failed!");
     // Add the review to the user
