@@ -439,6 +439,53 @@ function checkReview(review) {
 
 
 
+function convertWaitTime(waitTime) {
+    waitTime = checkWaitTime(waitTime);
+    let [hours, minutes] = waitTime.split(" ");
+    hours = parseInt(hours) * 60;
+    minutes = parseInt(minutes);
+    const time = hours + minutes; //Total minutes for waitTime
+    return time;
+}
+
+function convertNumber(number) {
+
+    if (typeof number !== 'number') throw 'must be a number';
+    
+    let hours = Math.trunc(number/60);
+    let minutes = Math.round(number%60);
+
+    return hours + "h " + minutes + "min" 
+
+}
+
+async function averageRestaurantWaitTime(restaurantId) {
+
+    restaurantId = checkId(restaurantId);
+    
+    //let restaurant = await getRestaurantById(restaurantId);
+    let restaurantReviews = await reviewData.getAllRestaurantReviews(restaurantId);
+    //let restaurantReviews = restaurant.reviews;
+    let numberOfReviews = restaurantReviews.length;
+    let totalwaitTime = 0;
+
+    for (let i = 0; i < numberOfReviews; i++) {
+        let waitTime = convertWaitTime(restaurantReviews[i].waitTime);
+        totalwaitTime += waitTime; 
+    }
+    if (numberOfReviews > 0) totalwaitTime = totalwaitTime/numberOfReviews; 
+    
+    totalwaitTime = convertNumber(totalwaitTime);
+
+    return totalwaitTime;
+
+}
+
+
+
+
+
+
 
 // Export all the functions
 export default {
@@ -465,5 +512,8 @@ export default {
     stringToArray,
     stringArrayToString,
     checkDietaryRestrictions,
-    checkReview
+    checkReview,
+    convertWaitTime,
+    convertNumber,
+    averageRestaurantWaitTime
 };
