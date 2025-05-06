@@ -1,5 +1,6 @@
 import {Router} from 'express';
 const router = Router();
+import {ObjectId} from 'mongodb';
 import userData from '../data/users.js';
 import helper from '../data/helpers.js';
 import rsvpData from "../data/rsvps.js";
@@ -46,8 +47,12 @@ router
     // Store the relevant req.session parameters
     const reviewDeleted = req.session.reviewDeleted || false;
     const restaurantDeleted = req.session.restaurantDeleted || false;
+    const menuItemDeleted = req.session.menuItemDeleted || false;
+    const restaurantDetails = restaurantDeleted || menuItemDeleted
     const editingRestaurant = req.session.editingRestaurant || false;
+    const editingMenuItem = req.session.editingMenuItem || false;
     const restaurant = req.session.restaurantInfo || false;
+    const menuItem = req.session.menuItemInfo || false;
     const message = req.session.message || null;
     const dietaryCheckBox = req.session.dietaryCheckBox || null;
 
@@ -85,6 +90,14 @@ router
             status: 500
         });
     }
+    // Get the restaurant for a menu item, if editing said menu item
+    if (editingMenuItem && menuItem && menuItem.restaurantId) {
+        const selectedRestaurantId = menuItem.restaurantId;
+        for (let i = 0; i < allRestaurants.length; i++) {
+            const restaurantId = allRestaurants[i]._id;
+            allRestaurants[i].isSelected = (restaurantId.toString() === selectedRestaurantId.toString()) ? true : false;
+        }
+    }
 
     // Render the user's admin page
     try {
@@ -102,9 +115,12 @@ router
             allUsers: allUsers,
             allRestaurants: allRestaurants,
             reviewDeleted,
-            restaurantDeleted,
+            restaurantDetails,
+            menuItemDeleted,
             editingRestaurant,
+            editingMenuItem,
             restaurant,
+            menuItem,
             dietaryCheckBox,
             message,
             script: 'adminScript',
@@ -114,8 +130,11 @@ router
         // Clear the 'deleted' flags
         req.session.reviewDeleted = false;
         req.session.restaurantDeleted = false;
+        req.session.menuItemDeleted = false;
         req.session.editingRestaurant = false;
+        req.session.editingMenuItem = false;
         req.session.restaurantInfo = null;
+        req.session.menuItemInfo = null;
         req.session.message = null;
         req.session.dietaryCheckBox = null;
         return;
@@ -127,8 +146,11 @@ router
         });
         req.session.reviewDeleted = false;
         req.session.restaurantDeleted = false;
+        req.session.menuItemDeleted = false;
         req.session.editingRestaurant = false;
+        req.session.editingMenuItem = false;
         req.session.restaurantInfo = null;
+        req.session.menuItemInfo = null;
         req.session.message = null;
         req.session.dietaryCheckBox = null;
         return;
@@ -218,7 +240,9 @@ router
         let typeOfFood = helper.stringToArray(req.body.typeOfFood, "Restaurant types of food");
         let hoursOfOperation = helper.checkHoursOfOperation(req.body.hoursOfOperation);
         let imageURL = helper.checkString(req.body.imageURL, "Restaurant image URL");
-        let dietaryRestrictions = helper.checkDietaryRestrictions(req.body.dietaryRestrictions);
+        let dietaryRestrictions = req.body.dietaryRestrictions || [];
+        if (!Array.isArray(dietaryRestrictions)) dietaryRestrictions = [dietaryRestrictions];
+        dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
         // Update the restaurant
         await restaurants.updateRestaurant(
             restaurantId,
@@ -280,7 +304,201 @@ router
     }
     try {
         // Make dietaryRestrictions into an array
-        if (!restaurant.dietaryRestrictions) restaurant.dietaryRestrictions = [];
+        restaurant.dietaryRestrictions = restaurant.dietaryRestrictions || [];
+        if (!Array.isArray(restaurant.dietaryRestrictions)) restaurant.dietaryRestrictions = [restaurant.dietaryRestrictions];
+        restaurant.dietaryRestrictions = helper.checkDietaryRestrictions(restaurant.dietaryRestrictions);
+    } catch (e) {
+        errors.push(e.message);
+    }
+    // Get all users reviews
+    let user = req.session.user;
+    let reviews = [];
+    try{
+        reviews = await reviewData.getAllReviewsWithInfo();
+    }
+    catch(e){
+        return res.status(500).render('error', {
+            title: "500 Internal Server Error",
+            error: e.message,
+            status: 500
+        });
+    }
+    // Create the dietaryCheckBox object
+    let dietaryCheckBox = {};
+    dietaryRestrictions.forEach(dr => {
+        dietaryCheckBox[dr] = restaurant.dietaryRestrictions.includes(dr);
+    });
+    // Reload with errors if needed
+    if (errors.length > 0) {
+        return res.render('users/admin', {
+          title: "EatWithMe Admin Page",
+          user: {
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            reviews: reviews // array of review objects
+          },
+          errors: errors,
+          hasErrors: true,
+          partial: 'adminScript',
+          days: days,
+          isLoggedIn: !!req.session.user,
+          isAdmin: true,
+          // Submitted info
+          name: restaurant.name,
+          location: restaurant.location,
+          typeOfFood: restaurant.typeOfFood,
+          dietaryCheckBox: dietaryCheckBox,
+          //hoursOfOperation: restaurant.hoursOfOperation,
+          hoursOfOperation: restaurant.hoursOfOperation,
+          imageURL: restaurant.imageURL,
+          dietaryRestrictions: restaurant.dietaryRestrictions
+        });
+      }
+
+    // Add the restaurant to the database
+    try {
+        await restaurants.createRestaurant(
+            restaurant.name,
+            restaurant.location,
+            [],
+            restaurant.typeOfFood,
+            restaurant.hoursOfOperation,
+            restaurant.imageURL,
+            restaurant.dietaryRestrictions
+        );
+        req.session.message = `New restaunt, '${restaurant.name}', created successfully!`;
+        return res.redirect('/admin');
+    } catch (e) {
+        req.session.message = e.message || "Server error.";
+        return res.status(500).redirect('/admin');
+    }
+  });
+
+
+/* Delete menu items */
+router 
+.post('/menuItem/delete', async (req, res) => {
+    try{
+        //receive menuItemId
+        let menuItemId = req.body.menuItemId;
+        menuItemId = helper.checkId(menuItemId);
+        await menuItems.removeMenuItem(menuItemId);
+        req.session.message = "Deleted Menu Item!"; 
+        req.session.menuItemDeleted = true;
+        res.redirect('/admin');
+    }
+    catch (e){
+        req.session.message = e.message || "Something went wrong deleting the menu item.";
+        return res.status(500).redirect('/admin');
+    }
+});
+
+/* Get menu item info for editing */
+router
+.get('/menuItem/edit/:id', async (req, res) => {
+    try {
+        console.log(`GET /menuItem/edit/:id ${req.params}`);
+        let id = req.params.id;
+        id = helper.checkId(id);
+        let menuItem = await menuItems.getMenuItemById(id);
+        // Convert the array of strings, to strings
+        menuItem.dietaryRestrictions = helper.checkDietaryRestrictions(menuItem.dietaryRestrictions);
+        // Create the dietaryCheckBox object
+        let dietaryCheckBox = {};
+        dietaryRestrictions.forEach(dr => {
+            dietaryCheckBox[dr] = menuItem.dietaryRestrictions.includes(dr);
+        });
+        req.session.editingMenuItem = true;
+        req.session.menuItemInfo = menuItem;
+        req.session.dietaryCheckBox = dietaryCheckBox;
+    } catch (e) {
+        req.session.message = e.message || "Failed to load menu item for editing.";
+        return res.status(400).redirect('/admin');
+    }
+    try {
+        return res.redirect('/admin');
+    } catch (e) {
+        req.session.message = e.message || "Failed to load menu item for editing.";
+        return res.status(500).redirect('/admin');
+    }
+})
+
+
+/* Edit menu items */
+router
+.put('/menuItem/edit', async (req, res) => {
+    try{
+        console.log(`PUT /menuItem/edit ${req.body}`);
+        console.dir(req.body, {depth:null, colors:true})
+        // Verify the restaurant info
+        let menuItemId = helper.checkId(req.body.menuItemId);
+        let restaurantId = helper.checkId(req.body.restaurantId);
+        let name = helper.checkString(req.body.name, "Menu item name");
+        let description = helper.checkString(req.body.description, "Menu item description");
+        let dietaryRestrictions = req.body.dietaryRestrictions || [];
+        if (!Array.isArray(dietaryRestrictions)) dietaryRestrictions = [dietaryRestrictions];
+        dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
+        // Update the menu item
+        await menuItems.updateMenuItem(
+            menuItemId,
+            restaurantId,
+            name,
+            description,
+            dietaryRestrictions
+        );
+        req.session.editingMenuItem = false;
+        req.session.message = null;
+        req.session.message = "Menu item updated successfully!";
+        res.redirect('/admin');
+    }
+    catch (e){
+        req.session.message = e.message || "Something went wrong updating the menu item.";
+        return res.status(400).redirect('/admin');
+    }
+});
+
+
+
+/* Create menu items */
+router
+  .route('/menuItem')
+  .post(async (req, res) => {
+    // Create a new restaurant
+    let errors = [];
+    // Verify all restaurant fields
+    let restaurant = req.body;
+    try {
+        restaurant.name = helper.checkString(restaurant.name, 'Restaurant name');
+    } catch (e) {
+        errors.push(e.message);
+    }
+    // Check if restaurant already exists with that name
+    let checkRestaurantName = await restaurants.getRestaurantByName(restaurant.name);
+    if (checkRestaurantName !== null) errors.push(`Restaurant already exists with the name '${restaurant.name}'`);
+    try {
+        restaurant.location = helper.checkString(restaurant.location, 'Restaurant location');
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        restaurant.typeOfFood = helper.stringToArray(restaurant.typeOfFood, 'Restaurant types of food');
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        restaurant.hoursOfOperation = helper.checkHoursOfOperation(restaurant.hoursOfOperation);
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        restaurant.imageURL = helper.checkString(restaurant.imageURL, 'Restaurant image URL');
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        // Make dietaryRestrictions into an array
+        restaurant.dietaryRestrictions = restaurant.dietaryRestrictions || [];
         if (!Array.isArray(restaurant.dietaryRestrictions)) restaurant.dietaryRestrictions = [restaurant.dietaryRestrictions];
         restaurant.dietaryRestrictions = helper.checkDietaryRestrictions(restaurant.dietaryRestrictions);
     } catch (e) {

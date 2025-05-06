@@ -519,16 +519,39 @@ footer{
   gap: 30px;
   padding: 20px;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
-.admin-leftside, .admin-rightside {
-  flex: 1 1 45%;
+.admin-leftside, .admin-center, .admin-rightside {
+  flex: 1 1 1 33%;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-width: 350px;
   overflow-x: auto; /* Allow the user to scroll horizontally */
 }
+
+/*
+.admin-leftside, .admin-center, .admin-rightside {
+  flex: 1 1 33%;
+  min-width: 350px;
+}
+
+.admin-leftside {
+  max-width: 30%;
+  align-items: center;
+}
+
+.admin-center {
+  max-width: 40%;
+  align-items: center;
+}
+
+.admin-rightside {
+  max-width: 30%;
+  align-items: center;
+}
+*/
 
 
 .admin-data-sections section {
@@ -627,6 +650,29 @@ footer{
   max-height: 200px;     
   overflow-y: auto;      
   overflow-x: hidden;    
+}
+
+.listSlider {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-y: auto;
+  gap: 10px;
+  padding: 10px;
+  list-style-type: none;
+}
+
+.sliderListItem {
+  flex: 0 0 300px;
+  position: relative;
+}
+
+.sliderIndividualItem {
+  background-color: white;
+  border-style: solid;
+  border-color: darkred;
+  border-radius: 10px;
+  padding: 50px 10px 50px 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Create Review Form */
