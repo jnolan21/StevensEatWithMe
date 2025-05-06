@@ -171,13 +171,13 @@ router
 
     let restaurantId = req.body.restaurantId;
     let menuId = req.body.menuId || null;
-    let review = req.body.review;
+    let review = req.body.review || null;
     let rating = Number(req.body.rating);
     let hour = req.body.waitTimeHour;
     let minute = req.body.waitTimeMinute;
     let waitTime = `${hour}h ${minute}min`;
 
-    console.log(restaurantId + " " + menuId + " " + review + " " + rating + " " + waitTime);
+    //console.log(restaurantId + " " + menuId + " " + review + " " + rating + " " + waitTime);
 
     try {
     restaurantId = helper.checkId(restaurantId);
@@ -199,14 +199,16 @@ router
                                         rating,
                                         waitTime );
         } else {
-            await reviews.createRestaurantReview(req.session.userId, 
+            await reviews.createRestaurantReview(req.session.user._id, 
                                         restaurantId,
                                         review,
                                         rating,
                                         waitTime);
         }
         return res.redirect('/profile');
-    } catch(e) {res.status(500).json({error: e.message})};
+    } catch(e) {req.session.message = e.message || "Duplicate Review.";
+        return res.redirect('/profile');
+    }
 
 
   });
