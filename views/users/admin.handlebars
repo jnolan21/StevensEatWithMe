@@ -79,7 +79,7 @@
                 <ul>
                     {{#each allUsers}}
                         <li class="reviewLi">
-                            <p><span class="reviewSpan">Username:</span> {{this.username}}</p>
+                            <a href="/profile/{{this._id}}">Username: {{this.username}}</a>
                             <p><span class="reviewSpan">Name:</span> {{this.firstName}}</p>
                             {{#if this.isAdmin}}
                                 <p><span class="reviewSpan">Role: </span>Admin</p>
@@ -95,10 +95,10 @@
         <!-- Restaurant List! -->
         <section class="profile-myRestaurants">
             <h2 class="profile">All Restaurants:</h2>
-            {{#if restaurantDeleted}}
-                <details open>
+            {{#if restaurantDetails}}
+            <details open>
             {{else}}
-                <details close>
+            <details close>
             {{/if}}
                 <summary class="caret-summary">
                     <p><span class="caret"></span> All Restaurants</p>
@@ -119,8 +119,42 @@
                                 </form>
                             </div>
                             <div class="reviewInfo">
-                                <p><span class="reviewSpan">Name:</span> {{this.name}}</p>
+                                <a href="/diningList/{{this._id}}">Name: {{this.name}}</a>
                                 <p><span class="reviewSpan">Location:</span> {{this.location}}</p>
+                                <!-- All Menu Items! -->
+                                {{#if menuItemDeleted}}
+                                <details open>
+                                {{else}}
+                                <details close>
+                                {{/if}}
+                                    <summary class="caret-summary">
+                                        <p><span class="caret"></span> All Menu Items</p>
+                                    </summary>
+                                    <ul class="listSlider">
+                                        {{#each this.menuItems}}
+                                        <li class="sliderListItem">
+                                            <div class="buttonGroup">
+                                                <!-- Delete Menu Item Button -->
+                                                <form action="/admin/menuItem/delete" method="POST" class="deleteMenuItemForm">
+                                                    <input type="hidden" name="menuItemId" value="{{this._id}}">
+                                                    <button type="submit" class="EditandDeleteButton">Delete</button>
+                                                </form>
+                                                <!-- Edit Menu Item Button -->
+                                                <form action="/admin/menuItem/edit/{{this._id}}" method="GET" class="editMenuItemForm">
+                                                    <input type="hidden" name="menuItemId" value="{{this._id}}">
+                                                    <button type="submit" class="EditandDeleteButton">Edit</button>
+                                                </form>
+                                            </div>
+                                            <div class="sliderIndividualItem">
+                                                <p><span class="reviewSpan">Name:</span> {{this.name}}</p>
+                                                <p><span class="reviewSpan">Description:</span> {{this.description}}</p>
+                                                <p><span class="reviewSpan">Dietary Restrictions:</span> {{this.dietaryRestrictions}}</p>
+                                                <p><span class="reviewSpan">Reviews:</span> {{this.reviews}}</p>
+                                            </div>
+                                        </li>
+                                        {{/each}}
+                                    </ul>
+                                </details>
                             </div>
                         </li>
                     {{/each}}
@@ -129,7 +163,7 @@
         </section>
     </section>
 
-    <section class="admin-rightside">
+    <section class="admin-center">
         {{#if editingRestaurant}}
         <!-- EDIT restaurant form -->
             <section class="profSection">
@@ -351,6 +385,181 @@
                 </section>
             </section>
         {{/if}}
+        </section>
+        <section class="admin-rightside">
+        {{#if editingMenuItem}}
+        <!-- EDIT menu item form -->
+            <section class="profSection">
+                <section class="profile-myRSVPposts">
+                    <h2 class="profile">Edit Menu Item:</h2>
+                    <!-- Form to edit a menu item -->
+                    <form action="/admin/menuItem/edit" method="POST" id="menuItem-edit-form" class="restaurant-form">
+                        <!-- Override the POST method to a PUT request -->
+                        <input type="hidden" name="_method" value="PUT">
+                        <div class="adminBox">
+                            <!-- Drop down for restaurant -->
+                            <label for="menuItem-restaurantId">Restaurant:</label>
+                            <select id="menuItem-restaurantId" name="restaurantId" class="login-input">
+                                {{#each allRestaurants}}
+                                    <option value="{{this._id}}" {{#if this.isSelected}}selected{{/if}}>{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                            <!-- Menu item id -->
+                            <input type="hidden" name="menuItemId" value="{{menuItem._id}}">
+                            <!-- Name -->
+                            <div class="loginForm">
+                                <label for="menuItem-name">Name:</label> 
+                                <input type="text" id="menuItem-name" name="name" placeholder="Name..." value="{{menuItem.name}}" class="login-input">
+                            </div>
+
+                            <!-- Description -->
+                            <div class="loginForm">
+                                <label for="menuItem-description">Description:</label>
+                                <input type="text" id="menuItem-description" name="description" placeholder="Description..." value="{{menuItem.description}}" class="login-input">
+                            </div>
+
+                            <!-- Dietary Restrictions -->
+                            <div class="loginForm">
+                                <label for="menuItem-dietaryRestrictions">Dietary Restrictions:</label>
+                                <div class="restaurant-checkbox">
+                                    <!-- Vegetarian -->
+                                    {{#if dietaryCheckBox.Vegetarian}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-vegetarian">Vegetarian</label>
+                                    <!-- Nut-free -->
+                                    {{#if dietaryCheckBox.Nut-free}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-nut-free">Nut-free</label>
+                                    <!-- Vegan -->
+                                    {{#if dietaryCheckBox.Vegan}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-vegan">Vegan</label>
+                                    <!-- Dairy-free -->
+                                    {{#if dietaryCheckBox.Dairy-free}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-dairy-free">Dairy-free</label>
+                                    <!-- Gluten-free -->
+                                    {{#if dietaryCheckBox.Gluten-free}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-gluten-free">Gluten-free</label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button id="menuItem-button" type="submit" class="loginButton">Update</button>
+                        </div>
+                    </form>
+
+                    <ul id="menuItem-errors" class="error-list">
+                        {{#if hasErrors}}
+                            {{#each errors}}
+                                <li>{{this}}</li>
+                            {{/each}}
+                        {{/if}}
+                    </ul>
+                </section>
+            </section>
+            {{else}}
+            <!-- Create menu item form -->
+            <section class="profSection">
+                <section class="profile-myRSVPposts">
+                    <h2 class="profile">Create Menu Item:</h2>
+                    <!-- Form to create a menu item -->
+                    <form action="/admin/menuItem" method="POST" id="menuItem-create-form" class="restaurant-form">
+                        <!-- Override the POST method to a PUT request -->
+                        <input type="hidden" name="_method" value="PUT">
+                        <div class="adminBox">
+                            <!-- Drop down for restaurant -->
+                            <label for="menuItem-restaurantId">Restaurant:</label>
+                            <select id="menuItem-restaurantId" name="restaurantId" class="login-input">
+                                {{#each allRestaurants}}
+                                    <option value="{{this._id}}">{{this.name}}</option>
+                                {{/each}}
+                            </select>
+                            <!-- Name -->
+                            <div class="loginForm">
+                                <label for="menuItem-name">Name:</label> 
+                                <input type="text" id="menuItem-name" name="name" placeholder="Name..." value="{{name}}" class="login-input">
+                            </div>
+
+                            <!-- Description -->
+                            <div class="loginForm">
+                                <label for="menuItem-description">Description:</label>
+                                <input type="text" id="menuItem-description" name="description" placeholder="Description..." value="{{description}}" class="login-input">
+                            </div>
+
+                            <!-- Dietary Restrictions -->
+                            <div class="loginForm">
+                                <label for="menuItem-dietaryRestrictions">Dietary Restrictions:</label>
+                                <div class="restaurant-checkbox">
+                                    <!-- Vegetarian -->
+                                    {{#if dietaryCheckBox.Vegetarian}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-vegetarian">Vegetarian</label>
+                                    <!-- Nut-free -->
+                                    {{#if dietaryCheckBox.Nut-free}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-nut-free">Nut-free</label>
+                                    <!-- Vegan -->
+                                    {{#if dietaryCheckBox.Vegan}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-vegan">Vegan</label>
+                                    <!-- Dairy-free -->
+                                    {{#if dietaryCheckBox.Dairy-free}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-dairy-free">Dairy-free</label>
+                                    <!-- Gluten-free -->
+                                    {{#if dietaryCheckBox.Gluten-free}}
+                                    <input type="checkbox" checked id="dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
+                                    {{else}}
+                                    <input type="checkbox" id="dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
+                                    {{/if}}
+                                    <label for="dietaryRestrictions-gluten-free">Gluten-free</label>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button id="menuItem-button" type="submit" class="loginButton">Submit</button>
+                        </div>
+                    </form>
+
+                    <ul id="menuItem-errors" class="error-list">
+                        {{#if hasErrors}}
+                            {{#each errors}}
+                                <li>{{this}}</li>
+                            {{/each}}
+                        {{/if}}
+                    </ul>
+                </section>
+            </section>
+            {{/if}}
     </section>
 
 </article>

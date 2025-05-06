@@ -2,7 +2,9 @@ import {reviews, restaurants} from '../config/mongoCollections.js';
 import {ObjectId, ReturnDocument} from 'mongodb';
 import helper from './helpers.js'
 import userData from './users.js'
+import reviewData from './reviews.js'
 import restaurantData from './restaurants.js'
+import { all } from 'axios';
 
 
 // Create a menu item for a restaurant
@@ -78,30 +80,30 @@ const getRestaurantId = async (id) => {
 const removeMenuItem = async (id) => {
     // Check id
     id = helper.checkId(id);
-    // Get the menu item object
-    let menuItem = getMenuItemById(id);
+    let menuItem = await getMenuItemById(id);
+    const restaurantId = menuItem.restaurantId;
+    // Remove all reviews about this menu item
+    let allReviews = await reviewData.getAllReviews();
+    for (let i = 0; i < allReviews.length; i++) {
+        if (allReviews[i].menuItemId.toString() === id) await reviewData.deleteReview(allReviews[i]._id.toString());
+    }
     // Get the restaurant
-    let restaurant = restaurantData.getRestaurantById(menuItem.restaurantId);
+    let restaurant = await restaurantData.getRestaurantById(menuItem.restaurantId);
     // Remove the review from the restaurant
-    await rCollection.updateOne(
-        {_id: new ObjectId(menuItem.restaurantId)},
-        {$pull: {reviews: {_id: new ObjectId(menuItem._id.toString())}}}
+    const rCollection = await restaurants();
+    const result = await rCollection.updateOne(
+        {_id: new ObjectId(restaurantId)},
+        {$pull: {menuItems: {_id: new ObjectId(id)}}}
     );
-    // Get the updated restaurant
-    let newRestaurant = await rCollection.findOne(
-        {_id: new ObjectId(restaurant._id)}
-    )
+    if (result.modifiedCount === 0) throw new Error(`Failed to remove menu item: '${menuItem.name}'.`);
     // Update the menu item rating
-    let newRating = await helper.calculateRestaurantRating(newRestaurant);
-    await rCollection.findOneAndUpdate(
-        {_id: new ObjectId(restaurant._id)},
-        {$set: {rating: newRating}}
+    let updatedRestaurant = await restaurantData.getRestaurantById(restaurantId);
+    let newRating = await helper.calculateRestaurantRating(updatedRestaurant);
+    await rCollection.updateOne(
+        {_id: new ObjectId(restaurantId)},
+        {$set: {averageRating: newRating}}
     )
-    // Get the update menu item
-    const updatedMenuItem = await rCollection.findOne (
-        {_id: new ObjectId(restaurant._id)}
-    );
-    return updatedMenuItem;
+    return await restaurantData.getRestaurantById(restaurantId);
 }
 
 const ratingFilter = async (restaurantId) => {
@@ -117,6 +119,37 @@ const ratingFilter = async (restaurantId) => {
 }
 
 
+const updateMenuItem = async (
+    menuItemId,
+    restaurantId,
+    name,
+    description,
+    dietaryRestrictions
+) => {
+    // Verify all the input
+    menuItemId = helper.checkId(menuItemId);
+    restaurantId = helper.checkId(restaurantId);
+    name = helper.checkString(name, 'Menu item name');
+    description = helper.checkString(description, 'Menu item description');
+    dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
+    // Update the menu item
+    const menuItem = await getMenuItemById(menuItemId);
+    if (!menuItem) throw new Error("Menu item not found.");
+    const rCollection = await restaurants();
+    const updatedInfo = await rCollection.updateOne(
+        {_id: new ObjectId(restaurantId), 'menuItems._id': new ObjectId(menuItemId)},
+        {$set:
+            {'menuItems.$.name': name,
+            'menuItems.$.description': description,
+            'menuItems.$.dietaryRestrictions': dietaryRestrictions}
+        }
+    );
+    if (updatedInfo.modifiedCount === 0) throw new Error("Failed to update the menu item.");
+    const returnRestaurant = await restaurantData.getRestaurantById(restaurantId);
+    return returnRestaurant;
+}
+
+
 
 
 
@@ -129,5 +162,6 @@ export default {
     getMenuItemById,
     getRestaurantId,
     removeMenuItem,
-    ratingFilter
+    ratingFilter,
+    updateMenuItem
 }
