@@ -71,7 +71,7 @@
     <ol>
         {{#each reviews}}
         <li>
-            {{!-- <p>Name: </p> Add name attribute to each review --}}
+            <p>Name: {{this.name}}</p> 
             {{#if this.menuItemName}}
             <p>Item: {{this.menuItemName}}</p>
             {{/if}}
