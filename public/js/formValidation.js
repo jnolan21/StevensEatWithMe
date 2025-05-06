@@ -139,11 +139,12 @@ const validateId = (id, field) => {
 
   // create review form validation
 const reviewForm = document.getElementById('review-form');
+
 if (reviewForm) {
   reviewForm.addEventListener('submit', function(event) {
   event.preventDefault();
   document.querySelectorAll('.error').forEach(e => e.innerText = '');
-
+  //console.log("testsdkjgjksdfhgkjsdhfgkjhsdfgkhsdfkghsdfkjghkdfhgkljhgkjdhgkjdhgkhdfgkdfjkgdfhgkjd");
   let errors = {};
   let restaurantId;
   
@@ -163,7 +164,10 @@ if (reviewForm) {
   
   try {
   menuItemId = document.querySelector('#menuItems input:checked').value;
-  menuItemId = validateId(menuItemId), "menuItemId"
+  console.log(menuItemId);
+  if (menuItemId !== "") {
+    menuItemId = validateId(menuItemId, "menuItemId");
+  }
   } catch(e) {
     
   }
