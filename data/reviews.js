@@ -327,6 +327,19 @@ const updateReview = async (reviewId, updateFields, isMenuItem, properId) => {
         throw new Error(`Error updating review: ${e.message}`);
       }
   };
+
+const addNametoReview = async (review) =>{
+    
+    let userId = review.userId;
+
+    let user = await userData.getUserById(userId);
+    let name = user.firstName + " " + user.lastName;
+
+    review.name = name;
+
+    return review;
+
+}
   
 
 
@@ -345,5 +358,6 @@ export default {
     getReviewById,
     deleteReview,
     getAllRestaurantReviews,
-    updateReview
+    updateReview,
+    addNametoReview
 }
