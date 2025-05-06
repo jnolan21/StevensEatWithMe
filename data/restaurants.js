@@ -1,6 +1,7 @@
 import {restaurants} from '../config/mongoCollections.js';
 import {ObjectId, ReturnDocument} from 'mongodb';
-import helper from './helpers.js'
+import helper from './helpers.js';
+
 
 
 
@@ -160,6 +161,9 @@ const getRestaurantByName = async (name) => {
 
 
 
+//console.log(await averageRestaurantWaitTime("6819349eeafcead927d1d43c"));
+
+
 
 
 
@@ -174,4 +178,5 @@ export default {
     preferredWaitTime,
     updateRestaurant,
     getRestaurantByName
+    //averageRestaurantWaitTime
 }

@@ -63,12 +63,23 @@ const createMenuItemReview = async (
     // Calculate the new overall rating of that food item
     menuItem = await menuItemData.getMenuItemById(menuItemId);
     let overallRating = await helper.calculateMenuItemRating(menuItem);
+    //let averageWaitTime = await restaurantData.averageRestaurantWaitTime(restaurant._id);
     // Update the menu item's overall rating
     await rCollection.updateOne(
         {_id: new ObjectId(restaurantId),
         'menuItems._id': new ObjectId(menuItemId)},
-        {$set: {'menuItems.$.rating': overallRating}}
+        {$set: {'menuItems.$.rating': overallRating}},
     );
+    let averageWaitTime = await helper.averageRestaurantWaitTime(restaurantId);
+        await rCollection.updateOne(
+            {_id: new ObjectId(restaurantId)},
+            {$set: {
+                //averageRating: overallRating,
+                averageWaitTime: averageWaitTime
+            }}
+        );
+
+    
     // Get the new inserted user and return the user object
     return await getReviewById(newReviewInfo.insertedId.toString());
 }
@@ -108,13 +119,14 @@ const createRestaurantReview = async (
     //check if review already exists;
     const existingReview = await reviewCollection.findOne({
         restaurantId: restaurantId,
-        userId: userId
+        userId: userId,
+        menuItemId: ""
       });
       
     if (existingReview) {
         throw "Cannot create multiple reviews of the same place";
     }
-      
+    
 
 
     const newReviewInfo = await reviewCollection.insertOne(newReview);
@@ -132,10 +144,14 @@ const createRestaurantReview = async (
     // Calculate the new overall rating of that restaurant
     restaurant = await restaurantData.getRestaurantById(restaurantId);
     let overallRating = await helper.calculateRestaurantRating(restaurant);
+    let averageWaitTime = await helper.averageRestaurantWaitTime(restaurant._id);
     // Update the menu item's overall rating
     await rCollection.updateOne(
         {_id: new ObjectId(restaurantId)},
-        {$set: {averageRating: overallRating}}
+        {$set: {
+            averageRating: overallRating,
+            averageWaitTime: averageWaitTime
+        }}
     );
     // Get the new inserted user and return the user object
     return await getReviewById(newReviewInfo.insertedId.toString());
@@ -341,6 +357,27 @@ const addNametoReview = async (review) =>{
 
 }
   
+// async function averageRestaurantWaitTime(restaurantId) {
+
+//     //restaurantId = helper.checkId(restaurantId);
+    
+//     //let restaurant = await getRestaurantById(restaurantId);
+//     let restaurantReviews = await getAllRestaurantReviews(restaurantId);
+//     //let restaurantReviews = restaurant.reviews;
+//     let numberOfReviews = restaurantReviews.length;
+//     let totalwaitTime = 0;
+
+//     for (let i = 0; i < numberOfReviews; i++) {
+//         let waitTime = helper.convertWaitTime(restaurantReviews[i].waitTime);
+//         totalwaitTime += waitTime; 
+//     }
+//     if (numberOfReviews > 0) totalwaitTime = totalwaitTime/numberOfReviews; 
+    
+//     totalwaitTime = helper.convertNumber(totalwaitTime);
+
+//     return totalwaitTime;
+
+// }
 
 
 

@@ -205,6 +205,7 @@ router
                                         rating,
                                         waitTime);
         }
+
         return res.redirect('/profile');
     } catch(e) {req.session.message = e.message || "Duplicate Review.";
         return res.redirect('/profile');
