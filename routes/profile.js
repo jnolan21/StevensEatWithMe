@@ -247,6 +247,7 @@ router
         if(waitTime.trim() === "h min") waitTime = req.body.oldTime;
         let review = (req.body.comment).trim();
         if(typeof review !== "string" || review === "") throw new Error("Review must be a string. Cannot be empty.")
+        helper.checkreviewlength(review);
         let reviewId = req.body.reviewId
         //update review: waittime, rating, review
         let oldReview = await reviews.getReviewById(reviewId); //make sure it exists 

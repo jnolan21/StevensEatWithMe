@@ -283,9 +283,36 @@ footer{
     padding-bottom: 12px;;
     list-style-position: inside;
   }
+/*styling for create meetup form */
+.meetupForm {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.formGroup {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
 
 
-  /*styling for rsvp boxes on meetup page*/
+
+  /*styling for meetup page*/
+  .rsvpHeaderContainer{
+    display: flex;
+    align-items: center;
+  }
+  .createRSVPButton{
+    background-color: var(--stevens-red);
+    border-radius: 8px;
+    width: 110px;
+    font-size: small;
+    color: white;
+    margin-left: 10px;
+    margin-top: 14px;
+
+  }
+
   .rsvph1{
     margin-left: 14px;
   }
