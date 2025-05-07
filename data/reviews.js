@@ -213,6 +213,7 @@ const deleteReview = async (id) => {
     const restaurantCollection = await restaurants();
     // Get the review
     let review = await getReviewById(id);
+
     // Remove the review from the user
     await userCollection.updateOne(
         {_id: new ObjectId(review.userId)},
@@ -249,7 +250,9 @@ const deleteReview = async (id) => {
         // Update the restaurant rating
         await restaurantCollection.updateOne(
             {_id: new ObjectId(review.restaurantId)},
-            {$set: {averageRating: newRating}}
+            {$set: {
+                averageRating: newRating,
+            }}
         )
     }
     // Delete the review from the review collection
@@ -257,6 +260,15 @@ const deleteReview = async (id) => {
         {_id: new ObjectId(id)}
     );
     if (deletedReview.deletedCount === 0) throw new Error('Failed to delete review.');
+    //updatewait
+    let newtime = await helper.averageRestaurantWaitTime(review.restaurantId)
+    await restaurantCollection.updateOne(
+        {_id: new ObjectId(review.restaurantId)},
+        {$set: {
+            averageWaitTime: newtime,
+        }}
+    )
+    
     // Return the deleted review
     review._id = review._id.toString();
     return review;
