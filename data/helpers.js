@@ -317,7 +317,7 @@ async function formatAndCheckRSVPS(allrsvps){ //given a list of raw rsvp objects
         let inputDate = new Date(Number(year), Number(month) - 1, Number(day));        
         let today = new Date();
  
-          if(inputDate.getFullYear() >= today.getFullYear() && inputDate.getMonth() >= today.getMonth() && inputDate.getDate() >= today.getDate()){ //if not a past rsvp
+          if(inputDate>=today){ //if not a past rsvp
             if(inputDate.getFullYear() === today.getFullYear() && inputDate.getMonth() === today.getMonth() && inputDate.getDate() === today.getDate()){ //if the rsvp is currently today lets make sure its not expired (by more than an hour)
                 let [time, period] = (allrsvps[i].meetUpTime.Time).split(/(AM|PM)/); // ex: split into "3:45" and "PM"
                 let [hoursStr, minutesStr] = time.split(':'); //seperate mins and hours by colon
@@ -367,7 +367,50 @@ async function formatAndCheckRSVPS(allrsvps){ //given a list of raw rsvp objects
       return currentRsvps;
 }
 
+function isFutureDateTime(dateStr, timeStr) {
+    let [month, day, year] = dateStr.split('/').map(Number);
+    let [timePart, period] = timeStr.split(/(AM|PM)/i);
+    let [hoursStr, minutesStr] = timePart.split(':');
+    
+    let hours = Number(hoursStr);
+    const minutes = Number(minutesStr);
+  
+    //convert to 24h format
+    if (period.toUpperCase() === 'PM' && hours !== 12) {
+      hours += 12;
+    } else if (period.toUpperCase() === 'AM' && hours === 12) {
+      hours = 0;
+    }
 
+    //make Date object for RSVP
+    let meetupTime = new Date(year, month - 1, day, hours, minutes);
+  
+    //get current time
+    let now = new Date();
+
+    console.log(meetupTime.toLocaleString(), now.toLocaleString())
+  
+    return meetupTime > now;
+  }
+  
+function checkCommentLength(comment){
+    const minLength = 10;
+    const maxlength = 400;
+    comment = comment.trim();
+    if(!comment || comment.length < minLength){
+        throw new Error("Comment must be at least 10 characters.")
+    }
+    if(comment.length > maxlength) throw new Error("Comment must be no more than 400 characters. ")
+}
+function checkreviewlength(review){
+    const minLength = 10;
+    const maxlength = 600;
+    review = review.trim();
+    if(!review || review.length < minLength){
+        throw new Error("Review must be at least 10 characters.")
+    }
+    if(review.length > maxlength) throw new Error("Review must be no more than 600 characters. ")
+}
 
 function stringToArray(str, strName) {
     str = checkString(str, strName);
@@ -465,5 +508,8 @@ export default {
     stringToArray,
     stringArrayToString,
     checkDietaryRestrictions,
-    checkReview
+    checkReview,
+    isFutureDateTime,
+    checkCommentLength,
+    checkreviewlength
 };

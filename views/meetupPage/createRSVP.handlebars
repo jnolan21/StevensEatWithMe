@@ -1,0 +1,55 @@
+<h1> hi lets create!!</h1>
+  {{#if error}}
+        <p class = "meetupError">Oh no! {{error}}</p>
+    {{/if}}
+    {{#if message}}
+        <p class = "friendAddMessage">{{message}}</p>
+    {{/if}}
+
+<form action="/meetupPage/created" method="POST" class="meetupForm">
+
+  <div class="formGroup">
+    <label for="rsvpDate">Date:</label>
+    <input type="date" name="rsvpDate" id="rsvpDate" class="createMeet">
+  </div>
+
+  <div class="formGroup">
+    <label for="rsvpTime">Time:</label>
+    <input type="time" name="rsvpTime" id="rsvpTime" class="createMeet">
+  </div>
+
+  <div class="formGroup">
+    <label for="restaurantSelect">Where:</label>
+    <select name="restaurant" id="restaurantSelect" class="createMeet">
+      <option value="">-- Select --</option>
+      {{#each restNames}}
+        <option value="{{this.id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+
+  <div class="formGroup">
+    <label for="comment">Comment:</label>
+    <input type="text" name="comment" id="comment" class="createMeet">
+  </div>
+
+  <div class="formGroup">
+    <button type="submit" class="createRSVPButton">Create Meetup</button>
+  </div>
+
+</form>
+
+
+<!--
+things to ensure:
+all inputs provided and of correct type
+make sure date is in future and time is not in the middle of the nigt
+prob will have to format the date and time manually before sending to function
+max word count on comment? check out the create rsvp data function (also check for editing reviews lol)
+do a dropdown for where. maybe do a dropdowns for the times as well? idk 
+date ,time, where ,comment
+
+clientside 
+
+
+    -->

@@ -5,7 +5,20 @@
     {{#if message}}
         <p class = "friendAddMessage">{{message}}</p>
     {{/if}}
+    <div class="rsvpHeaderContainer">
     <h1 class = "rsvph1"> Current Meetups </h1>
+
+  <!-- create a meetup! -->
+  <form action="/meetupPage/create" method="GET" class = "meetupButtonForm">
+  {{#each restNames}}
+    <input type="hidden" name="restNames[]" value="{{this.name}}::{{this.id}}">
+  {{/each}}
+
+    <button type = 'submit' class = "createRSVPButton">Create Meetup</button>
+  </form>
+
+</div>
+
 
     {{#each allrsvps}}
     <div class = "rsvpBox" >
@@ -34,17 +47,7 @@
     {{/each}}
 
   
-  <!--
 
-<form action="/meetupPage/follow" method="POST">
-  <input type="hidden" name="friendId" value="{{this.userId}}">
-  <button type="submit" class="followButton">Follow</button>
-</form>
-<form action="/meetupPage/follow" method="POST">
-  <button type="submit" class="followButton">Follow</button>
-</form>
-
-    -->
 <script src="/js/formValidation.js"></script>
 </body>
 </html>

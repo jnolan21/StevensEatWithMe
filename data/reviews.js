@@ -20,6 +20,7 @@ const createMenuItemReview = async (
     restaurantId = helper.checkId(restaurantId);
     menuItemId = helper.checkId(menuItemId);
     review = helper.checkString(review);
+    helper.checkreviewlength(review)
     helper.checkReviewRating(rating);
     waitTime = helper.checkWaitTime(waitTime);
     // Validate that the user, restaurant, and menu item all exist AND add it the menu item
@@ -86,6 +87,7 @@ const createRestaurantReview = async (
     userId = helper.checkId(userId);
     restaurantId = helper.checkId(restaurantId);
     review = helper.checkString(review);
+    helper.checkreviewlength(review);
     helper.checkReviewRating(rating);
     waitTime = helper.checkWaitTime(waitTime);
     // Validate that the user, restaurant, and menu item all exist AND add it the menu item

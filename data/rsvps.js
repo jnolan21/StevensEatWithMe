@@ -14,6 +14,7 @@ const createRsvp = async (
 ) => {
     // Verify all the input
     comment = helper.checkString(comment);
+    helper.checkCommentLength(comment);
     meetUpTime = helper.checkMeetUpTime(meetUpTime);
     restaurantId = helper.checkId(restaurantId);
     userId = helper.checkId(userId);
