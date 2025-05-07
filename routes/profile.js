@@ -237,6 +237,7 @@ router
     try{
         let properId = req.body.properId;
         let isMenuItem = req.body.isMenuItem;
+        let restId = req.body.restId;
         //process the review changes here. check if wait time empty, if it is dont update. for rating and review grab the values and update. do type checking 
         if(req.body.waitMinutes == undefined || req.body.waitHours == undefined || req.body.rating == undefined ){
             throw new Error("Undefined fields when updating review.")
@@ -251,12 +252,12 @@ router
         let reviewId = req.body.reviewId
         //update review: waittime, rating, review
         let oldReview = await reviews.getReviewById(reviewId); //make sure it exists 
-
+        helper.checkWaitTime(waitTime)
         await reviews.updateReview(reviewId, {
             rating: rating,
             review: review,
             waitTime: waitTime
-          },isMenuItem, properId);
+          },isMenuItem, properId, restId);
     
 
         req.session.message = "Updated Review!"
@@ -281,7 +282,7 @@ router
             let reviewMenuItem = req.query.reviewMenuItem
             let properId = req.query.properId;
             let isMenuItem = req.query.isMenuItem;
-
+            let restId = req.query.restId;
             res.render('users/editReview', {
                 reviewObj: reviewObj,
                 userId: userId,
@@ -294,6 +295,7 @@ router
                 properId: properId,
                 isMenuItem: isMenuItem,
                 isLoggedIn: !!req.session.user,
+                restId: restId, 
                 partial: 'editReviewScript'
             }) //need to send it the review info so we can set up the review, maybe have an ol
         
@@ -397,7 +399,6 @@ router
 
     // render the profile page
     try {
-        console.log(restaurants);
         const message = req.session.message || null;
         req.session.message = null;
         res.render('users/profile', {

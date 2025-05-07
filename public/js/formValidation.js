@@ -165,7 +165,6 @@ if (reviewForm) {
   
   try {
   menuItemId = document.querySelector('#menuItems input:checked').value;
-  console.log(menuItemId);
   if (menuItemId !== "") {
     menuItemId = validateId(menuItemId, "menuItemId");
   }

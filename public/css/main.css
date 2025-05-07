@@ -719,7 +719,12 @@ footer{
   max-width: 500px;
   width: 100%;
 }
+.revCollapse{
+  margin-left: 12px;
+  font-size: x-large;
+  font-weight: bold;
 
+}
 
 .form-group {
   margin-bottom: 1.5rem;

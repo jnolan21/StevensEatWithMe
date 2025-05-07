@@ -7,7 +7,7 @@ document.querySelectorAll('.dropdown-menu').forEach(menu => {
 
   
 let dietary = [];
-let waitTime = 70;
+let waitTime = 359;
 let rating = 0;
 
 
@@ -40,7 +40,6 @@ $.ajax(requestConfig).then(function (responseMessage) {
             dietary.splice(index, 1); 
             }
         }
-        console.log(dietary);
         rerender();
       });
   });
@@ -48,7 +47,7 @@ $.ajax(requestConfig).then(function (responseMessage) {
 
 $('#waitTime input').click(function() {
     waitTime = this.value;
-    if (waitTime === 'None') waitTime = 70;
+    if (waitTime === 'None') waitTime = 359;
     rerender();
   });
 

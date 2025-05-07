@@ -295,7 +295,7 @@ const getAllRestaurantReviews = async (restaurantId) => {
     return reviews;
 
 }
-const updateReview = async (reviewId, updateFields, isMenuItem, properId) => {
+const updateReview = async (reviewId, updateFields, isMenuItem, properId, restId) => {
     //need to update ratings too. 
     //going to need either restaurantid or menuitemid
     //based on this, call the proper helper function and perform another update 
@@ -310,7 +310,9 @@ const updateReview = async (reviewId, updateFields, isMenuItem, properId) => {
           { _id: new ObjectId(reviewId) },
           { $set: updateFields }
         );
+        
         if (isMenuItem==="true") {
+            let newAvgWaitTime= await helper.averageRestaurantWaitTime(restId);
             const menuItem = await menuItemData.getMenuItemById(properId);
             newOverallRating = await helper.calculateMenuItemRating(menuItem);
         
@@ -320,16 +322,28 @@ const updateReview = async (reviewId, updateFields, isMenuItem, properId) => {
                     'menuItems._id': new ObjectId(properId)
                 },
                 {
-                    $set: { 'menuItems.$.rating': newOverallRating }
+                    $set: { 
+                        'menuItems.$.rating': newOverallRating,
+
+                 }
                 }
             );
+            await restaurantCollection.updateOne(
+                { _id: new ObjectId(restId) },
+                { $set: { 
+                    averageWaitTime: newAvgWaitTime
+                 } }
+            );
         } else {
+            let newAvgWaitTime= await helper.averageRestaurantWaitTime(properId);
             const restaurant = await restaurantData.getRestaurantById(properId);
             newOverallRating = await helper.calculateRestaurantRating(restaurant);
-        
             await restaurantCollection.updateOne(
                 { _id: new ObjectId(properId) },
-                { $set: { averageRating: newOverallRating } }
+                { $set: { 
+                    averageRating: newOverallRating,
+                    averageWaitTime: newAvgWaitTime
+                 } }
             );
         }
 

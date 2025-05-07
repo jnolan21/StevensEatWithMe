@@ -132,6 +132,7 @@ ALL RSVP FIELDS:
                      <button type="submit" class="EditandDeleteButton">Edit</button>
                      {{#if this.menuItemName}}
                          <input type="hidden" name="properId" value="{{this.menuItemId}}">
+                         <input type="hidden" name="restId" value="{{this.restaurantId}}">
                          <input type="hidden" name="isMenuItem" value="true">
                      {{else}}
                          <input type="hidden" name="properId" value="{{this.restaurantId}}">
@@ -164,7 +165,8 @@ ALL RSVP FIELDS:
     </section>
     </section>
 </article>
-
+<details class="reviewCollapse">
+  <summary class="caret-summary revCollapse"><span class="caret"></span> Write a Review</summary>
 <section id = "createReviewContainer">
     <form method = "POST" class = "formContainer" id = "review-form">
         <h2>Create New Review</h2>
@@ -237,6 +239,7 @@ ALL RSVP FIELDS:
         {{/if}}
     </form>
 </section>
+</details>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
