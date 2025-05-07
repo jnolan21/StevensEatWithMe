@@ -164,14 +164,27 @@ const updateMenuItem = async (
     // Update the menu item
     const menuItem = await getMenuItemById(menuItemId);
     if (!menuItem) throw new Error("Menu item not found.");
+    const oldRestaurantId = menuItem.restaurantId.toString();
     const rCollection = await restaurants();
+    // Remove the menu item from the old restaurant
+    await rCollection.updateOne(
+        {_id: new ObjectId(oldRestaurantId)},
+        {$pull: {menuItems: {_id: new ObjectId(menuItemId)}}}
+    );
+    // Make the new menu item with the updated info
+    const newMenuItem = {
+        _id: new ObjectId(menuItemId),
+        restaurantId: restaurantId.toString(),
+        name: name,
+        description: description,
+        dietaryRestrictions: dietaryRestrictions,
+        reviews: menuItem.reviews || [],
+        rating: menuItem.rating || 0
+    }
+    // Add the updated menu item to the new restaurant
     const updatedInfo = await rCollection.updateOne(
-        {_id: new ObjectId(restaurantId), 'menuItems._id': new ObjectId(menuItemId)},
-        {$set:
-            {'menuItems.$.name': name,
-            'menuItems.$.description': description,
-            'menuItems.$.dietaryRestrictions': dietaryRestrictions}
-        }
+        {_id: new ObjectId(restaurantId)},
+        {$push: {menuItems: newMenuItem}}
     );
     if (updatedInfo.modifiedCount === 0) throw new Error("Failed to update the menu item.");
     // Get the new menu item array from the restaurant
@@ -185,6 +198,7 @@ const updateMenuItem = async (
         {_id: new ObjectId(restaurantId)},
         {$set: {menuItems: sortedMenuItems}}
     );
+
     const returnRestaurant = await restaurantData.getRestaurantById(restaurantId);
     return returnRestaurant;
 }
