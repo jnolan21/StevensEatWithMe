@@ -364,7 +364,7 @@ footer{
     margin-bottom: 50px;
   }
 
-#goldStar {
+#goldStar0, #goldStar1, #goldStar2, #goldStar3, #goldStar4, #goldStar5  {
   color: gold;
 }
 
