@@ -404,12 +404,12 @@ function checkCommentLength(comment){
 }
 function checkreviewlength(review){
     const minLength = 10;
-    const maxlength = 600;
+    const maxlength = 1000;
     review = review.trim();
     if(!review || review.length < minLength){
         throw new Error("Review must be at least 10 characters.")
     }
-    if(review.length > maxlength) throw new Error("Review must be no more than 600 characters. ")
+    if(review.length > maxlength) throw new Error("Review must be no more than 1000 characters. ")
 }
 
 function stringToArray(str, strName) {

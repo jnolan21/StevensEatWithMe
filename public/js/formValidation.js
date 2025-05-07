@@ -96,6 +96,7 @@ function checkReview(review) {
   if (typeof review !== 'string') throw "Review must be a string";
   review = review.trim();
   if (review.length === 0) throw "Review cannot be empty";
+  if (review.length < 10) throw "Review is too short";
   if (review.length > 1000) throw "Review is too long";
   return review;
 }
