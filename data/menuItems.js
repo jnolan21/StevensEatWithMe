@@ -50,7 +50,7 @@ const createMenuItem = async (
         {$set: {menuItems: sortedMenuItems}}
     );
     // Return the restaurant object
-    return getMenuItemById(newMenuItem._id.toString());
+    return await getMenuItemById(newMenuItem._id.toString());
 }
 
 
@@ -73,12 +73,14 @@ const getMenuItemById = async (id) => {
     id = helper.checkId(id);
     // Search for the menut item in restaurant collection
     const rCollection = await restaurants();
-    const menuItem = await rCollection.findOne(
+    const value = await rCollection.findOne(
         {'menuItems._id': new ObjectId(id)},
         {projection: {_id: 0, 'menuItems.$': 1}}
     )
-    if (!menuItem) throw new Error(`Error in getMenuItemById: menu item not found with id = ${id}`);
-    return menuItem.menuItems[0];
+    if (!value || !value.menuItems || value.menuItems.length === 0) throw new Error(`Error in getMenuItemById: menu item not found with id = ${id}`);
+    let menuItem = value.menuItems[0];
+    menuItem._id = menuItem._id.toString();
+    return menuItem;
 }
 
 // Get the restaurant id of a menu item using menu item id

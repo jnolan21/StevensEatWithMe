@@ -1,9 +1,7 @@
 import {Router} from 'express';
 const router = Router();
-import {ObjectId} from 'mongodb';
 import userData from '../data/users.js';
 import helper from '../data/helpers.js';
-import rsvpData from "../data/rsvps.js";
 import reviewData from '../data/reviews.js';
 import restaurants from '../data/restaurants.js';
 import menuItems from '../data/menuItems.js';
@@ -367,7 +365,7 @@ router
             restaurant.imageURL,
             restaurant.dietaryRestrictions
         );
-        req.session.message = `New restaunt, '${restaurant.name}', created successfully!`;
+        req.session.message = `New restaurant created successfully!`;
         return res.redirect('/admin');
     } catch (e) {
         req.session.message = e.message || "Server error.";
@@ -398,7 +396,6 @@ router
 router
 .get('/menuItem/edit/:id', async (req, res) => {
     try {
-        console.log(`GET /menuItem/edit/:id ${req.params}`);
         let id = req.params.id;
         id = helper.checkId(id);
         let menuItem = await menuItems.getMenuItemById(id);
@@ -428,33 +425,119 @@ router
 /* Edit menu items */
 router
 .put('/menuItem/edit', async (req, res) => {
-    try{
-        console.log(`PUT /menuItem/edit ${req.body}`);
-        console.dir(req.body, {depth:null, colors:true})
-        // Verify the restaurant info
-        let menuItemId = helper.checkId(req.body.menuItemId);
-        let restaurantId = helper.checkId(req.body.restaurantId);
-        let name = helper.checkString(req.body.name, "Menu item name");
-        let description = helper.checkString(req.body.description, "Menu item description");
-        let dietaryRestrictions = req.body.dietaryRestrictions || [];
-        if (!Array.isArray(dietaryRestrictions)) dietaryRestrictions = [dietaryRestrictions];
-        dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
-        // Update the menu item
-        await menuItems.updateMenuItem(
-            menuItemId,
-            restaurantId,
-            name,
-            description,
-            dietaryRestrictions
-        );
-        req.session.editingMenuItem = false;
-        req.session.message = null;
-        req.session.message = "Menu item updated successfully!";
-        res.redirect('/admin');
+    let errors = [];
+    let menuItem = req.body;
+    // Verify the admin input
+    try {
+        menuItem._id = helper.checkId(menuItem.menuItemId);
+    } catch (e) {
+        errors.push(e.message);
     }
-    catch (e){
+    try {
+        menuItem.restaurantId = helper.checkId(menuItem.restaurantId);
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        menuItem.name = helper.checkString(menuItem.name, "Menu item name");
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        menuItem.description = helper.checkString(menuItem.description, "Menu item description");
+    } catch (e) {
+        errors.push(e.message);
+    }
+    try {
+        menuItem.dietaryRestrictions = menuItem.dietaryRestrictions || [];
+        if (!Array.isArray(menuItem.dietaryRestrictions)) menuItem.dietaryRestrictions = [menuItem.dietaryRestrictions];
+        menuItem.dietaryRestrictions = helper.checkDietaryRestrictions(menuItem.dietaryRestrictions);
+    } catch (e) {
+        errors.push(e.message);
+    }
+    let dietaryCheckBox;
+    try {
+        // Create the dietaryCheckBox object
+        dietaryCheckBox = {};
+        menuItem.dietaryRestrictions.forEach(dr => {
+            dietaryCheckBox[dr] = menuItem.dietaryRestrictions.includes(dr);
+        });
+    } catch (e) {
+        errors.push(e.message);
+    }
+    // Reload with errors if needed
+    if (errors.length > 0) {
+        let user = req.session.user;
+        // Get all users reviews
+        let reviews = [];
+        try{
+            reviews = await reviewData.getAllReviewsWithInfo();
+        }
+        catch(e){
+            return res.status(500).render('error', {
+                title: "500 Internal Server Error",
+                error: e.message,
+                status: 500
+            });
+        }
+        // Get all the users
+        let allUsers = [];
+        try {
+            allUsers = await userData.getAllUsers();
+        } catch (e) {
+            return res.status(500).render('error', {
+                title: "500 Internal Server Error",
+                error: e.message,
+                status: 500
+            });
+        }
+        // Get all the restaurants
+        let allRestaurants = [];
+        try {
+            allRestaurants = await restaurants.getAllRestaurants();
+        } catch (e) {
+            return res.status(500).render('error', {
+                title: "500 Internal Server Error",
+                error: e.message,
+                status: 500
+            });
+        }
+        return res.render('users/admin', {
+            title: "EatWithMe Admin Page",
+            user: {
+              username: user.username,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              reviews: reviews // array of review objects
+            },
+            errors: errors,
+            hasErrors: true,
+            partial: 'adminScript',
+            days: days,
+            isLoggedIn: !!req.session.user,
+            isAdmin: true,
+            allUsers: allUsers,
+            allRestaurants: allRestaurants,
+            // Submitted info
+            menuItem: menuItem,
+            dietaryCheckBox: dietaryCheckBox,
+            editingMenuItem: true,
+          });
+    }
+    // Update the menu item
+    try {
+        await menuItems.updateMenuItem(
+            menuItem._id,
+            menuItem.restaurantId,
+            menuItem.name,
+            menuItem.description,
+            menuItem.dietaryRestrictions
+        );
+        req.session.message = "Menu item updated successfully!";
+        return res.redirect('/admin');
+    } catch (e) {
         req.session.message = e.message || "Something went wrong updating the menu item.";
-        return res.status(400).redirect('/admin');
+        return res.status(500).redirect('/admin');
     }
 });
 
@@ -468,7 +551,6 @@ router
     let errors = [];
     // Verify all restaurant fields
     let menuItem = req.body;
-    console.log(menuItem);
     try {
         menuItem.restaurantId = helper.checkId(menuItem.restaurantId);
     } catch (e) {
@@ -503,10 +585,6 @@ router
     });
     // Reload with errors if needed
     if (errors.length > 0) {
-        console.log('errors[]')
-        errors.forEach((e) => {
-            console.log(e.message);
-        })
         return res.render('users/admin', {
           title: "EatWithMe Admin Page",
           user: {
@@ -542,7 +620,6 @@ router
         req.session.message = `New menu item, '${menuItem.name}', successfully added to '${restaurant.name}'!`;
         return res.redirect('/admin');
     } catch (e) {
-        console.log(`create ${e.message}`)
         req.session.message = e.message || "Server error.";
         return res.status(500).redirect('/admin');
     }
