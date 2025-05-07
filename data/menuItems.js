@@ -38,6 +38,17 @@ const createMenuItem = async (
         {$push: {menuItems: newMenuItem}},
         {returnDocument: "after"}
     );
+    // Get the new menu item array from the restaurant
+    restaurant = await restaurantData.getRestaurantById(restaurantId);
+    // Sort the menu items
+    let sortedMenuItems = restaurant.menuItems.sort((menuItem1, menuItem2) => {
+        return menuItem1.name.toLowerCase().localeCompare(menuItem2.name.toLowerCase());
+    });
+    // Add the sorted menu item array back into the restaurant
+    await rCollection.updateOne(
+        {_id: new ObjectId(restaurantId)},
+        {$set: {menuItems: sortedMenuItems}}
+    );
     // Return the restaurant object
     return getMenuItemById(newMenuItem._id.toString());
 }
@@ -47,7 +58,12 @@ const createMenuItem = async (
 const getAllMenuItems = async (restaurantId) => {
     restaurantId = helper.checkId(restaurantId);
     let restaurant = await restaurantData.getRestaurantById(restaurantId);
-    return restaurant.menuItems;
+    // Sort the menu items by name
+    // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare
+    let menuItems = restaurant.menuItems.sort((menuItem1, menuItem2) => {
+        return menuItem1.name.toLowerCase().localeCompare(menuItem2.name.toLowerCase());
+    });
+    return menuItems;
 }
 
 
@@ -96,6 +112,17 @@ const removeMenuItem = async (id) => {
         {$pull: {menuItems: {_id: new ObjectId(id)}}}
     );
     if (result.modifiedCount === 0) throw new Error(`Failed to remove menu item: '${menuItem.name}'.`);
+    // Get the new menu item array from the restaurant
+    restaurant = await restaurantData.getRestaurantById(restaurantId);
+    // Sort the menu items
+    let sortedMenuItems = restaurant.menuItems.sort((menuItem1, menuItem2) => {
+        return menuItem1.name.toLowerCase().localeCompare(menuItem2.name.toLowerCase());
+    });
+    // Add the sorted menu item array back into the restaurant
+    await rCollection.updateOne(
+        {_id: new ObjectId(restaurantId)},
+        {$set: {menuItems: sortedMenuItems}}
+    );
     // Update the menu item rating
     let updatedRestaurant = await restaurantData.getRestaurantById(restaurantId);
     let newRating = await helper.calculateRestaurantRating(updatedRestaurant);
@@ -145,6 +172,17 @@ const updateMenuItem = async (
         }
     );
     if (updatedInfo.modifiedCount === 0) throw new Error("Failed to update the menu item.");
+    // Get the new menu item array from the restaurant
+    let restaurant = await restaurantData.getRestaurantById(restaurantId);
+    // Sort the menu items
+    let sortedMenuItems = restaurant.menuItems.sort((menuItem1, menuItem2) => {
+        return menuItem1.name.toLowerCase().localeCompare(menuItem2.name.toLowerCase());
+    });
+    // Add the sorted menu item array back into the restaurant
+    await rCollection.updateOne(
+        {_id: new ObjectId(restaurantId)},
+        {$set: {menuItems: sortedMenuItems}}
+    );
     const returnRestaurant = await restaurantData.getRestaurantById(restaurantId);
     return returnRestaurant;
 }
