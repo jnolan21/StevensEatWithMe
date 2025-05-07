@@ -467,63 +467,46 @@ router
     // Create a new restaurant
     let errors = [];
     // Verify all restaurant fields
-    let restaurant = req.body;
+    let menuItem = req.body;
+    console.log(menuItem);
     try {
-        restaurant.name = helper.checkString(restaurant.name, 'Restaurant name');
+        menuItem.restaurantId = helper.checkId(menuItem.restaurantId);
+    } catch (e) {
+        errors.push(e.message);
+    }    
+    try {
+        menuItem.name = helper.checkString(menuItem.name, 'Menu item name');
     } catch (e) {
         errors.push(e.message);
     }
-    // Check if restaurant already exists with that name
-    let checkRestaurantName = await restaurants.getRestaurantByName(restaurant.name);
-    if (checkRestaurantName !== null) errors.push(`Restaurant already exists with the name '${restaurant.name}'`);
+    // Check if menu item already exists with that name
+    let checkMenuItemName = await menuItems.getMenuItemByName(menuItem.name, menuItem.restaurantId);
+    if (checkMenuItemName !== null) errors.push(`Menu item already exists with the name '${menuItem.name}'`);
     try {
-        restaurant.location = helper.checkString(restaurant.location, 'Restaurant location');
-    } catch (e) {
-        errors.push(e.message);
-    }
-    try {
-        restaurant.typeOfFood = helper.stringToArray(restaurant.typeOfFood, 'Restaurant types of food');
-    } catch (e) {
-        errors.push(e.message);
-    }
-    try {
-        restaurant.hoursOfOperation = helper.checkHoursOfOperation(restaurant.hoursOfOperation);
-    } catch (e) {
-        errors.push(e.message);
-    }
-    try {
-        restaurant.imageURL = helper.checkString(restaurant.imageURL, 'Restaurant image URL');
+        menuItem.description = helper.checkString(menuItem.description, 'Menu item description');
     } catch (e) {
         errors.push(e.message);
     }
     try {
         // Make dietaryRestrictions into an array
-        restaurant.dietaryRestrictions = restaurant.dietaryRestrictions || [];
-        if (!Array.isArray(restaurant.dietaryRestrictions)) restaurant.dietaryRestrictions = [restaurant.dietaryRestrictions];
-        restaurant.dietaryRestrictions = helper.checkDietaryRestrictions(restaurant.dietaryRestrictions);
+        menuItem.dietaryRestrictions = menuItem.dietaryRestrictions || [];
+        if (!Array.isArray(menuItem.dietaryRestrictions)) menuItem.dietaryRestrictions = [menuItem.dietaryRestrictions];
+        menuItem.dietaryRestrictions = helper.checkDietaryRestrictions(menuItem.dietaryRestrictions);
     } catch (e) {
         errors.push(e.message);
     }
-    // Get all users reviews
-    let user = req.session.user;
-    let reviews = [];
-    try{
-        reviews = await reviewData.getAllReviewsWithInfo();
-    }
-    catch(e){
-        return res.status(500).render('error', {
-            title: "500 Internal Server Error",
-            error: e.message,
-            status: 500
-        });
-    }
+
     // Create the dietaryCheckBox object
     let dietaryCheckBox = {};
     dietaryRestrictions.forEach(dr => {
-        dietaryCheckBox[dr] = restaurant.dietaryRestrictions.includes(dr);
+        dietaryCheckBox[dr] = menuItem.dietaryRestrictions.includes(dr);
     });
     // Reload with errors if needed
     if (errors.length > 0) {
+        console.log('errors[]')
+        errors.forEach((e) => {
+            console.log(e.message);
+        })
         return res.render('users/admin', {
           title: "EatWithMe Admin Page",
           user: {
@@ -539,31 +522,27 @@ router
           isLoggedIn: !!req.session.user,
           isAdmin: true,
           // Submitted info
-          name: restaurant.name,
-          location: restaurant.location,
-          typeOfFood: restaurant.typeOfFood,
+          restaurantId: menuItem.restaurantId,
+          name: menuItem.name,
+          description: menuItem.description,
           dietaryCheckBox: dietaryCheckBox,
-          //hoursOfOperation: restaurant.hoursOfOperation,
-          hoursOfOperation: restaurant.hoursOfOperation,
-          imageURL: restaurant.imageURL,
-          dietaryRestrictions: restaurant.dietaryRestrictions
+          dietaryRestrictions: menuItem.dietaryRestrictions
         });
       }
 
-    // Add the restaurant to the database
+    // Add the menu item to the database
     try {
-        await restaurants.createRestaurant(
-            restaurant.name,
-            restaurant.location,
-            [],
-            restaurant.typeOfFood,
-            restaurant.hoursOfOperation,
-            restaurant.imageURL,
-            restaurant.dietaryRestrictions
+        await menuItems.createMenuItem(
+            menuItem.restaurantId,
+            menuItem.name,
+            menuItem.description,
+            menuItem.dietaryRestrictions
         );
-        req.session.message = `New restaunt, '${restaurant.name}', created successfully!`;
+        let restaurant = await restaurants.getRestaurantById(menuItem.restaurantId);
+        req.session.message = `New menu item, '${menuItem.name}', successfully added to '${restaurant.name}'!`;
         return res.redirect('/admin');
     } catch (e) {
+        console.log(`create ${e.message}`)
         req.session.message = e.message || "Server error.";
         return res.status(500).redirect('/admin');
     }

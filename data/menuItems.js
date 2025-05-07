@@ -188,9 +188,28 @@ const updateMenuItem = async (
 }
 
 
-
-
-
+const getMenuItemByName = async (name, restaurantId) => {
+    name = helper.checkString(name, "Menu item name");
+    restaurantId = helper.checkId(restaurantId);
+    const rCollection = await restaurants();
+    // Search for the case-insensitive name match
+    const restaurant = await rCollection.findOne({
+        _id: new ObjectId(restaurantId),
+        menuItems: {
+            // Search each menu item in each restaurant
+            $elemMatch: {name: {$regex: `^${name}`, $options: 'i'}}
+        }
+    });
+    if (!restaurant) return null;
+    // Get the menu item object
+    let menuItem;
+    for (let i = 0; i < restaurant.menuItems.length; i++) {
+        if (restaurant.menuItems[i].name.toLowerCase() === name.toLowerCase()) menuItem = restaurant.menuItems[i];
+    }
+    if (!menuItem) return null;
+    menuItem._id = menuItem._id.toString();
+    return menuItem;
+}
 
 
 
@@ -203,5 +222,6 @@ export default {
     getRestaurantId,
     removeMenuItem,
     ratingFilter,
-    updateMenuItem
+    updateMenuItem,
+    getMenuItemByName
 }
