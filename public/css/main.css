@@ -465,6 +465,7 @@ footer{
   }
   .rsvpli{
     list-style: none;
+    padding-bottom: 5px;
   }
  .profile{
   border: 2px solid var(--stevens-red);

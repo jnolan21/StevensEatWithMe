@@ -1,12 +1,12 @@
-<article class="profile-container">
-            {{#if message}}
+        {{#if message}}
         <p class="deletedReview">{{message}}</p>
         {{/if}}
-    <h1 class="profile">{{#if isOwnProfile}}Hi, {{user.firstName}}!{{else}}{{user.firstName}}'s Profile{{/if}}</h1>
+<div class="profile-container">
+
 
     <!-- Profile Information Container -->
     <section class = "profSection">
-    <section class="profile-info">
+        <h2 class="profile">{{#if isOwnProfile}}Hi, {{user.firstName}}!{{else}}{{user.firstName}}'s Profile{{/if}}</h2>
         <p class = "profileInfo">Username: {{user.username}}</p>
         <p class = "profileInfo">First Name: {{user.firstName}}</p>
         <p class = "profileInfo">Last Name: {{user.lastName}}</p>
@@ -21,11 +21,9 @@
         {{/if}}
 
     </section>
-    </section>
     
     <!-- "Following" Container -->
     <section class = "profSection">
-    <section class="profile-following">
         <h2 class = "profile">Following:</h2>
         <ul>
             <!-- Display each user this user is following -->
@@ -36,11 +34,9 @@
             {{/each}}
         </ul>
     </section>
-    </section>
 
     <!-- "My Followers" Container -->
     <section class = "profSection">
-    <section class="profile-followers">
         <h2 class = "profile">Followers:</h2>
         <ul>
             <!-- Display each user who is following this user -->
@@ -50,7 +46,6 @@
                 </li>
             {{/each}}
         </ul>
-    </section>
     </section>
 <!-- PERSONAL COMMENT:
 ALL RSVP FIELDS:
@@ -65,7 +60,6 @@ ALL RSVP FIELDS:
     <!-- "My RSVP Posts" Container -->
     <!-- <a href="/rsvp/{{this._id}}">{{this.title}} - {{this.meetUpTime.date}}, {{this.meetUpTime.time}}</a> -->
     <section class = "profSection">
-    <section class="profile-rsvps">
         <h2 class = "profile">Meetup Posts:</h2>
         <p class="rinfo">all posted and attended meetups</p>
         <ul>
@@ -73,7 +67,7 @@ ALL RSVP FIELDS:
             {{#each user.RSVPposts}}
                 <li class = "rsvpli">
                     <div class = "profRsvp">
-                        <details><summary class = "caret-summary"><p> <span class="caret"></span>Posted By: {{this.user}} </p></summary>
+                        <details><summary class = "caret-summary"> <span class="caret"></span>Posted By: {{this.user}} </summary>
                         <p>When: {{this.meetUpTime.Date}}, {{this.meetUpTime.Time}}</p>
                         <p>Where: {{this.restaurantId}}</p>
                         <p>Comment: {{this.comment}}</p>
@@ -84,12 +78,10 @@ ALL RSVP FIELDS:
             {{/each}}
         </ul>
     </section>
-    </section>
 
     <!-- "My Current RSVPs" Container -->
     <!-- <a href="/rsvp/{{this._id}}">{{this.title}} - {{this.date}}, {{this.time}}</a> -->
     <section class = "profSection">
-    <section class="profile-myRSVPposts">
         <h2 class = "profile">Active Meetup Posts and RSVPs:</h2>
         <p class="rinfo">current meetups posted by me, or meetups that I am attending</p>
         <ul>
@@ -97,7 +89,7 @@ ALL RSVP FIELDS:
             {{#each user.currentRSVPs}}
                 <li class = "rsvpli">
                     <div class = "profRsvp">
-                        <details><summary class = "caret-summary"><p> <span class="caret"></span>Posted By: {{this.user}} </p></summary>
+                        <details><summary class = "caret-summary"> <span class="caret"></span>Posted By: {{this.user}} </summary>
                         <p>When: {{this.meetUpTime.Date}}, {{this.meetUpTime.Time}}</p>
                         <p>Where: {{this.restaurantId}}</p>
                         <p>Comment: {{this.comment}}</p>
@@ -108,12 +100,10 @@ ALL RSVP FIELDS:
             {{/each}}
         </ul>
     </section>
-    </section>
     <!-- "Reviews" Container -->
     <section class="profSection">
-    <section class="profile-myReviews">
        <h2 class = "profile">Reviews:</h2>
-       <details open><summary class = "caret-summary"><p> <span class="caret"></span> All Reviews </p></summary>
+       <details open><summary class = "caret-summary"> <span class="caret"></span> All Reviews </summary>
         <ul>
             {{#each user.reviews}}
                 <li class="reviewLi">
@@ -144,27 +134,26 @@ ALL RSVP FIELDS:
                         <input type="hidden" name="userId" value="{{this.userId}}">
                         <button type="submit" class="EditandDeleteButton">Delete</button>
                     </form>
-                    <div id="delete-error" class="meetupError" hidden></div>
-                    </div>
+                    <div  class="meetupError" hidden></div>
                     {{/if}}
                     <div class="reviewInfo">
                         {{#if this.menuItemName}}
-                            <p><span class="reviewSpan">{{this.restaurantName}}:</span> <span class="revItalic">{{this.menuItemName}}</span></p>
+                            <span class="reviewSpan">{{this.restaurantName}}:</span> <span class="revItalic">{{this.menuItemName}}</span>
                          <input type="hidden" name="properId" value="{{this.menuItemId}}">
                         {{else}}
-                            <p><span class="reviewSpan">{{this.restaurantName}}</span></p>
+                            <span class="reviewSpan">{{this.restaurantName}}</span>
                         <input type="hidden" name="properId" value="{{this.restaurantId}}">
                         {{/if}}
                         <p><span class="reviewSpan">Rating:</span> {{this.rating}}</p>
                         <p><span class="reviewSpan">Wait Time:</span> {{this.waitTime}}</p>
                         <p><span class="reviewSpan">Review:</span> {{this.review}}</p>
+                    </div>
                 </li>
             {{/each}}
         </ul>
         </details> 
     </section>
-    </section>
-</article>
+</div>
 <details class="reviewCollapse">
   <summary class="caret-summary revCollapse"><span class="caret"></span> Write a Review</summary>
 <section id = "createReviewContainer">
@@ -218,7 +207,7 @@ ALL RSVP FIELDS:
         </div>
 
         <div class = "form-group" id = "waitTimeContainer"> 
-            <legend>Wait Time</legend>
+            Wait Time
             <div class="time-field">
                 <input name="waitTimeHour" id="waitTimeHour" type="number" min="0" placeholder="1">
                 <label for = "waitTimeHour">hour</label>
@@ -227,6 +216,7 @@ ALL RSVP FIELDS:
                 <input name="waitTimeMinute" id="waitTimeMinute" type="number" min="0" max="59" placeholder="30">
                 <label for = "waitTimeMinute">min</label>
             <p class = "error" id = "errorTime">{{errors.Time}}</p>
+            </div>
         </div>
 
         
@@ -246,6 +236,5 @@ ALL RSVP FIELDS:
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script src="/public/js/populateReview.js"></script>
 <script src="/public/js/formValidation.js"></script>
-</body>
-</html>
+
 
