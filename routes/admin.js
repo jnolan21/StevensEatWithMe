@@ -7,7 +7,6 @@ import restaurants from '../data/restaurants.js';
 import menuItems from '../data/menuItems.js';
 //import crypto from 'crypto'
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const dietaryRestrictions = ['Vegetarian', 'Nut-free', 'Vegan', 'Dairy-free', 'Gluten-free'];
 
 // Get the admin page
 router
@@ -97,6 +96,9 @@ router
         }
     }
 
+    // Determine if a menu item has any reviews
+    helper.addHasReviewsKey(allRestaurants);
+
     // Render the user's admin page
     try {
         res.render('users/admin', {
@@ -126,15 +128,7 @@ router
             isAdmin
         });
         // Clear the 'deleted' flags
-        req.session.reviewDeleted = false;
-        req.session.restaurantDeleted = false;
-        req.session.menuItemDeleted = false;
-        req.session.editingRestaurant = false;
-        req.session.editingMenuItem = false;
-        req.session.restaurantInfo = null;
-        req.session.menuItemInfo = null;
-        req.session.message = null;
-        req.session.dietaryCheckBox = null;
+        helper.clearAdminSession(req.session);
         return;
     } catch (e) {
         res.status(500).render('error', {
@@ -142,15 +136,7 @@ router
             error: e.message,
             status: 500
         });
-        req.session.reviewDeleted = false;
-        req.session.restaurantDeleted = false;
-        req.session.menuItemDeleted = false;
-        req.session.editingRestaurant = false;
-        req.session.editingMenuItem = false;
-        req.session.restaurantInfo = null;
-        req.session.menuItemInfo = null;
-        req.session.message = null;
-        req.session.dietaryCheckBox = null;
+        helper.clearAdminSession(req.session);
         return;
     }
 
@@ -207,10 +193,7 @@ router
         restaurant.typeOfFood = helper.stringArrayToString(restaurant.typeOfFood, "Restaurant types of food");
         restaurant.dietaryRestrictions = helper.checkDietaryRestrictions(restaurant.dietaryRestrictions);
         // Create the dietaryCheckBox object
-        let dietaryCheckBox = {};
-        dietaryRestrictions.forEach(dr => {
-            dietaryCheckBox[dr] = restaurant.dietaryRestrictions.includes(dr);
-        });
+        let dietaryCheckBox = helper.buildDietaryCheckBox(restaurant.dietaryRestrictions);
         req.session.editingRestaurant = true;
         req.session.restaurantInfo = restaurant;
         req.session.dietaryCheckBox = dietaryCheckBox;
@@ -238,8 +221,7 @@ router
         let typeOfFood = helper.stringToArray(req.body.typeOfFood, "Restaurant types of food");
         let hoursOfOperation = helper.checkHoursOfOperation(req.body.hoursOfOperation);
         let imageURL = helper.checkString(req.body.imageURL, "Restaurant image URL");
-        let dietaryRestrictions = req.body.dietaryRestrictions || [];
-        if (!Array.isArray(dietaryRestrictions)) dietaryRestrictions = [dietaryRestrictions];
+        let dietaryRestrictions = helper.fixDietaryInput(req.body.dietaryRestrictions);
         dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
         // Update the restaurant
         await restaurants.updateRestaurant(
@@ -302,8 +284,7 @@ router
     }
     try {
         // Make dietaryRestrictions into an array
-        restaurant.dietaryRestrictions = restaurant.dietaryRestrictions || [];
-        if (!Array.isArray(restaurant.dietaryRestrictions)) restaurant.dietaryRestrictions = [restaurant.dietaryRestrictions];
+        restaurant.dietaryRestrictions = helper.fixDietaryInput(restaurant.dietaryRestrictions);
         restaurant.dietaryRestrictions = helper.checkDietaryRestrictions(restaurant.dietaryRestrictions);
     } catch (e) {
         errors.push(e.message);
@@ -322,10 +303,15 @@ router
         });
     }
     // Create the dietaryCheckBox object
-    let dietaryCheckBox = {};
-    dietaryRestrictions.forEach(dr => {
-        dietaryCheckBox[dr] = restaurant.dietaryRestrictions.includes(dr);
-    });
+    let dietaryCheckBox = helper.buildDietaryCheckBox(restaurant.dietaryRestrictions);
+    let allRestaurants;
+    try {
+        allRestaurants = await restaurants.getAllRestaurants();
+    } catch (e) {
+        errors.push(e.message);
+    }
+    // Determine if a menu item has any reviews
+    helper.addHasReviewsKey(allRestaurants);
     // Reload with errors if needed
     if (errors.length > 0) {
         return res.render('users/admin', {
@@ -402,10 +388,7 @@ router
         // Convert the array of strings, to strings
         menuItem.dietaryRestrictions = helper.checkDietaryRestrictions(menuItem.dietaryRestrictions);
         // Create the dietaryCheckBox object
-        let dietaryCheckBox = {};
-        dietaryRestrictions.forEach(dr => {
-            dietaryCheckBox[dr] = menuItem.dietaryRestrictions.includes(dr);
-        });
+        let dietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
         req.session.editingMenuItem = true;
         req.session.menuItemInfo = menuItem;
         req.session.dietaryCheckBox = dietaryCheckBox;
@@ -425,6 +408,7 @@ router
 /* Edit menu items */
 router
 .put('/menuItem/edit', async (req, res) => {
+    console.log('EDIT MENU ITEM ROUTE!');
     let errors = [];
     let menuItem = req.body;
     // Verify the admin input
@@ -449,8 +433,7 @@ router
         errors.push(e.message);
     }
     try {
-        menuItem.dietaryRestrictions = menuItem.dietaryRestrictions || [];
-        if (!Array.isArray(menuItem.dietaryRestrictions)) menuItem.dietaryRestrictions = [menuItem.dietaryRestrictions];
+        menuItem.dietaryRestrictions = helper.fixDietaryInput(menuItem.dietaryRestrictions);
         menuItem.dietaryRestrictions = helper.checkDietaryRestrictions(menuItem.dietaryRestrictions);
     } catch (e) {
         errors.push(e.message);
@@ -458,10 +441,7 @@ router
     let dietaryCheckBox;
     try {
         // Create the dietaryCheckBox object
-        dietaryCheckBox = {};
-        menuItem.dietaryRestrictions.forEach(dr => {
-            dietaryCheckBox[dr] = menuItem.dietaryRestrictions.includes(dr);
-        });
+        dietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
     } catch (e) {
         errors.push(e.message);
     }
@@ -501,6 +481,17 @@ router
                 error: e.message,
                 status: 500
             });
+        }
+        // Determine if a menu item has any reviews
+        for (let i = 0; i < allRestaurants.length; i++) {
+            let restaurant = allRestaurants[i];
+            let menuItems = restaurant.menuItems;
+            if (menuItems && Array.isArray(menuItems)) {
+                for (let j = 0; j < menuItems.length; j++) {
+                    if (menuItems[j].reviews && (menuItems[j].reviews.length > 0)) menuItems[j].hasReviews = true;
+                    else menuItems[j].hasReviews = false;
+                }
+            }
         }
         return res.render('users/admin', {
             title: "EatWithMe Admin Page",
@@ -547,9 +538,10 @@ router
 router
   .route('/menuItem')
   .post(async (req, res) => {
-    // Create a new restaurant
+    console.log('CREATE MENU ITEM ROUTE!');
+    // Create a new menu item
     let errors = [];
-    // Verify all restaurant fields
+    // Verify all menu item fields
     let menuItem = req.body;
     try {
         menuItem.restaurantId = helper.checkId(menuItem.restaurantId);
@@ -571,18 +563,22 @@ router
     }
     try {
         // Make dietaryRestrictions into an array
-        menuItem.dietaryRestrictions = menuItem.dietaryRestrictions || [];
-        if (!Array.isArray(menuItem.dietaryRestrictions)) menuItem.dietaryRestrictions = [menuItem.dietaryRestrictions];
+        menuItem.dietaryRestrictions = helper.fixDietaryInput(menuItem.dietaryRestrictions);
         menuItem.dietaryRestrictions = helper.checkDietaryRestrictions(menuItem.dietaryRestrictions);
     } catch (e) {
         errors.push(e.message);
     }
 
     // Create the dietaryCheckBox object
-    let dietaryCheckBox = {};
-    dietaryRestrictions.forEach(dr => {
-        dietaryCheckBox[dr] = menuItem.dietaryRestrictions.includes(dr);
-    });
+    let dietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
+    let allRestaurants;
+    try {
+        allRestaurants = await restaurants.getAllRestaurants();
+    } catch (e) {
+        errors.push(e.message);
+    }
+    // Determine if a menu item has any reviews
+    helper.addHasReviewsKey(allRestaurants);
     // Reload with errors if needed
     if (errors.length > 0) {
         return res.render('users/admin', {

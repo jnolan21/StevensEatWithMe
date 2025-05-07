@@ -149,7 +149,11 @@
                                                 <p><span class="reviewSpan">Name:</span> {{this.name}}</p>
                                                 <p><span class="reviewSpan">Description:</span> {{this.description}}</p>
                                                 <p><span class="reviewSpan">Dietary Restrictions:</span> {{this.dietaryRestrictions}}</p>
-                                                <p><span class="reviewSpan">Reviews:</span> {{this.reviews}}</p>
+                                                {{#if this.hasReviews}}
+                                                <p><span class="reviewSpan">Rating:</span> {{this.rating}}/5</p>
+                                                {{else}}
+                                                <p><span class="reviewSpan">Rating:</span>N/A - no reviews</p>
+                                                {{/if}}
                                             </div>
                                         </li>
                                         {{/each}}
@@ -361,14 +365,6 @@
                                     <label for="dietaryRestrictions-gluten-free">Gluten-free</label>
                                 </div>
                             </div>
-                        
-                            <!-- Dietary Restrictions -->
-                            <!--
-                            <div class="loginForm">
-                                <label for="restaurant-dietaryRestrictions">Dietary restrictions:</label>
-                                <input type="text" id="restaurant-dietaryRestrictions" name="dietaryRestrictions" placeholder="Dietary restrictions..." value="{{dietaryRestrictions}}" class="login-input">
-                            </div>
-                            -->
 
                             <!-- Submit Button -->
                             <button id="restaurant-button" type="submit" class="loginButton">Submit</button>

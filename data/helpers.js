@@ -524,8 +524,46 @@ async function averageRestaurantWaitTime(restaurantId) {
 }
 
 
+const addHasReviewsKey = (allRestaurants) => {
+    for (let i = 0; i < allRestaurants.length; i++) {
+        let restaurant = allRestaurants[i];
+        let menuItems = restaurant.menuItems;
+        if (menuItems && Array.isArray(menuItems)) {
+            for (let j = 0; j < menuItems.length; j++) {
+                if (menuItems[j].reviews && (menuItems[j].reviews.length > 0)) menuItems[j].hasReviews = true;
+                else menuItems[j].hasReviews = false;
+            }
+        }
+    }
+}
 
 
+const clearAdminSession = (session) => {
+    session.reviewDeleted = false;
+    session.restaurantDeleted = false;
+    session.menuItemDeleted = false;
+    session.editingRestaurant = false;
+    session.editingMenuItem = false;
+    session.restaurantInfo = null;
+    session.menuItemInfo = null;
+    session.message = null;
+    session.dietaryCheckBox = null;
+}
+
+const buildDietaryCheckBox = (selectedDietaryRestrictions) => {
+    const dietaryRestrictions = ['Vegetarian', 'Nut-free', 'Vegan', 'Dairy-free', 'Gluten-free'];
+    let dietaryCheckBox = {};
+    dietaryRestrictions.forEach(dr => {
+        dietaryCheckBox[dr] = selectedDietaryRestrictions.includes(dr);
+    })
+    return dietaryCheckBox;
+}
+
+const fixDietaryInput = (dietaryRestrictions) => {
+    if (!dietaryRestrictions) return [];
+    if (!Array.isArray(dietaryRestrictions)) return [dietaryRestrictions];
+    return dietaryRestrictions;
+}
 
 
 
@@ -559,5 +597,9 @@ export default {
     averageRestaurantWaitTime,
     isFutureDateTime,
     checkCommentLength,
-    checkreviewlength
+    checkreviewlength,
+    addHasReviewsKey,
+    clearAdminSession,
+    buildDietaryCheckBox,
+    fixDietaryInput
 };

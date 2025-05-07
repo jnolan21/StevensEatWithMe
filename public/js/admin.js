@@ -7,10 +7,17 @@
     let typesOfFood = document.getElementById('restaurant-typeOfFood');
     let imageURL = document.getElementById('restaurant-imageURL');
     let serverForm = document.getElementById('restaurant-create-form') || document.getElementById('restaurant-edit-form');
+    let menuItemForm = document.getElementById('menuItem-create-form') || document.getElementById('menuItem-edit-form');
     let errorList = document.getElementById('restaurant-errors');
     let submitButton = document.getElementById('restaurant-button');
+    // Menu item input
+    let menuItemName = document.getElementById('menuItem-name');
+    let menuItemDescription = document.getElementById('menuItem-description');
+    let menuItemErrorList = document.getElementById('menuItem-errors');
+    let menuItemSubmitButton = document.getElementById('menuItem-button');
   
     let errors = [];
+
     // Checks the string
     const checkString = (str, str_name) => {
         if (str === undefined) return errors.push(`${str_name} cannot be empty.`);
@@ -159,6 +166,52 @@
           } else {
             /* If there are no errors, disable the submit button to prevent multiple requests */
             submitButton.disabled = true;
+          }
+
+      });
+    }
+
+
+    // If a form was submitted, this executes
+    if (menuItemForm) {
+      menuItemForm.addEventListener('submit', (event) => {
+          errors = [];
+          // Make sure all previous errors in the list are removed (if they exist)
+          menuItemErrorList.innerHTML = '';
+          // Hide the error list
+          if (menuItemErrorList) menuItemErrorList.hidden = true;
+    
+          // Check all input
+          let nameValue = menuItemName.value.trim();
+          let descriptionValue = menuItemDescription.value.trim();
+          nameValue = checkString(nameValue, "Menu item name");
+          descriptionValue = checkString(descriptionValue, "Menu item description");
+          // Get all checked dietary restriction values
+          let selectedDietaryRestrictions = document.querySelectorAll('input[name="dietaryRestrictions"]:checked');
+          let dietaryRestrictions = [];
+          // Convert the node list, into a list of the values
+          for (let i = 0; i < selectedDietaryRestrictions.length; i++) {
+            dietaryRestrictions.push(selectedDietaryRestrictions[i].value);
+          }
+          dietaryRestrictions = checkDietaryRestrictions(dietaryRestrictions);
+
+          // Display all errors that have been caught
+          if (errors.length > 0) {
+    
+            // Since there are errors, we prevent the form from going to the server
+            event.preventDefault();
+            // Display all errors found!
+            for (let i = 0; i < errors.length; i++) {
+              let myLi = document.createElement('li');
+              myLi.classList.add('error');
+              myLi.innerHTML = errors[i];
+              menuItemErrorList.appendChild(myLi);
+            }
+            // Display the error list
+            menuItemErrorList.hidden = false;
+          } else {
+            /* If there are no errors, disable the submit button to prevent multiple requests */
+            menuItemSubmitButton.disabled = true;
           }
 
       });
