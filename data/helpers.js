@@ -193,7 +193,7 @@ function checkHoursOfOperation(ho) {
         throw new Error("Hours of Operation must have Monday-Sunday");
     }
     
-    const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm])) - ((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$/;
+    const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AP][M])) - ((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AP][M]))$/;
     // Check that each value is a string
     for (let [day, time] of dayTimePairs) {
         if (typeof time !== 'string') throw new Error("Daily hours of operation must be a string.");
@@ -210,7 +210,7 @@ function checkHoursOfOperation(ho) {
 }
 
 function checkHours(time) {
-    const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$/
+    const regex = /^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AP][M]))$/
     if(time.toLowerCase() !== "closed" && (typeof time !== 'string' || !regex.test(time))) {
         throw new Error("Time must be in the form HH:MM AM/PM");
     }
@@ -550,7 +550,6 @@ export default {
     upTooThree,
     checkMeetUpTime,
     formatAndCheckRSVPS,
-    checkHoursOfOperation,
     stringToArray,
     stringArrayToString,
     checkDietaryRestrictions,
