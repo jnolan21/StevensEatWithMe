@@ -681,7 +681,83 @@ try {
 }
 
 //add breakfast items 
+// createMenuItem() (egg sandwich)
+let eggsand;
+try {
+    eggsand = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Egg Sandwich",
+        "Fried eggs on a kaiser roll or plain bagel. ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
 
+// createMenuItem() (egg cheese sandwich)
+let eggsandcheese;
+try {
+    eggsandcheese = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Egg & Cheese Sandwich",
+        "Fried eggs on a kaiser roll or plain bagel with American, Swiss, or Provolone Cheese. ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (egg cheese and meatsandwich)
+let eggsandcheesemeat;
+try {
+    eggsandcheesemeat = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Egg & Cheese Sandwich with Meat",
+        "Fried eggs on a kaiser roll or plain bagel with American, Swiss, or Provolone Cheese. Choice of bacon, pork sausage patty, ham, or taylor ham ",
+        ["Nut-free"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (pancakes)
+let pancakespierce;
+try {
+    pancakespierce = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Pancakes ",
+        "Pancakes served with syrup. ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (french toast)
+let frenchToastPierce;
+try {
+    frenchToastPierce = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " French Toast ",
+        "French toast served with syrup. ",
+        ["Nut-free", "Vegetarian"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (soup)
+let soupOfDay;
+try {
+    soupOfDay = await menuItems.createMenuItem(
+        pierceDiningHall._id,
+        " Soup of the Day ",
+        "Varies between Broccoli Cheddar Soup, Sausage & Escarole Soup, Chicken Noodle, etc. ",
+        []
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
 //////YELLAS MENU ITEMS////////////////////
 
 
