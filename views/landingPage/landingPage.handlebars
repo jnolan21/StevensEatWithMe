@@ -1,4 +1,3 @@
-<article class="landingPage">
     <div class = "landingBox">
         {{#unless isLoggedIn}}
         <p><a href="/users/signup">Signup</a></p> <!--make this hidden if theyre already logged in and give them a user profile they can click on or just disappear-->
@@ -6,20 +5,20 @@
         {{/unless}}
     </div>
 
-</article>
 <div id = "restaurants">
     <h1 class = "landingH1"> Top Dining Options </h1>
 
 
     {{#each topRestaurants}}
+    <div class = "restaurant_box" >
     <a href = "/diningList/{{this._id}}">
-        <div class = "restaurant_box" >
-            <img src = {{this.imageURL}} class = "restaurant_img" alt = {{this.name}} >
+        
+            <img src = {{this.imageURL}} class = "restaurant_img" alt = "{{this.name}}" >
             <h2 class = "restNameLink">{{this.name}}</h2>
     </a>    
         <ul>
             {{#each topMenuItems}}
-            <li>{{name}}</li>
+            <li>{{this.name}}</li>
             {{/each}}
         </ul>
     </div>
