@@ -218,13 +218,4 @@
     }
 
 
-    // Validation for the DELETE review button
-    // Get each form with class='deleteReviewForm' and add an event listener that executes when it is submitted
-    document.querySelectorAll('.deleteReviewForm').forEach((reviewForm) => {
-      reviewForm.addEventListener('submit', (event) => {
-        const reviewId = reviewForm.querySelector()
-      })
-    })
-
-
 })();

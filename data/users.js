@@ -151,7 +151,7 @@ const createAdminUser = async (
 // Get an array of all user objects
 const getAllUsers = async () => {
     const userCollection = await users();
-    const userList = userCollection.find({}).toArray();
+    const userList = userCollection.find({}).sort({username: 1}).toArray();
     return userList;
 }
 
