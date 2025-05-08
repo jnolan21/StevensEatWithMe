@@ -326,21 +326,19 @@ const getFollowingList = async(id) => {
 }
 
 
-/* Get all of the user's reviews
-// ****************************************** INCOMPLETE ******************************************
-const getAllUserReviews = async (id) => {
+const changeAdminPrivileges = async(id) => {
     id = helper.checkId(id);
-    const allUsers = await getAllUsers();
-    // Verify that user with 'id' exists
-    let idFound = false;
-    for (let i = 0; i < allUsers.length; i++) {
-        if (allUsers[i]._id.toString() === id) idFound = true;
-    }
-    if (!idFound) throw new Error('User id not found!');
-
+    let user = await getUserById(id);
+    if (user.isAdmin) user.isAdmin = false;
+    else user.isAdmin = true;
+    const userCollection = await users();
+    const update = await userCollection.updateOne(
+        {_id: new ObjectId(id)},
+        {$set: {isAdmin: user.isAdmin}}
+    );
+    if (update.modifiedCount === 0) throw new Error(`Failed to updated admin status for '${user.username}'.`);
+    return user.isAdmin;
 }
-// ****************************************** INCOMPLETE ******************************************
-*/
 
 
 
@@ -358,5 +356,6 @@ export default {
     addFriend,
     removeFriend,
     getAllPeopleFollowingThisUser,
-    getFollowingList
+    getFollowingList,
+    changeAdminPrivileges
 }
