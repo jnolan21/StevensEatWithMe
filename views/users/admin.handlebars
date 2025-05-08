@@ -80,12 +80,28 @@
                     {{#each allUsers}}
                         <li class="reviewLi">
                             <a href="/profile/{{this._id}}">Username: {{this.username}}</a>
-                            <p><span class="reviewSpan">Name:</span> {{this.firstName}}</p>
+                            <p><span class="reviewSpan">First Name:</span> {{this.firstName}}</p>
+                            <p><span class="reviewSpan">Last Name:</span> {{this.lastName}}</p>
                             {{#if this.isAdmin}}
                                 <p><span class="reviewSpan">Role: </span>Admin</p>
                             {{else}}
                                 <p><span class="reviewSpan">Role: </span>Regular User</p>
                             {{/if}}
+                            <div class="buttonGroup">
+                                {{#if this.isAdmin}}
+                                <!-- Revoke admin privileges -->
+                                <form action="/admin/changeAdmin/{{this._id}}" method="POST" class="deleteRestaurantForm">
+                                    <input type="hidden" name="userId" value="{{this._id}}">
+                                    <button type="submit" class="EditandDeleteButton">Revoke Admin Privileges</button>
+                                </form>
+                                {{else}}
+                                <!-- Give admin privileges -->
+                                <form action="/admin/changeAdmin/{{this._id}}" method="POST" class="editRestaurantForm">
+                                    <input type="hidden" name="userId" value="{{this._id}}">
+                                    <button type="submit" class="EditandDeleteButton">Grant Admin Privileges</button>
+                                </form>
+                                {{/if}}
+                            </div>
                         </li>
                     {{/each}}
                 </ul>

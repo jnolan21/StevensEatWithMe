@@ -69,6 +69,10 @@ router
     let allUsers = [];
     try {
         allUsers = await userData.getAllUsers();
+        // Remove the current user from 'allUsers'
+        allUsers = allUsers.filter((user) => {
+            return user._id.toString() !== req.session.user._id.toString();
+        })
     } catch (e) {
         return res.status(500).render('error', {
             title: "500 Internal Server Error",
@@ -620,6 +624,31 @@ router
         return res.status(500).redirect('/admin');
     }
   });
+
+
+
+/* Remove admin privileges */
+router 
+.post('/changeAdmin/:id', async (req, res) => {
+    //receive menuItemId
+    let id = req.params.id;
+    try {
+        id = helper.checkId(id);
+    } catch (e) {
+        req.session.message = e.message;
+        return res.status(400).redirect('/admin');
+    }
+    let isAdmin;
+    try {
+        isAdmin = await userData.changeAdminPrivileges(id);
+    } catch (e) {
+        req.session.message = e.message;
+        return res.status(400).redirect('/admin');
+    }
+    if (isAdmin) req.session.message = 'Admin privileges granted.'
+    else req.session.message = 'Admin privilges revoked.'
+    return res.redirect('/admin');
+});
 
 
 export default router;
