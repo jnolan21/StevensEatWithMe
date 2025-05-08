@@ -185,7 +185,10 @@ const getAllReviewsWithInfo = async () => {
         }
         reviews.push(allReviews[i]);
     }
-    return reviews;
+    // Sort the reviews by username
+    return reviews.sort((review1, review2) => {
+        return review1.username.toLowerCase().localeCompare(review2.username.toLowerCase())
+    });
 }
 
 
