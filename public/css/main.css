@@ -559,29 +559,6 @@ footer{
   overflow-x: auto; /* Allow the user to scroll horizontally */
 }
 
-/*
-.admin-leftside, .admin-center, .admin-rightside {
-  flex: 1 1 33%;
-  min-width: 350px;
-}
-
-.admin-leftside {
-  max-width: 30%;
-  align-items: center;
-}
-
-.admin-center {
-  max-width: 40%;
-  align-items: center;
-}
-
-.admin-rightside {
-  max-width: 30%;
-  align-items: center;
-}
-*/
-
-
 .admin-data-sections section {
   min-width: 300px;
   max-width: 350px;
@@ -799,4 +776,33 @@ footer{
   color: red;
   font-size: 0.9rem;
   margin-top: 0.3rem;
+}
+
+.verifyEmailPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 300px;
+}
+
+.verifyEmailPage h1 {
+  color: darkred;
+  margin-bottom: 20px;
+}
+
+.verifyEmailPage a {
+  font-weight: bold;
+  color: darkred;
+  padding: 10px;
+  border: 1px solid darkred;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+.verifyEmailPage a:hover {
+  background-color: darkred;
+  color: white;
 }
