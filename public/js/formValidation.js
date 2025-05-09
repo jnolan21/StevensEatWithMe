@@ -137,6 +137,19 @@ const validateId = (id, field) => {
   return id;
 };
 
+let selectedRadio = null;
+let anonymous = document.getElementById('anonymous'); 
+anonymous.addEventListener('click', function () {
+  if (selectedRadio === this) {
+    this.checked = false;
+    selectedRadio = null;
+  } else {
+    selectedRadio = this;
+    }
+    //console.log(anonymous.checked); 
+});
+
+
 
   // create review form validation
 const reviewForm = document.getElementById('review-form');
@@ -193,6 +206,7 @@ if (reviewForm) {
   } catch(e) {
     errors.Time = e.message || "Enter a valid time";
   }
+  
 
   if (Object.keys(errors).length > 0) {
     for (const key in errors) {

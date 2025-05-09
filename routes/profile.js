@@ -163,7 +163,8 @@ router
             menuItem: menu
         })
     } catch (e) {
-        return res.status(500).json({error: e.message});
+        req.session.message = e.message;
+        return res.redirect('/profile');
     }
     
   })
@@ -176,6 +177,7 @@ router
     let hour = req.body.waitTimeHour;
     let minute = req.body.waitTimeMinute;
     let waitTime = `${hour}h ${minute}min`;
+    let anonymous = req.body.anonymous;
 
     //console.log(restaurantId + " " + menuId + " " + review + " " + rating + " " + waitTime);
 
@@ -186,7 +188,8 @@ router
     rating = helper.checkReviewRating(rating);
     waitTime = helper.checkWaitTime(waitTime);
     } catch(e) {
-        return res.status(500).json({error: e.message});
+        req.session.message = e.message;
+        return res.redirect('/profile');
     }
 
 
@@ -197,17 +200,20 @@ router
                                         menuId,
                                         review,
                                         rating,
-                                        waitTime );
+                                        waitTime,
+                                        anonymous);
         } else {
             await reviews.createRestaurantReview(req.session.user._id, 
                                         restaurantId,
                                         review,
                                         rating,
-                                        waitTime);
+                                        waitTime,
+                                        anonymous);
         }
 
         return res.redirect('/profile');
-    } catch(e) {req.session.message = e.message || "Duplicate Review.";
+    } catch(e) {
+        req.session.message = e.message || "Duplicate Review.";
         return res.redirect('/profile');
     }
 
