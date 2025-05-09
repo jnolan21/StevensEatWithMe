@@ -269,19 +269,6 @@ try {
     console.log(`${e.message}`);
 }
 
-// createMenuItem() (Grits)
-let grits;
-try {
-    grits = await menuItems.createMenuItem(
-        acup._id,
-        " Grits ",
-        "Creamy Southern-style cornmeal, slow-cooked to a smooth finish."
-        ["Vegan"]
-    );
-} catch (e) {
-    console.log(`${e.message}`);
-}
-
 
 //////tu taco MENU ITEMS////////////////////
 
