@@ -177,7 +177,7 @@ router
     let hour = req.body.waitTimeHour;
     let minute = req.body.waitTimeMinute;
     let waitTime = `${hour}h ${minute}min`;
-    let anonymous = req.body.anonymous;
+    let anonymous = req.body.anonymous || "false";
 
     //console.log(restaurantId + " " + menuId + " " + review + " " + rating + " " + waitTime);
 
@@ -213,7 +213,8 @@ router
 
         return res.redirect('/profile');
     } catch(e) {
-        req.session.message = e.message || "Duplicate Review.";
+        console.log(e);
+        req.session.message = e || "Duplicate Review.";
         return res.redirect('/profile');
     }
 

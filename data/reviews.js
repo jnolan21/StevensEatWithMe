@@ -24,6 +24,9 @@ const createMenuItemReview = async (
     helper.checkreviewlength(review)
     helper.checkReviewRating(rating);
     waitTime = helper.checkWaitTime(waitTime);
+    if (anonymous !== 'true' && anonymous !== 'false') throw "anonymous must be a boolean"
+    if (anonymous === 'true') anonymous = true;
+    else anonymous = false;
     // Validate that the user, restaurant, and menu item all exist AND add it the menu item
     let user = await userData.getUserById(userId);
     let restaurant = await restaurantData.getRestaurantById(restaurantId);
@@ -104,7 +107,9 @@ const createRestaurantReview = async (
     helper.checkreviewlength(review);
     helper.checkReviewRating(rating);
     waitTime = helper.checkWaitTime(waitTime);
-    if (typeof anonymous !== 'boolean') throw "anonymous must be a boolean"
+    if (anonymous !== 'true' && anonymous !== 'false') throw "anonymous must be a boolean"
+    if (anonymous === 'true') anonymous = true;
+    else anonymous = false;
     // Validate that the user, restaurant, and menu item all exist AND add it the menu item
     let user = await userData.getUserById(userId);
     let restaurant = await restaurantData.getRestaurantById(restaurantId);
