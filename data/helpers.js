@@ -41,6 +41,7 @@ function checkUsername(username) {
     if (typeof username !== 'string') throw new Error(`Username must be a string.`);
     username = username.trim();
     if (username.length === 0) throw new Error(`Username cannot be an empty string.`);
+    if (username.length > 50) throw new Error(`Username can have no more than 50 characters.`);
     for (let i = 0; i < username.length; i++) {
         if (!('a' <= username[i] && username[i] <= 'z') && !('A' <= username[i] && username[i] <= 'Z') && !('0' <= username[i] && username[i] <= '9'))
             throw new Error(`Username can only contain letters and numbers.`);
@@ -54,8 +55,8 @@ function checkEmail(email) {
     if (typeof email !== 'string') throw new Error('Email must be a string.');
     email = email.trim();
     if (email.length === 0) throw new Error('Email cannot be an empty string.');
-    if (email[0] === '@' || email.length < 12) throw new Error('Invalid email.');
-    if (email.substring((email.length - 12)) !== '@stevens.edu') throw new Error('Email must be a Stevens email (@stevens.edu).');
+    if (email[0] === '@' || email.length < 12 || email.length > 256) throw new Error('Invalid email.');
+    if (email.substring((email.length - 12)).toLowerCase() !== '@stevens.edu') throw new Error('Email must be a Stevens email (@stevens.edu).');
     return email.toLowerCase();
 }
 

@@ -9,15 +9,15 @@
     let submitButton = document.getElementById('login-button');
   
     let errors = [];
-    // Checks the user's email
-    const checkEmail = (email) => {
-        if (email === undefined) return errors.push("Please enter your email.");
-        if (typeof email !== 'string') return errors.push("Invalid email or password.");
-        email = email.trim();
-        if (email.length === 0) return errors.push("Please enter your email.");
-        if (email[0] === '@' || email.length < 12) return errors.push("Invalid email or password.");
-        if (email.substring((email.length - 12)) !== '@stevens.edu') return errors.push("Invalid email or password.");
-    };
+  // Checks the user's email
+  const checkEmail = (email) => {
+      if (email === undefined) return errors.push("Email field cannot be empty.");
+      if (typeof email !== 'string') return errors.push("Email field cannot be empty.");
+      email = email.trim();
+      if (email.length === 0) return errors.push("Email field cannot be empty.");
+      if (email[0] === '@' || email.length < 12 || email.length > 256) return errors.push("Invalid email.");
+      if (email.substring((email.length - 12)).toLowerCase() !== '@stevens.edu') return errors.push("Email must be a valid Stevens email (@stevens.edu).");
+  };
 
     // Checks the user's password
     const checkPassword = (password) => {

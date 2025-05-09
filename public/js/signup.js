@@ -28,8 +28,8 @@
       if (typeof email !== 'string') return errors.push("Email field cannot be empty.");
       email = email.trim();
       if (email.length === 0) return errors.push("Email field cannot be empty.");
-      if (email[0] === '@' || email.length < 12) return errors.push("Invalid email.");
-      if (email.substring((email.length - 12)) !== '@stevens.edu') return errors.push("Email must be a valid Stevens email (@stevens.edu).");
+      if (email[0] === '@' || email.length < 12 || email.length > 256) return errors.push("Invalid email.");
+      if (email.substring((email.length - 12)).toLowerCase() !== '@stevens.edu') return errors.push("Email must be a valid Stevens email (@stevens.edu).");
   };
 
   // Check's the user's username
@@ -38,6 +38,7 @@
     if (typeof username !== 'string') return errors.push(`Username must be a string.`);
     username = username.trim();
     if (username.length === 0) return errors.push(`Username cannot be an empty string.`);
+    if (username.length > 50) return errors.push(`Username can have no more than 50 characters.`);
     for (let i = 0; i < username.length; i++) {
         if (!('a' <= username[i] && username[i] <= 'z') && !('A' <= username[i] && username[i] <= 'Z') && !('0' <= username[i] && username[i] <= '9'))
             return errors.push(`Username can only contain letters and numbers.`);

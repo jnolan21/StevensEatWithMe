@@ -3,40 +3,47 @@ const router = Router();
 import userData from '../data/users.js';
 import helper from '../data/helpers.js';
 import bcrypt from 'bcrypt'
-const saltRounds = 16;
-//import crypto from 'crypto'
+import xss from 'xss'
 
 
 // VERIFY EMAIL route
 router
   .route('/verifyEmail')
   .get(async (req, res) => {
+    // Determine if an admin is logged in
+    let isAdmin;
+    if (req.session.user) {
+      if (req.session.user.isAdmin) isAdmin = true;
+      else isAdmin = false;
+    }
+    // Get the token from the verification email link
+    const verificationToken = xss(req.query.token);
+    if (!verificationToken) {
+      return res.status(400).render('error', {
+        title: "EatWithMe Error Page",
+        error: 'Verification token is missing.',
+        status: 400
+      });
+    }
     try {
-      // Determine if an admin is logged in
-      let isAdmin;
-      if (req.session.user) {
-        if (req.session.user.isAdmin) isAdmin = true;
-        else isAdmin = false;
-      }
-      // Get the token from the verification email link
-      const verificationToken = req.query.token;
       let signupUser = await userData.getUserByVerificationToken(verificationToken);
       // User could not be found
       if (!signupUser) {
-        return res.status(404).json({
-          title: "404 Page Not Found",
-          error: "User Not Found",
-          status: 404});
+        return res.status(404).render('error', {
+          title: "EatWithMe Error Page",
+          error: 'Verification link is invalid.',
+          status: 404
+        });
       }
       // Update the user signing up to mark them as verified!
       signupUser = await userData.verifyUserSignup(signupUser._id);
-      res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user, isAdmin});
-      return;
+      return res.redirect('/users/login');
     } catch (e) {
-      return res.status(500).json({
-        title: "500 Internal Server Error",
+      return res.status(500).render('error', {
+        title: "EatWithMe Error Page",
         error: e.message,
-        status: 500});
+        status: 500
+      });
     }
   });
 
@@ -53,12 +60,13 @@ router
         if (req.session.user.isAdmin) isAdmin = true;
         else isAdmin = false;
       }
-      res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript', isLoggedIn: !!req.session.user, isAdmin});
+      return res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript', isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
-      return res.status(500).json({
-        title: "500 Internal Server Error",
-        error: e.message,
-        status: 500});
+      return res.status(500).render('error', {
+        title: "EatWithMe Error Page",
+        error: [e.message],
+        status: 500
+      });
     }
   })
   .post(async (req, res) => {
@@ -69,16 +77,23 @@ router
       else isAdmin = false;
     }
     // Create a new user via signup page
-    let user = req.body;
+    let user = {
+      firstName: xss(req.body.firstName),
+      lastName: xss(req.body.lastName),
+      email: xss(req.body.email),
+      username: xss(req.body.username),
+      password: xss(req.body.password),
+      passwordConfirm: xss(req.body.passwordConfirm)
+    }
     let errors = [];
     // Validate all user fields
     try {
-      user.firstName = helper.checkName(user.firstName, 'firstName', 'POST /users');
+      user.firstName = helper.checkName(user.firstName, 'First name');
     } catch (e) {
       errors.push(e.message);
     }
     try {
-      user.lastName = helper.checkName(user.lastName, 'lastName', 'POST /users');
+      user.lastName = helper.checkName(user.lastName, 'Last name');
     } catch (e) {
       errors.push(e.message);
     }
@@ -106,7 +121,7 @@ router
     if (user.password !== user.passwordConfirm) errors.push("Password and confirm password must match.");
     // If there are errors, reload the signup page and display the errors
     if (errors.length > 0) {
-      res.render('users/signup', {
+      return res.status(400).render('users/signup', {
         title: "EatWithMe signup",
         user: user,
         errors: errors,
@@ -115,7 +130,6 @@ router
         isLoggedIn: !!req.session.user,
         isAdmin
       });
-      return;
     }
     // Get all users
     let allUsers;
@@ -169,14 +183,12 @@ router
     try {
       // Send the verification email
       await helper.sendVerificationEmail(newUser._id);
-      res.render('users/verify', {title: "EatWithMe login", partial: 'signupScript', isLoggedIn: !!req.session.user, isAdmin});
-      // Redirect the '/verify' route and wait for user to click the email
-      //res.render('users/verify', {email: newUser.email});
+      return res.render('users/verify', {title: "EatWithMe Verify Email", isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
       return res.status(500).render('users/signup', {
         title: "EatWithMe signup",
         user: user,
-        errors: [e.message],
+        errors: ['There was a problem sending the verification email. Please try again.'],
         hasErrors: true,
         partial: 'signupScript',
         isLoggedIn: !!req.session.user,
@@ -201,13 +213,10 @@ router
     try {
       res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
-      return res.status(500).render('users/login', {
-        title: "EatWithMe login",
-        errors: [e.message],
-        partial: 'loginScript',
-        hasErrors: true,
-        isLoggedIn: !!req.session.user,
-        isAdmin
+      return res.status(500).render('error', {
+        title: "EatWithMe Error Page",
+        error: [e.message],
+        status: 500
       });
     }
   })
@@ -219,7 +228,10 @@ router
       if (req.session.user.isAdmin) isAdmin = true;
       else isAdmin = false;
     }
-    const user = req.body;
+    const user = {
+      email: xss(req.body.email),
+      password: xss(req.body.password)
+    }
     let errors = [];
     let email, password;
     try {
@@ -228,16 +240,16 @@ router
       errors.push(e.message);
     }
     try {
-      password = helper.checkString(user.password, 'password');
+      password = helper.checkPassword(user.password);
     } catch (e) {
       errors.push(e.message);
     }
     if (errors.length > 0) {
       // Render login if invalid input supplied
-      return res.render('users/login', {
+      return res.status(400).render('users/login', {
         title: "EatWithMe login",
-        email: email,
-        errors: errors,
+        email: user.email,
+        errors: ['Invalid email or password.'],
         hasErrors: true,
         partial: 'loginScript',
         isLoggedIn: !!req.session.user,
@@ -267,14 +279,14 @@ router
             return res.redirect(`/profile`); // Redirect the user to the profile route
           } else {
             // Reload the login page if the user is not verified
-            errors.push("Invalid login credentials or account not verified.");
+            errors.push("Invalid email or password.");
             break;
           }
         }
       }
-      if (errors.length === 0) errors.push('Invalid login credentials.');
+      if (errors.length === 0) errors.push('Invalid email or password.');
     } catch (e) {
-      errors.push(e.message)
+      errors.push('Server error during login. Please try again.');
     }
     // Render login if invalid input supplied
     return res.status(403).render('users/login', {
