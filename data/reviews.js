@@ -13,7 +13,8 @@ const createMenuItemReview = async (
     menuItemId,
     review,
     rating, // rating should be a number 0 - 5
-    waitTime
+    waitTime,
+    anonymous
 ) => {
     // Verify all the input
     userId = helper.checkId(userId);
@@ -33,7 +34,8 @@ const createMenuItemReview = async (
         menuItemId: menuItemId,
         review: review,
         rating: rating,
-        waitTime: waitTime
+        waitTime: waitTime,
+        anonymous: anonymous
     };
     const userCollection = await users();
     const rCollection = await restaurants();
@@ -92,7 +94,8 @@ const createRestaurantReview = async (
     restaurantId,
     review,
     rating, // rating should be a number 0 - 5
-    waitTime
+    waitTime,
+    anonymous
 ) => {
     // Verify all the input
     userId = helper.checkId(userId);
@@ -101,6 +104,7 @@ const createRestaurantReview = async (
     helper.checkreviewlength(review);
     helper.checkReviewRating(rating);
     waitTime = helper.checkWaitTime(waitTime);
+    if (typeof anonymous !== 'boolean') throw "anonymous must be a boolean"
     // Validate that the user, restaurant, and menu item all exist AND add it the menu item
     let user = await userData.getUserById(userId);
     let restaurant = await restaurantData.getRestaurantById(restaurantId);
@@ -110,7 +114,8 @@ const createRestaurantReview = async (
         menuItemId: "",
         review: review,
         rating: rating,
-        waitTime: waitTime
+        waitTime: waitTime,
+        anonymous: anonymous
     };
 
     const userCollection = await users();

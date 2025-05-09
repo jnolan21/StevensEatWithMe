@@ -71,7 +71,12 @@
     <ol>
         {{#each reviews}}
         <li>
+            {{#if anonymous}} 
+            <p>Anonymous</p>
+            {{/if}}
+            {{#unless anonymous}}
             <p>Name: {{this.name}}</p> 
+            {{/unless}}
             {{#if this.menuItemName}}
             <p>Item: {{this.menuItemName}}</p>
             {{/if}}

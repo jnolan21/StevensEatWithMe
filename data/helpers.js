@@ -104,7 +104,6 @@ function checkWaitTime(time) {
 
     
     if (m < 0 || m > 59 || h < 0) throw "Hours must be greater than 0 and minutes must be between 0 and 59.";
-    if(h>5) throw "Hours cannot be greater than 5";
     return time;
 }
 
