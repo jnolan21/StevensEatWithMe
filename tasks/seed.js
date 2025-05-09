@@ -177,6 +177,111 @@ try {
     console.log(`${e.message}`);
 }
 
+// createRestaurant() (ACUP)
+let acup;
+try {
+    acup = await restaurants.createRestaurant(
+        "   America's Cup: Starbucks  ",
+        " Samuel C. Williams Library, 1st Floor ",
+        [],
+        [" American "],
+        {
+            "Sunday": "Closed",
+            "Monday": "8:00AM - 6:00PM",
+            "Tuesday": "8:00AM - 6:00PM",
+            "Wednesday": "8:00AM - 6:00PM",
+            "Thursday": "8:00AM - 6:00PM",
+            "Friday": "8:00AM - 6:00PM",
+            "Saturday": "Closed"
+        },
+        "https://api.dineoncampus.com/files/section_banner/6a236224-dc5f-4641-bae6-d6e9f8b8174d.jpg",
+        ["Vegan", "Vegetarian", "Dairy-free", "Nut-free"]
+    );
+} catch (e) {
+    console.log("ACUP ERROR")
+    console.log(`${e.message}`);
+}
+
+
+//////ACUP MENU ITEMS////////////////////
+
+// createMenuItem() (Vanilla Oat Waffle)
+let vanillaOatWaffle;
+try {
+    vanillaOatWaffle = await menuItems.createMenuItem(
+        acup._id,
+        " Vanilla Oat Waffle ",
+        "Made with: Oat Milk, Gluten Free Oats, Maple Syrup, Canola Oil, Brown Flax Seeds, Baking Powder, Pure Vanilla Extract, Apple Cider Vinegar, Baking Soda.",
+        ["Vegan"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (Creat Your Own Omelet)
+let omelet;
+try {
+    omelet = await menuItems.createMenuItem(
+        acup._id,
+        " Create Your Own Omelet ",
+        "Choose eggs or egg whites and customize with fresh veggies, meats, cheese, or tofu: spinach, broccoli, tomatoes, onions, mushrooms, bell pepper, cheddar, ham, bacon, sausage, tater tots, or tofu.",
+        ["Vegeterian", "Vegan"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (Create Your Own Salad)
+let salad;
+try {
+    salad = await menuItems.createMenuItem(
+        acup._id,
+        " Create Your Own Salad ",
+        'Choose a base of kale, spring mix, romaine, spinach, or arugula. Add an optional protein like tofu, grilled chicken, or hummus. Pick 4 toppings such as feta, avocado, or chickpeas. Finish with your choice of dressing.'        ["Vegeterian", "Vegan"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (Oatmeal)
+let oatmeal;
+try {
+    oatmeal = await menuItems.createMenuItem(
+        acup._id,
+        " Oatmeal ",
+        "Warm, hearty oats served plain or with your favorite toppings."
+        ["Vegan"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (Grits)
+let grits;
+try {
+    grits = await menuItems.createMenuItem(
+        acup._id,
+        " Grits ",
+        "Creamy Southern-style cornmeal, slow-cooked to a smooth finish."
+        ["Vegan"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (Grits)
+let grits;
+try {
+    grits = await menuItems.createMenuItem(
+        acup._id,
+        " Grits ",
+        "Creamy Southern-style cornmeal, slow-cooked to a smooth finish."
+        ["Vegan"]
+    );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
 
 //////tu taco MENU ITEMS////////////////////
 
