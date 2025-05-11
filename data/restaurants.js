@@ -125,6 +125,8 @@ const updateRestaurant = async (
     imageURL = helper.checkString(imageURL, "Image URL");
     dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
     // Update the restaurant
+    let checkRestaurantName = await getRestaurantByName(name);
+    if (checkRestaurantName !== null && id !== checkRestaurantName._id.toString()) throw new Error(`Restaurant already exists with the name ${checkRestaurantName.name}.`);
     let restaurant = await getRestaurantById(id);
     if (!restaurant) throw new Error("Restaurant not found.");
     const rCollection = await restaurants();
@@ -138,7 +140,8 @@ const updateRestaurant = async (
             imageURL: imageURL,
             dietaryRestrictions: dietaryRestrictions}}
     );
-    if (updatedInfo.modifiedCount === 0) throw new Error("Failed to update the restaurant.");
+    if (updatedInfo.matchedCount === 0) throw new Error("Failed to update the restaurant.");
+    if (!updatedInfo.acknowledged) throw new Error('MongoDB failed to perform the restaurant update.');
     const returnRestaurant = await getRestaurantById(id);
     return returnRestaurant;
 }

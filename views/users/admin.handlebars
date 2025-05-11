@@ -306,19 +306,19 @@
                             <!-- Name -->
                             <div class="loginForm">
                                 <label for="restaurant-name">Name:</label> 
-                                <input type="text" id="restaurant-name" name="name" placeholder="Name..." value="{{name}}" class="login-input">
+                                <input type="text" id="restaurant-name" name="name" placeholder="Name..." value="{{restaurant.name}}" class="login-input">
                             </div>
 
                             <!-- Location -->
                             <div class="loginForm">
                                 <label for="restaurant-location">Location:</label>
-                                <input type="text" id="restaurant-location" name="location" placeholder="Location..." value="{{location}}" class="login-input">
+                                <input type="text" id="restaurant-location" name="location" placeholder="Location..." value="{{restaurant.location}}" class="login-input">
                             </div>
 
                             <!-- Types of Food -->
                             <div class="loginForm">
                                 <label for="restaurant-typeOfFood">Types of food:</label>
-                                <input type="text" id="restaurant-typeOfFood" name="typeOfFood" placeholder="Types of food..." value="{{typeOfFood}}" class="login-input">
+                                <input type="text" id="restaurant-typeOfFood" name="typeOfFood" placeholder="Types of food..." value="{{restaurant.typeOfFood}}" class="login-input">
                             </div>
 
                             <!-- Hours of Operation -->
@@ -328,7 +328,7 @@
                                         <legend>Hours of operation:</legend>
                                         {{#each days}}
                                             <label for="restaurant-hoursOfOperation-{{this}}">{{this}}:</label>
-                                            <input type="text" id="restaurant-hoursOfOperation-{{this}}" name="hoursOfOperation[{{this}}]" placeholder="ex. '8:00AM - 5:00PM' or 'closed'" value="{{lookup ../hoursOfOperation this}}" class="login-input">
+                                            <input type="text" id="restaurant-hoursOfOperation-{{this}}" name="hoursOfOperation[{{this}}]" placeholder="ex. '8:00AM - 5:00PM' or 'closed'" value="{{lookup ../restaurant.hoursOfOperation this}}" class="login-input">
                                         {{/each}}
                                     </div>
                                 </fieldset>
@@ -337,7 +337,7 @@
                             <!-- Image URL -->
                             <div class="loginForm">
                                 <label for="restaurant-imageURL">Image URL:</label>
-                                <input type="text" id="restaurant-imageURL" name="imageURL" placeholder="Image URL..." value="{{imageURL}}" class="login-input">
+                                <input type="text" id="restaurant-imageURL" name="imageURL" placeholder="Image URL..." value="{{restaurant.imageURL}}" class="login-input">
                             </div>
 
                             <!-- Dietary Restrictions -->
@@ -498,19 +498,19 @@
                             <label for="menuItem-restaurantId">Restaurant:</label>
                             <select id="menuItem-restaurantId" name="restaurantId" class="login-input">
                                 {{#each allRestaurants}}
-                                    <option value="{{this._id}}">{{this.name}}</option>
+                                    <option value="{{this._id}}" {{#if this.isSelected}}selected{{/if}}>{{this.name}}</option>
                                 {{/each}}
                             </select>
                             <!-- Name -->
                             <div class="loginForm">
                                 <label for="menuItem-name">Name:</label> 
-                                <input type="text" id="menuItem-name" name="name" placeholder="Name..." value="{{name}}" class="login-input">
+                                <input type="text" id="menuItem-name" name="name" placeholder="Name..." value="{{menuItem.name}}" class="login-input">
                             </div>
 
                             <!-- Description -->
                             <div class="loginForm">
                                 <label for="menuItem-description">Description:</label>
-                                <input type="text" id="menuItem-description" name="description" placeholder="Description..." value="{{description}}" class="login-input">
+                                <input type="text" id="menuItem-description" name="description" placeholder="Description..." value="{{menuItem.description}}" class="login-input">
                             </div>
 
                             <!-- Dietary Restrictions -->
