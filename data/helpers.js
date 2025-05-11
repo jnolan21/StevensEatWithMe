@@ -200,7 +200,7 @@ function checkHoursOfOperation(ho) {
     for (let [day, time] of dayTimePairs) {
         if (typeof time !== 'string') throw new Error("Daily hours of operation must be a string.");
         time = time.trim();
-        if (time === '') continue;
+        if (time === '') throw new Error(`Operating times for ${day} cannot be empty.`);
         if (time.toLowerCase() === 'closed') {
             ho[day] = 'closed';
             continue;
@@ -586,6 +586,13 @@ const xssForArrays = (arr) => {
     return arr.map((element) => xss(element));
 }
 
+const checkImgURL = (imageURL) => {
+    imageURL = checkString(imageURL, 'Restaurant image URL');
+    let checkingURL = new URL(imageURL);
+    if (!checkingURL.protocol.startsWith('http')) throw new error('Image URL must be a valid absolute URL starting with http:// or https://');
+    return imageURL;
+}
+
 
 
 // Export all the functions
@@ -624,5 +631,6 @@ export default {
     buildDietaryCheckBox,
     fixDietaryInput,
     xssForObjects,
-    xssForArrays
+    xssForArrays,
+    checkImgURL
 };
