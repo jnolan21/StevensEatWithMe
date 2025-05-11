@@ -7,6 +7,7 @@ import reviews from '../data/reviews.js';
 import restaurants from '../data/restaurants.js';
 import menuItems from '../data/menuItems.js';
 import {ObjectId} from 'mongodb';
+import xss from 'xss'
 //import crypto from 'crypto'
 
 
@@ -136,7 +137,8 @@ router
     // Render the user's profile page
     try {
         const message = req.session.message || null;  
-        req.session.message = null;   
+        req.session.message = null;  
+        console.log(req.session.formData); 
         res.render('users/profile', {
             title: "EatWithMe Profile Page",
             // Send the relevant information about the user
@@ -160,7 +162,8 @@ router
             isAdmin,
             isOwnProfile: true,
             restaurant: restaurantss, 
-            menuItem: menu
+            menuItem: menu,
+            formData: req.session.formData || {}
         })
     } catch (e) {
         req.session.message = e.message;
@@ -170,14 +173,14 @@ router
   })
   .post(async (req, res) => {
 
-    let restaurantId = req.body.restaurantId;
-    let menuId = req.body.menuId || null;
-    let review = req.body.review || null;
-    let rating = Number(req.body.rating);
-    let hour = req.body.waitTimeHour;
-    let minute = req.body.waitTimeMinute;
+    let restaurantId = xss(req.body.restaurantId);
+    let menuId = xss(req.body.menuId) || null;
+    let review = xss(req.body.review) || null;
+    let rating = Number(xss(req.body.rating));
+    let hour = xss(req.body.waitTimeHour);
+    let minute = xss(req.body.waitTimeMinute);
     let waitTime = `${hour}h ${minute}min`;
-    let anonymous = req.body.anonymous || "false";
+    let anonymous = xss(req.body.anonymous) || "false";
 
     //console.log(restaurantId + " " + menuId + " " + review + " " + rating + " " + waitTime);
 
@@ -188,6 +191,7 @@ router
     rating = helper.checkReviewRating(rating);
     waitTime = helper.checkWaitTime(waitTime);
     } catch(e) {
+        req.body.formData = req.body;
         req.session.message = e.message;
         return res.redirect('/profile');
     }
@@ -213,8 +217,9 @@ router
 
         return res.redirect('/profile');
     } catch(e) {
-        console.log(e);
+        console.log(req.body);
         req.session.message = e || "Duplicate Review.";
+        req.session.formData = req.body;
         return res.redirect('/profile');
     }
 
@@ -226,9 +231,9 @@ router
   .post('/delete', async (req, res) => {
     try{
         //receive reviewId, userId and session.user.userId
-        let reviewId = req.body.reviewId;
+        let reviewId = xss(req.body.reviewId);
         let loggedInUserId = req.session.user._id;
-        let reviewPosterId= req.body.userId; 
+        let reviewPosterId= xss(req.body.userId); 
         if(reviewPosterId !== loggedInUserId) throw new Error("User not authorized to delete this review.")
         await reviews.deleteReview(reviewId);
         req.session.message = "Deleted Review!"; 
@@ -242,21 +247,21 @@ router
   router 
   .post('/edit', async (req, res) => {
     try{
-        let properId = req.body.properId;
-        let isMenuItem = req.body.isMenuItem;
-        let restId = req.body.restId;
+        let properId = xss(req.body.properId);
+        let isMenuItem = xss(req.body.isMenuItem);
+        let restId = xss(req.body.restId);
         //process the review changes here. check if wait time empty, if it is dont update. for rating and review grab the values and update. do type checking 
-        if(req.body.waitMinutes == undefined || req.body.waitHours == undefined || req.body.rating == undefined ){
+        if(xss(req.body.waitMinutes) == undefined || xss(req.body.waitHours) == undefined || xss(req.body.rating) == undefined ){
             throw new Error("Undefined fields when updating review.")
         }
-        let minutes = req.body.waitMinutes.toString().padStart(2, "0"); //make sure minutes is two digits 
-        let rating = Number(req.body.rating);
-        let waitTime = req.body.waitHours + "h " + req.body.waitMinutes + "min" ;
-        if(waitTime.trim() === "h min") waitTime = req.body.oldTime;
-        let review = (req.body.comment).trim();
+        let minutes = (xss(req.body.waitMinutes)).toString().padStart(2, "0"); //make sure minutes is two digits 
+        let rating = Number(xss(req.body.rating));
+        let waitTime = xss(req.body.waitHours) + "h " + xss(req.body.waitMinutes) + "min" ;
+        if(waitTime.trim() === "h min") waitTime = xss(req.body.oldTime);
+        let review = (xss(req.body.comment)).trim();
         if(typeof review !== "string" || review === "") throw new Error("Review must be a string. Cannot be empty.")
         helper.checkreviewlength(review);
-        let reviewId = req.body.reviewId
+        let reviewId = xss(req.body.reviewId)
         //update review: waittime, rating, review
         let oldReview = await reviews.getReviewById(reviewId); //make sure it exists 
         helper.checkWaitTime(waitTime)
@@ -438,9 +443,9 @@ router
   router
   .post('/follow', async (req, res) => {
     try {
-        const friendId = req.body.friendId;
-        const currUserId = req.body.userId;
-        const action = req.body.action; // 'follow' or 'unfollow'
+        const friendId = xss(req.body.friendId);
+        const currUserId = xss(req.body.userId);
+        const action = xss(req.body.action); // 'follow' or 'unfollow'
 
         // Validate IDs
         if (!friendId || !currUserId) {
@@ -480,7 +485,7 @@ router
     catch(e) {
         console.log("Follow error:", e);
         req.session.message = e.message || "Something went wrong. Cannot follow/unfollow this user.";
-        res.redirect(`/profile/${req.body.friendId}`);
+        res.redirect(`/profile/${xss(req.body.friendId)}`);
     }
   });
 
@@ -608,9 +613,9 @@ router
 router
   .post('/follow', async (req, res) => {
     try {
-        const friendId = req.body.friendId;
-        const currUserId = req.body.userId;
-        const action = req.body.action; // 'follow' or 'unfollow'
+        const friendId = xss(req.body.friendId);
+        const currUserId = xss(req.body.userId);
+        const action = xss(req.body.action); // 'follow' or 'unfollow'
 
         // Validate IDs
         if (!friendId || !currUserId) {
@@ -650,7 +655,7 @@ router
     catch(e) {
         console.log("Follow error:", e);
         req.session.message = e.message || "Something went wrong. Cannot follow/unfollow this user.";
-        res.redirect(`/profile/${req.body.friendId}`);
+        res.redirect(`/profile/${xss(req.body.friendId)}`);
     }
   });
 

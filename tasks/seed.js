@@ -237,7 +237,7 @@ try {
     salad = await menuItems.createMenuItem(
         acup._id,
         " Create Your Own Salad ",
-        'Choose a base of kale, spring mix, romaine, spinach, or arugula. Add an optional protein like tofu, grilled chicken, or hummus. Pick 4 toppings such as feta, avocado, or chickpeas. Finish with your choice of dressing.'        ["Vegeterian", "Vegan"]
+        'Choose a base of kale, spring mix, romaine, spinach, or arugula. Add an optional protein like tofu, grilled chicken, or hummus. Pick 4 toppings such as feta, avocado, or chickpeas. Finish with your choice of dressing.',        ["Vegeterian", "Vegan"]
     );
 } catch (e) {
     console.log(`${e.message}`);
@@ -249,7 +249,7 @@ try {
     oatmeal = await menuItems.createMenuItem(
         acup._id,
         " Oatmeal ",
-        "Warm, hearty oats served plain or with your favorite toppings."
+        "Warm, hearty oats served plain or with your favorite toppings.",
         ["Vegan"]
     );
 } catch (e) {
@@ -262,7 +262,7 @@ try {
     grits = await menuItems.createMenuItem(
         acup._id,
         " Grits ",
-        "Creamy Southern-style cornmeal, slow-cooked to a smooth finish."
+        "Creamy Southern-style cornmeal, slow-cooked to a smooth finish.",
         ["Vegan"]
     );
 } catch (e) {
@@ -1350,11 +1350,12 @@ try {
         fatAngelo._id.toString(),
         " The Fat Angelo is the best sub I've had in my life! ",
         5,
-        "0h 22min"
+        "0h 22min",
+        "false"
     );
     //console.log(review1);
 } catch (e) {
-    console.log(`${e.message}`);
+    console.log(`${e}`);
 }
 
 
@@ -1366,7 +1367,8 @@ let reviewData = [
         menuItem: fatAngelo._id.toString(),
         text: "It was cold when I got it, so much for 'Hot Subs'.",
         rating: 1,
-        time: "0h 33min"
+        time: "0h 33min",
+        anonymous: "false"
     },
     {
         user: user1._id,
@@ -1374,7 +1376,8 @@ let reviewData = [
         menuItem: menuItem1._id.toString(),
         text: "Tasted like cardboard with cheese on it.",
         rating: 2,
-        time: "0h 20min"
+        time: "0h 20min",
+        anonymous: "false"
     },
     {
         user: user3._id,
@@ -1382,7 +1385,8 @@ let reviewData = [
         menuItem: uncleBabe._id.toString(),
         text: "Decent, but definitely overpriced for what it is.",
         rating: 3,
-        time: "0h 40min"
+        time: "0h 40min",
+        anonymous: "true"
     },
     {
         user: user2._id,
@@ -1390,7 +1394,8 @@ let reviewData = [
         menuItem: bennyBrown._id.toString(),
         text: "Honestly pretty good, would get it again.",
         rating: 4,
-        time: "0h 25min"
+        time: "0h 25min",
+        anonymous: "false"
     }
 ];
 
@@ -1403,10 +1408,11 @@ for (const data of reviewData) {
             data.menuItem,
             data.text,
             data.rating,
-            data.time
+            data.time,
+            data.anonymous
         );
     } catch (e) {
-        console.log(`${e.message}`);
+        console.log(`${e}`);
     }
 }
 
@@ -1414,32 +1420,36 @@ for (const data of reviewData) {
 // createReview() create 4 reviews for yellas menu items
 let menuItemReviewData = [
     {
-        user: user2._id,
+        user: user1._id,
         restaurant: yellas._id,
         text: " Decent food, took forever to get it though. ",
         rating: 1,
-        time: "  1h 01min  "
+        time: "  1h 01min  ",
+        anonymous: "true"
     },
     {
-        user: user1._id,
+        user: user2._id,
         restaurant: yellas._id,
         text: "My go to spot for good subs!",
         rating: 5,
-        time: "0h 20min"
+        time: "0h 20min",
+        anonymous: "false"
     },
     {
         user: user3._id,
         restaurant: yellas._id,
         text: "Nothing crazy. Decent food and service.",
         rating: 3,
-        time: "0h 40min"
+        time: "0h 40min",
+        anonymous: "false"
     },
     {
-        user: user2._id,
+        user: user4._id,
         restaurant: yellas._id,
         text: "I don't even know what to say. Don't eat here!",
         rating: 0,
-        time: "2h 12min"
+        time: "2h 12min",
+        anonymous: "false"
     }
 ];
 
@@ -1451,12 +1461,454 @@ for (const data of menuItemReviewData) {
             data.restaurant,
             data.text,
             data.rating,
-            data.time
+            data.time,
+            data.anonymous
         );
     } catch (e) {
-        console.log(`${e.message}`);
+        console.log(`${e}`);
     }
 }
+
+
+menuItemReviewData = [
+    {
+        user: user1._id,
+        restaurant: pom._id,
+        text: " Decent food, took forever to get it though. ",
+        rating: 3,
+        time: "  1h 01min  ",
+        anonymous: "false"
+    },
+    {
+        user: user2._id,
+        restaurant: pom._id,
+        text: "My go to spot for good chicken bowls!",
+        rating: 1,
+        time: "4h 59min",
+        anonymous: "false"
+    },
+    {
+        user: user3._id,
+        restaurant: pom._id,
+        text: "Nothing crazy. Decent food and service.",
+        rating: 5,
+        time: "0h 20min",
+        anonymous: "true"
+    },
+    {
+        user: user4._id,
+        restaurant: pom._id,
+        text: "Best Food Ever!!!",
+        rating: 5,
+        time: "1h 8min",
+        anonymous: "false"
+    }
+]
+
+// Create Pom and Honey Reviews
+for (const data of menuItemReviewData) {
+    try {
+        const review = await reviews.createRestaurantReview(
+            data.user,
+            data.restaurant,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
+reviewData = [
+    {
+        user: user2._id,
+        restaurant: pom._id,
+        menuItem: byofalafel._id.toString(),
+        text: "I LOVE IT!!! Just like chipotle!",
+        rating: 5,
+        time: "0h 20min",
+        anonymous: "true"
+    },
+    {
+        user: user1._id,
+        restaurant: pom._id,
+        menuItem: byoveg._id.toString(),
+        text: "MY FOOD HAD MEAT IN IT AND IM A VEGAN!!",
+        rating: 1,
+        time: "0h 40min",
+        anonymous: "true"
+    },
+    {
+        user: user3._id,
+        restaurant: pom._id,
+        menuItem: byochix._id.toString(),
+        text: "Decent, but definitely overpriced for what it is. 5 because it tasted good.",
+        rating: 5,
+        time: "0h 40min",
+        anonymous: "false"
+    },
+    {
+        user: user2._id,
+        restaurant: pom._id,
+        menuItem: tomsalad._id.toString(),
+        text: "Honestly pretty good, would get it again.",
+        rating: 4,
+        time: "0h 25min",
+        anonymous: "false"
+    }
+];
+
+// Add the 4 menu item reviews to pom and honey
+for (const data of reviewData) {
+    try {
+        const review = await reviews.createMenuItemReview(
+            data.user,
+            data.restaurant,
+            data.menuItem,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
+
+// createReview() create 4 reviews for pierce menu items
+reviewData = [
+    {
+        user: user2._id,
+        restaurant: pierceDiningHall._id,
+        menuItem: vegBurgerPierce._id.toString(),
+        text: "Veggie Burger Who",
+        rating: 3,
+        time: "0h 10min",
+        anonymous: "true"
+    },
+    {
+        user: user1._id,
+        restaurant: pierceDiningHall._id,
+        menuItem: hamburgerPierce._id.toString(),
+        text: "SO GOOD YUMMMMM!",
+        rating: 5,
+        time: "0h 0min",
+        anonymous: "false"
+    },
+    {
+        user: user3._id,
+        restaurant: pierceDiningHall._id,
+        menuItem: quesadillaPierce._id.toString(),
+        text: "The quesadilla is to cheesy",
+        rating: 2,
+        time: "1h 40min",
+        anonymous: "true"
+    },
+    {
+        user: user2._id,
+        restaurant: pierceDiningHall._id,
+        menuItem: pancakespierce._id.toString(),
+        text: "I love pancakes but these SUCK",
+        rating: 0,
+        time: "3h 25min",
+        anonymous: "false"
+    }
+];
+
+// Add the 4 menu item reviews to pierce
+for (const data of reviewData) {
+    try {
+        const review = await reviews.createMenuItemReview(
+            data.user,
+            data.restaurant,
+            data.menuItem,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
+
+// createReview() create 4 reviews for pierce menu items
+menuItemReviewData = [
+    {
+        user: user1._id,
+        restaurant: pierceDiningHall._id,
+        text: " The food is so bad ",
+        rating: 1,
+        time: "  1h 01min  ",
+        anonymous: "true"
+    },
+    {
+        user: user2._id,
+        restaurant: pierceDiningHall._id,
+        text: "ALL YOU CAN EAT COUNT ME IN!!",
+        rating: 5,
+        time: "0h 20min",
+        anonymous: "false"
+    },
+    {
+        user: user3._id,
+        restaurant: pierceDiningHall._id,
+        text: "Nothing crazy. Decent food and service.",
+        rating: 2,
+        time: "0h 40min",
+        anonymous: "false"
+    },
+    {
+        user: user4._id,
+        restaurant: pierceDiningHall._id,
+        text: "I don't even know what to say. Don't eat here!",
+        rating: 0,
+        time: "2h 12min",
+        anonymous: "true"
+    }
+];
+
+// Add the 4 menu item reviews to pierce
+for (const data of menuItemReviewData) {
+    try {
+        const review = await reviews.createRestaurantReview(
+            data.user,
+            data.restaurant,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
+// createReview() create 4 reviews for tu taco menu items
+reviewData = [
+    {
+        user: user2._id,
+        restaurant: tuTaco._id,
+        menuItem: byoBurritoBowl._id.toString(),
+        text: "i dont even have words for how bad this was.",
+        rating: 1,
+        time: "1h 33min",
+        anonymous: "false"
+    },
+    {
+        user: user1._id,
+        restaurant: tuTaco._id,
+        menuItem: byoCheeseQues._id.toString(),
+        text: "Tasted like cardboard with cheese on it.",
+        rating: 1,
+        time: "1h 20min",
+        anonymous: "false"
+    },
+    {
+        user: user3._id,
+        restaurant: tuTaco._id,
+        menuItem: byoBurrito._id.toString(),
+        text: "Not worth it at all!! Chicken was not even cooked",
+        rating: 0,
+        time: "1h 20min",
+        anonymous: "true"
+    },
+    {
+        user: user2._id,
+        restaurant: tuTaco._id,
+        menuItem: byoEnsaladaBowl._id.toString(),
+        text: "Honestly pretty good, would get it again.",
+        rating: 4,
+        time: "0h 30min",
+        anonymous: "false"
+    }
+];
+
+// Add the 4 menu item reviews to tu taco
+for (const data of reviewData) {
+    try {
+        const review = await reviews.createMenuItemReview(
+            data.user,
+            data.restaurant,
+            data.menuItem,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
+
+// createReview() create 4 reviews for tu taco menu items
+menuItemReviewData = [
+    {
+        user: user1._id,
+        restaurant: tuTaco._id,
+        text: " Decent food, not mind blowing ",
+        rating: 3,
+        time: "  0h 30min  ",
+        anonymous: "true"
+    },
+    {
+        user: user2._id,
+        restaurant: tuTaco._id,
+        text: "I love being able to customize but so long",
+        rating: 2,
+        time: "3h 40min",
+        anonymous: "false"
+    },
+    {
+        user: user3._id,
+        restaurant: tuTaco._id,
+        text: "Super quick!! but food was eh",
+        rating: 4,
+        time: "0h 10min",
+        anonymous: "false"
+    },
+    {
+        user: user4._id,
+        restaurant: tuTaco._id,
+        text: "Mid af but not bad",
+        rating: 2,
+        time: "0h 30min",
+        anonymous: "false"
+    }
+];
+
+// Add the 4 menu item reviews to tu taco
+for (const data of menuItemReviewData) {
+    try {
+        const review = await reviews.createRestaurantReview(
+            data.user,
+            data.restaurant,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
+
+// createReview() create 4 reviews for tu taco menu items
+reviewData = [
+    {
+        user: user2._id,
+        restaurant: acup._id,
+        menuItem: oatmeal._id.toString(),
+        text: "I CAN EVEN ADD RAISINS!",
+        rating: 5,
+        time: "0h 20min",
+        anonymous: "false"
+    },
+    {
+        user: user1._id,
+        restaurant: acup._id,
+        menuItem: grits._id.toString(),
+        text: "Reminds me of my throwup",
+        rating: 0,
+        time: "0h 10min",
+        anonymous: "true"
+    },
+    {
+        user: user3._id,
+        restaurant: acup._id,
+        menuItem: salad._id.toString(),
+        text: "Not worth it at all!! Salad was all moldy",
+        rating: 0,
+        time: "1h 20min",
+        anonymous: "true"
+    },
+    {
+        user: user2._id,
+        restaurant: acup._id,
+        menuItem: vanillaOatWaffle._id.toString(),
+        text: "hmm idk how I feel it is interesting",
+        rating: 3,
+        time: "0h 30min",
+        anonymous: "false"
+    }
+];
+
+// Add the 4 menu item reviews to tu taco
+for (const data of reviewData) {
+    try {
+        const review = await reviews.createMenuItemReview(
+            data.user,
+            data.restaurant,
+            data.menuItem,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
+
+// createReview() create 4 reviews for acup menu items
+menuItemReviewData = [
+    {
+        user: user1._id,
+        restaurant: acup._id,
+        text: " Decent food, not mind blowing ",
+        rating: 3,
+        time: "  0h 30min  ",
+        anonymous: "true"
+    },
+    {
+        user: user2._id,
+        restaurant: acup._id,
+        text: "I love being able to customize",
+        rating: 4,
+        time: "0h 20min",
+        anonymous: "false"
+    },
+    {
+        user: user3._id,
+        restaurant: acup._id,
+        text: "Super quick!! but food was eh",
+        rating: 4,
+        time: "0h 10min",
+        anonymous: "true"
+    },
+    {
+        user: user4._id,
+        restaurant: acup._id,
+        text: "I get lunch here everyday its greeeeeeeeeeeeeatttt (add Tony the Tigers voice when saying)",
+        rating: 5,
+        time: "0h 30min",
+        anonymous: "true"
+    }
+];
+
+// Add the 4 menu item reviews to acup
+for (const data of menuItemReviewData) {
+    try {
+        const review = await reviews.createRestaurantReview(
+            data.user,
+            data.restaurant,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
 
 
 // addFriend() - add user2 to user1's friend list

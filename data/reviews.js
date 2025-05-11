@@ -24,6 +24,8 @@ const createMenuItemReview = async (
     helper.checkreviewlength(review)
     helper.checkReviewRating(rating);
     waitTime = helper.checkWaitTime(waitTime);
+    if (typeof anonymous !== 'string') throw "anonymous value must be a string";
+    anonymous = anonymous.trim();
     if (anonymous !== 'true' && anonymous !== 'false') throw "anonymous must be a boolean"
     if (anonymous === 'true') anonymous = true;
     else anonymous = false;
@@ -44,6 +46,13 @@ const createMenuItemReview = async (
     const rCollection = await restaurants();
     // Add the review to the database and the corresponding user, restaurant, and menu item
     const reviewCollection = await reviews();
+
+    const menuItemExist = await rCollection.findOne({
+        _id: new ObjectId(restaurantId),
+        'menuItems._id': new ObjectId(menuItemId)
+    });
+
+    if (!menuItemExist) throw "Cannot find Menu Item";
 
     const existingReview = await reviewCollection.findOne({
         restaurantId: restaurantId,
@@ -107,6 +116,8 @@ const createRestaurantReview = async (
     helper.checkreviewlength(review);
     helper.checkReviewRating(rating);
     waitTime = helper.checkWaitTime(waitTime);
+    if (typeof anonymous !== 'string') throw "anonymous value must be a string";
+    anonymous = anonymous.trim();
     if (anonymous !== 'true' && anonymous !== 'false') throw "anonymous must be a boolean"
     if (anonymous === 'true') anonymous = true;
     else anonymous = false;
