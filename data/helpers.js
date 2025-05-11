@@ -6,6 +6,7 @@ import reviewData from './reviews.js';
 import menuItemData from './menuItems.js';
 import restaurants from './restaurants.js'
 import users from './users.js'
+import xss from 'xss'
 
 // Verifies that a string input is non-empty string, and returns the trimmed string
 function checkString(str, str_name) {
@@ -565,6 +566,22 @@ const fixDietaryInput = (dietaryRestrictions) => {
     return dietaryRestrictions;
 }
 
+const xssForObjects = (o) => {
+    if (o === undefined) throw new Error('Input not provided for xssForObjects()');
+    if (typeof o !== 'object' || Array.isArray(o)) throw new Error('Object expected in xssForObjects()');
+    let returnObject = {};
+    for (let key in o) {
+        returnObject[key] = xss(o[key]);
+    }
+    return returnObject;
+}
+
+const xssForArrays = (arr) => {
+    if (arr === undefined) throw new Error('Input not provided for xssForArrays()');
+    if (!Array.isArray(arr)) throw new Error('Array expected in xssForArrays()');
+    return arr.map((element) => xss(element));
+}
+
 
 
 // Export all the functions
@@ -601,5 +618,7 @@ export default {
     addHasReviewsKey,
     clearAdminSession,
     buildDietaryCheckBox,
-    fixDietaryInput
+    fixDietaryInput,
+    xssForObjects,
+    xssForArrays
 };
