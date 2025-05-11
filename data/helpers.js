@@ -417,21 +417,24 @@ function stringToArray(str, strName) {
     str = checkString(str, strName);
     let stringArray = [];
     let currentWord = '';
-    const regex = /^[A-Za-z]+$/;
+    const regex = /^[A-Za-z ]+$/;
     for (let i = 0; i < str.length; i++) {
-        if (str[i] == ',' || str[i] === ' ') {
+        if (str[i] == ',') {
             if (currentWord.length > 0) {
-                if (!regex.test(currentWord)) throw new Error(`${strName} can only contain letters separated by commas or spaces`);
-                stringArray.push(currentWord);
+                let word = currentWord.trim();
+                if (word.length > 0) {
+                    if (!regex.test(word)) throw new Error(`${strName} can only contain letters separated by commas.`);
+                    stringArray.push(word);
+                }
                 currentWord = '';
             }
         } else {
             currentWord += str[i];
         }
     }
-    if (currentWord.length > 0) {
-        if (!regex.test(currentWord)) throw new Error(`${strName} can only contain letters separated by commas or spaces`);
-        stringArray.push(currentWord);
+    if (currentWord.trim().length > 0) {
+        if (!regex.test(currentWord.trim())) throw new Error(`${strName} can only contain letters separated by commas.`);
+        stringArray.push(currentWord.trim());
     }
     return stringArray;
 }
