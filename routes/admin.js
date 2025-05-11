@@ -55,6 +55,7 @@ router
         reviews = await reviewData.getAllReviewsWithInfo();
     }
     catch(e){
+        console.log("ERROR: getAllReviewsWithInfo()")
         return res.status(500).render('error', {
             title: "500 Internal Server Error",
             error: e.message,
@@ -81,6 +82,7 @@ router
     try {
         allRestaurants = await restaurants.getAllRestaurants();
     } catch (e) {
+        console.log("ERROR: getAllRestaurants()")
         return res.status(500).render('error', {
             title: "500 Internal Server Error",
             error: e.message,
@@ -131,6 +133,7 @@ router
         helper.clearAdminSession(req.session);
         return;
     } catch (e) {
+        console.log('RENDER THE PAGE PROBLEM')
         return res.status(500).render('error', {
             title: "500 Internal Server Error",
             error: e.message,
@@ -188,8 +191,7 @@ router
     }
     try {
         await restaurants.removeRestaurant(restaurantId);
-    }
-    catch (e){
+    } catch (e){
         req.session.message = e.message || "Something went wrong deleting the restaurant.";
         return res.status(500).render('error', {
             title: "500 Internal Server Error",
@@ -247,7 +249,6 @@ router
 .put('/restaurant/edit', async (req, res) => {
     let restaurantId, name, dietaryRestrictions, location, typeOfFood, hoursOfOperation, imageURL;
     try{
-        console.dir(req.body, {depth:null})
         dietaryRestrictions = helper.fixDietaryInput(req.body.dietaryRestrictions);
         // Verify the restaurant info
         restaurantId = helper.checkId(xss(req.body.restaurantId));
@@ -255,7 +256,7 @@ router
         location = helper.checkString(xss(req.body.location), "Restaurant location");
         typeOfFood = helper.stringToArray(xss(req.body.typeOfFood), "Restaurant types of food");
         hoursOfOperation = helper.checkHoursOfOperation(helper.xssForObjects(req.body.hoursOfOperation));
-        imageURL = helper.checkString(xss(req.body.imageURL), "Restaurant image URL");
+        imageURL = helper.checkImgURL(xss(req.body.imageURL));
         dietaryRestrictions = helper.xssForArrays(dietaryRestrictions);
         dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
         // Update the restaurant
@@ -307,20 +308,6 @@ router
     }
     // Use xss on each value in dietaryRestrictions
     let dietaryRestrictions = helper.fixDietaryInput(req.body.dietaryRestrictions);
-    /* try {
-        if (Array.isArray(req.body.dietaryRestrictions)) {
-            console.log(req.body.dietaryRestrictions)
-            dietaryRestrictions = helper.xssForArrays(req.body.dietaryRestrictions);
-        } else if (typeof req.body.dietaryRestrictions === 'string') {
-            dietaryRestrictions = [xss(req.body.dietaryRestrictions)];
-        } else if (req.body.dietaryRestrictions === undefined) {
-            dietaryRestrictions = [];
-        } else {
-            errors.push("Invalid 'dietary restrictions' input type.")
-        }
-    } catch (e) {
-        errors.push(e)
-    } */
     let restaurant = {
         name: xss(req.body.name),
         location: xss(req.body.location),
@@ -363,7 +350,7 @@ router
         errors.push(e.message);
     }
     try {
-        restaurant.imageURL = helper.checkString(restaurant.imageURL, 'Restaurant image URL');
+        restaurant.imageURL = helper.checkImgURL(restaurant.imageURL);
     } catch (e) {
         errors.push(e.message);
     }
@@ -484,7 +471,6 @@ router
     let errors = [];
     // Use xss on each value in dietaryRestrictions
     let dietaryRestrictions;
-    console.dir(req.body, {depth:null})
     if (Array.isArray(req.body.dietaryRestrictions)) {
         dietaryRestrictions = helper.xssForArrays(req.body.dietaryRestrictions);
     } else if (typeof req.body.dietaryRestrictions === 'string' && req.body.dietaryRestrictions.trim() !== '') {
@@ -501,7 +487,6 @@ router
         description: xss(req.body.description),
         dietaryRestrictions: dietaryRestrictions
     }
-    console.dir(menuItem, {depth:null})
     // Verify the admin input
     try {
         menuItem._id = helper.checkId(menuItem._id);
@@ -538,7 +523,6 @@ router
     }
     // Reload with errors if needed
     if (errors.length > 0) {
-        console.log('Hello!')
         req.session.message = errors[0];
         req.session.editingMenuItem = true;
         req.session.menuItemInfo = menuItem;
@@ -547,11 +531,6 @@ router
     }
     // Update the menu item
     try {
-        console.log(menuItem._id)
-        console.log(menuItem.restaurantId)
-        console.log(menuItem.name)
-        console.log(menuItem)
-        console.dir(menuItem.dietaryRestrictions, {depth:null})
         await menuItems.updateMenuItem(
             menuItem._id,
             menuItem.restaurantId,
@@ -562,7 +541,6 @@ router
         req.session.message = "Menu item updated successfully!";
         return res.redirect('/admin');
     } catch (e) {
-        console.log('menu item update error')
         req.session.message = e.message || "Something went wrong updating the menu item.";
         req.session.editingMenuItem = true;
         req.session.menuItemInfo = menuItem;
