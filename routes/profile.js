@@ -138,7 +138,6 @@ router
     try {
         const message = req.session.message || null;  
         req.session.message = null;  
-        console.log(req.session.formData); 
         res.render('users/profile', {
             title: "EatWithMe Profile Page",
             // Send the relevant information about the user
