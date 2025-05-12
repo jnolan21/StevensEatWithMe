@@ -237,8 +237,152 @@ try {
     salad = await menuItems.createMenuItem(
         acup._id,
         " Create Your Own Salad ",
-        'Choose a base of kale, spring mix, romaine, spinach, or arugula. Add an optional protein like tofu, grilled chicken, or hummus. Pick 4 toppings such as feta, avocado, or chickpeas. Finish with your choice of dressing.',        ["Vegeterian", "Vegan"]
+        'Choose a base of kale, spring mix, romaine, spinach, or arugula. Add an optional protein like tofu, grilled chicken, or hummus. Pick 4 toppings such as feta, avocado, or chickpeas. Finish with your choice of dressing.',       
+         ["Vegeterian", "Vegan"]
     );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (Create Your Own Sandwich)
+let cyosandwich;
+try {
+    cyosandwich = await menuItems.createMenuItem(
+        acup._id,
+        " Create Your Own Sandwich ",
+        'Choice of bread, protein (roast beef, ham, turkery, salami, hummus, tuna salad, chicken salad, grilled chicken, pork bacon), cheese, and a variety of toppings and condiments. Option to be toasted.',
+        ['Vegan', 'Vegetarian']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (Chick ceaser)
+let cesarsalad;
+try {
+    cesarsalad = await menuItems.createMenuItem(
+        acup._id,
+        " Chicken Ceaser Salad ",
+        "Signature salad blend, herb croutons, shaved parmesean cheese. Grilled chicken. ",
+        ['Nut-free']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (greek salad)
+let greeksalad;
+try {
+    greeksalad = await menuItems.createMenuItem(
+        acup._id,
+        " Greek Salad ",
+        "Spring mix, feta cheese, red onion, cucumber, tomato, chick peas, black olives, oregano, oil and vinegar. ",
+        ['Nut-free', 'Vegetarian', 'Gluten-free']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (buff chic salad)
+let buffsalad;
+try {
+    buffsalad = await menuItems.createMenuItem(
+        acup._id,
+        " Buffalo Chicken Salad ",
+        "Buffalo chicken breast, blue cheese crumbles, croutons, spring mix, onions, tomato.",
+        ['Nut-free']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (tex mex salad)
+let texsalad;
+try {
+    texsalad = await menuItems.createMenuItem(
+        acup._id,
+        " Tex Mex Salad ",
+        "Romaine lettuce, cheddar cheese, black beans, corn, tomatoes, red onion, corn chips, ranch dressing.",
+        ['Nut-free', 'Vegetarian', 'Gluten-free']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() (buff chix wrap)
+let buffwrap;
+try {
+    buffwrap = await menuItems.createMenuItem(
+        acup._id,
+        " Buffalo Chicken Wrap ",
+        "Grilled chicken, hot sauce, blue cheese, lettuce and tomato.",
+        ['Nut-free']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( chic cesar wrap)
+let ceswrap;
+try {
+    ceswrap = await menuItems.createMenuItem(
+        acup._id,
+        " Grilled Chicken Caesar Wrap ",
+        "Chicken, caeser dressing, parmesan cheese, and lettuce.",
+        ['Nut-free']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( traditional grilled cheese)
+let grillcheese;
+try {
+    grillcheese = await menuItems.createMenuItem(
+        acup._id,
+        " Traditional Grilled Cheese ",
+        "Toasted white or wheat bread with melted American cheese.",
+        ['Nut-free', 'Vegetarian']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( veg hum wrap)
+let humwrap;
+try {
+    humwrap = await menuItems.createMenuItem(
+        acup._id,
+        " Loaded Veggie and Hummus Wrap ",
+        "This wrap is composed of hummus, tofu, spinach, tomatoes, bell peppers, onions and corn on a tortilla.",
+        ['Nut-free', 'Vegetarian', 'Vegan']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( turkey blt)
+let turkblt;
+try {
+    turkblt = await menuItems.createMenuItem(
+        acup._id,
+        " Classic Turkey BLT ",
+        " Sliced marbel rye, with turkey, bacon, lettuce, tomato and mayo. ",
+        ['Nut-free', 'Dairy-free']
+        );
+} catch (e) {
+    console.log(`${e.message}`);
+}
+
+// createMenuItem() ( chic noodle soup and grilled cheese)
+let soupandcheese;
+try {
+    soupandcheese = await menuItems.createMenuItem(
+        acup._id,
+        " Chicken Noodle Soup and Grilled Cheese ",
+        " Chicken noodle soup and grilled cheese",
+        ['Nut-free']
+        );
 } catch (e) {
     console.log(`${e.message}`);
 }
@@ -1753,7 +1897,7 @@ menuItemReviewData = [
         restaurant: tuTaco._id,
         text: " Decent food, not mind blowing ",
         rating: 3,
-        time: "  0h 30min  ",
+        time: "0h 30min",
         anonymous: "true"
     },
     {
@@ -1864,7 +2008,7 @@ menuItemReviewData = [
         restaurant: acup._id,
         text: " Decent food, not mind blowing ",
         rating: 3,
-        time: "  0h 30min  ",
+        time: "0h 30min",
         anonymous: "true"
     },
     {
@@ -1970,7 +2114,7 @@ try{
 
     let rsvpPost3 = await rsvps.createRsvp(
         "Hi! Im Foo. Wanna get some FOOd...maybe we go to the Bar?",
-        {Date: formattedDate, Time:"6:00PM"},
+        {Date: formattedDate, Time:"06:00PM"},
         pom._id,
         user3._id
     )
