@@ -17,6 +17,11 @@ The purpose of this application is to create a central hub for Stevens students 
 
 ---
 
+**How to Use**
+To use EatWithMe, start by browsing the landing page to see the top-rated dining locations and their most popular menu items on campus. If you want to explore more options, click “List all Dining Facilities” to view every restaurant and filter them by dietary preferences, average wait time, or overall rating. You can click on any dining location to see details like menu items, reviews, and hours. To contribute your own reviews, RSVP to meal meetups, or follow other students, simply sign up using your Stevens email and verify your account through the email link. Once logged in, you can post or edit reviews, join others for meals through the RSVP page, and build a network of students you enjoy eating with.
+
+---
+
 _**Core Features**_
 
 **Landing Page**
