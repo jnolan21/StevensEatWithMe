@@ -73,6 +73,9 @@
     return true;
   };
 
+
+
+
   // Main form validation
   const editReviewForm = document.querySelector('.doneEdit');
   if (editReviewForm) {
@@ -84,7 +87,8 @@
       const waitHours = document.querySelector('input[name="waitHours"]').value;
       const waitMinutes = document.querySelector('input[name="waitMinutes"]').value;
       const comment = document.querySelector('textarea[name="comment"]').value;
-
+      
+      
       try {
         // Validate all fields
         validateRating(rating);

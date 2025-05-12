@@ -264,6 +264,7 @@ router
         let properId = xss(req.body.properId);
         let isMenuItem = xss(req.body.isMenuItem);
         let restId = xss(req.body.restId);
+        let anon = xss(req.body.editAnonymous || "false") === "true";
         //process the review changes here. check if wait time empty, if it is dont update. for rating and review grab the values and update. do type checking 
         if(xss(req.body.waitMinutes) == undefined || xss(req.body.waitHours) == undefined || xss(req.body.rating) == undefined ){
             throw new Error("Undefined fields when updating review.")
@@ -275,14 +276,16 @@ router
         let review = (xss(req.body.comment)).trim();
         if(typeof review !== "string" || review === "") throw new Error("Review must be a string. Cannot be empty.")
         helper.checkreviewlength(review);
-        let reviewId = xss(req.body.reviewId)
+        let reviewId = xss(req.body.reviewId);
+        //let anonymous = xss(req.body.anonymous);
         //update review: waittime, rating, review
         let oldReview = await reviews.getReviewById(reviewId); //make sure it exists 
-        helper.checkWaitTime(waitTime)
+        helper.checkWaitTime(waitTime);
         await reviews.updateReview(reviewId, {
             rating: rating,
             review: review,
-            waitHours: waitTime
+            waitHours: waitTime,
+            anonymous: anon
           },isMenuItem, properId, restId);
     
 
@@ -311,7 +314,10 @@ router
             let properId = req.query.properId;
             let isMenuItem = req.query.isMenuItem;
             let restId = req.query.restId;
+            let r = await reviews.getReviewById(reviewId);
+            let anonymous = r.anonymous;
             res.render('users/editReview', {
+                title: "Edit Review",
                 reviewObj: reviewObj,
                 userId: userId,
                 reviewId: reviewId,
@@ -326,7 +332,8 @@ router
                 isMenuItem: isMenuItem,
                 isLoggedIn: !!req.session.user,
                 restId: restId, 
-                partial: 'editReviewScript'
+                partial: 'editReviewScript',
+                anonymous: anonymous
             }) //need to send it the review info so we can set up the review, maybe have an ol
         
         }
