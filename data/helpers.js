@@ -1,4 +1,4 @@
-import {ObjectId} from 'mongodb';
+import {ObjectId, Timestamp} from 'mongodb';
 import nodemailer from 'nodemailer';
 import sgMail from '@sendgrid/mail';
 import userData from './users.js'
@@ -307,9 +307,37 @@ function checkMeetUpTime(meetUpTime){
         throw new Error('Date must have format MM/DD/YYYY');
     }
     if (!timeRegex.test(timeStr)){
-        throw new Error('Time must have format HH:MM{AM/PM}');
+        timeStr = fixMilitaryTime(timeStr);
+        if (!timeRegex.test(timeStr)){
+            throw new Error('Time must have format HH:MM{AM/PM}');
+        }
     }
+    meetUpTime.Time = timeStr;
     return meetUpTime;
+}
+function fixMilitaryTime(miltime){
+    //format the military time 
+    let [hourStr, minuteStr] = miltime.split(':');
+    let hour = Number(hourStr);
+    let minute = minuteStr;
+    let period;
+    if(hour >=12){ period = 'PM';}
+    else{ period = 'AM';}
+    if (hour === 0) hour = 12;
+    else if (hour > 12) hour -= 12;
+    //add leading 0 to hour if needed
+    let formattedHour;
+    if (hour < 10) {
+      formattedHour = '0' + hour;
+    }
+    else{
+      formattedHour = hour;
+    }
+
+    miltime = `${formattedHour}:${minute}${period}`;
+    miltime=miltime.trim();
+    return miltime;
+
 }
 
 
@@ -380,7 +408,6 @@ function isFutureDateTime(dateStr, timeStr) {
     let [month, day, year] = dateStr.split('/').map(Number);
     let [timePart, period] = timeStr.split(/(AM|PM)/i);
     let [hoursStr, minutesStr] = timePart.split(':');
-    
     let hours = Number(hoursStr);
     const minutes = Number(minutesStr);
   

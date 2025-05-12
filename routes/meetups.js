@@ -111,7 +111,26 @@ router
   });
   router
   .post('/created', async (req, res) => {
+    let restNames = [];
+    let rawComment;
+    let rawDate;
+    let rawtime;
+    let rawrestaurant;
+    
         try{
+          let allrestaurants = await restaurants.getAllRestaurants();
+          
+          for(let i=0;i<allrestaurants.length; i++){
+            restNames.push({
+              name: allrestaurants[i].name,
+              id: allrestaurants[i]._id.toString()
+            });
+          }
+
+           rawDate = req.body.rsvpDate;
+           rawComment = req.body.comment;
+           rawtime = req.body.rsvpTime;
+           rawrestaurant = req.body.restaurant;
           let rsvpDate = req.body.rsvpDate;
           let rsvpTime = req.body.rsvpTime;
           let restId = req.body.restaurant;
@@ -120,6 +139,11 @@ router
           let userId = req.session.user._id;
           let userObj = await users.getUserById(userId);
           let nameUser = userObj.firstName;
+          for(let i=0; i<restNames.length; i++){
+            if(restNames[i].id == rawrestaurant.trim()){
+              restNames[i].isSelected = true;
+            }
+          }
 
           if(!comment || !rsvpDate || !restId || !rsvpTime || (comment=="") ){
             throw new Error("All fields must be filled out.")
@@ -145,7 +169,7 @@ router
           helpers.checkId(restId);
           helpers.checkId(userId);
           helpers.checkCommentLength(comment);
-          if(!(helpers.isFutureDateTime(rsvpDate, rsvpTime))){
+          if(!(helpers.isFutureDateTime(meetupTime.Date, meetupTime.Time))){
             throw new Error("Meetup time must be a future date.");
           }
           await rsvps.createRsvp(comment,meetupTime,restId,userId);
@@ -154,7 +178,16 @@ router
         }
         catch(e){
           req.session.message = e.message || "Something went wrong. Cannot create a meetup."
-            res.redirect('/meetupPage')
+          res.render('meetupPage/createRSVP', {
+            title: "EatWithMe Create Meetup",
+            isLoggedIn: !!req.session.user,
+            message: req.session.message,
+            restNames: restNames,
+            comment: rawComment,
+            restaurant: rawrestaurant,
+            date: rawDate,
+            time: rawtime
+          })
     }
   });
 export default router;
