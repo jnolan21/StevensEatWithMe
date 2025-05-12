@@ -16,7 +16,7 @@
 
 
 
-<main class = "diningFacility">
+<section class = "diningFacility">
     <div class="header-container">
     <div class = "header-text">
     <h1 id = "restaurantName">{{restaurant.name}}</h1>
@@ -40,7 +40,7 @@
         {{this}}{{#unless @last}}, {{/unless}}
         {{/each}}
     </p>
-    <img id = "restimg" class="restimgFac" src = {{restaurant.imageURL}} alt = {{restaurant.name}}>
+    <img id = "restimg" class="restimgFac" src = "{{restaurant.imageURL}}" alt = "{{restaurant.name}}">
 
 
     <div id="menuItems">
@@ -91,4 +91,4 @@
 </div>
 
 
-</main>
+</section>

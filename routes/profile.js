@@ -282,7 +282,7 @@ router
         await reviews.updateReview(reviewId, {
             rating: rating,
             review: review,
-            waitTime: waitTime
+            waitHours: waitTime
           },isMenuItem, properId, restId);
     
 
@@ -304,6 +304,8 @@ router
             reviewComment = reviewComment.trim()
             let reviewRating = req.query.reviewRating
             let reviewWaitTime = req.query.reviewWaitTime
+            let reviewHours = helper.getHours(req.query.reviewWaitTime);
+            let reviewMinutes = helper.getMinutes(req.query.reviewWaitTime);
             let reviewRestaurant = req.query.reviewRestaurant
             let reviewMenuItem = req.query.reviewMenuItem
             let properId = req.query.properId;
@@ -316,6 +318,8 @@ router
                 reviewComment: reviewComment,
                 reviewRating: reviewRating,
                 reviewWaitTime: reviewWaitTime,
+                reviewHours: reviewHours || 0,
+                reviewMinutes: reviewMinutes || 0,
                 reviewRestaurant: reviewRestaurant,
                 reviewMenuItem: reviewMenuItem,
                 properId: properId,

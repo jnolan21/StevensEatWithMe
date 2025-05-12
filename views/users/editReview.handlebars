@@ -29,14 +29,10 @@
     </label>
     </p>
 
-        <p><label>
-          Wait Time:
-<input type="number" name="waitHours" min="0" max="5" /> h
-  <input type="number" name="waitMinutes" min="0" max="59"  /> min        </label>
-   <input type="hidden" name="oldTime" value="{{this.reviewWaitTime}}">
+        <p>Wait Time:</p>
+<input type="number" name="waitHours" min="0" max="5" value = "{{reviewHours}}"> <label for = "waitHours">h</label>
+  <input type="number" name="waitMinutes" min="0" max="59"  value = "{{reviewMinutes}}"> <label for = "waitMinutes">min</label>
    <input type="hidden" name="reviewId" value="{{this.reviewId}}">
-
-        </p>
 
         <p>
         <label>
