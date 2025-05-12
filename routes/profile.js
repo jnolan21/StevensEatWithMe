@@ -172,7 +172,6 @@ router
   })
   .post(async (req, res) => {
 
-<<<<<<< Updated upstream
     let restaurantId = xss(req.body.restaurantId);
     let menuId = xss(req.body.menuId) || null;
     let review = xss(req.body.review) || null;
@@ -181,15 +180,7 @@ router
     let minute = xss(req.body.waitTimeMinute);
     let waitTime = `${hour}h ${minute}min`;
     let anonymous = xss(req.body.anonymous) || "false";
-=======
-    let restaurantId = req.body.restaurantId || null;
-    let menuId = req.body.menuId || null;
-    let review = req.body.review || null;
-    let rating = Number(req.body.rating) || null;
-    console.log(req.body.waitTime);
-    let waitTime = req.body.waitTime || null;
-    //let waitTime = `${hour}h ${minute}min`;
->>>>>>> Stashed changes
+
 
     //console.log(restaurantId + " " + menuId + " " + review + " " + rating + " " + waitTime);
 
