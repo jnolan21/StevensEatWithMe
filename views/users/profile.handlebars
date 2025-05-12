@@ -154,8 +154,6 @@ ALL RSVP FIELDS:
         </details> 
     </section>
 </div>
-<details class="reviewCollapse">
-  <summary class="caret-summary revCollapse"><span class="caret"></span> Write a Review</summary>
 <section id = "createReviewContainer">
     <form method = "POST" class = "formContainer" id = "review-form">
         <h2>Create New Review</h2>
@@ -202,18 +200,18 @@ ALL RSVP FIELDS:
 
         <div class = "form-group">
             <label for = "rating">Rating</label>
-            <input name = "rating" id = "rating" type = "number" placeholder = "3" value = {{formData.rating}}>
+            <input name = "rating" id = "rating" type = "number" placeholder = "3" value = "{{formData.rating}}">
             <p class = "error" id = "errorRating">{{errors.Rating}}</p>
         </div>
 
         <div class = "form-group" id = "waitTimeContainer"> 
             Wait Time
             <div class="time-field">
-                <input name="waitTimeHour" id="waitTimeHour" type="number" min="0" placeholder="1" value = {{formData.waitTimeHour}}>
+                <input name="waitTimeHour" id="waitTimeHour" type="number" min="0" placeholder="1" value = "{{formData.waitTimeHour}}">
                 <label for = "waitTimeHour">hour</label>
             </div>
             <div class="time-field">
-                <input name="waitTimeMinute" id="waitTimeMinute" type="number" min="0" max="59" placeholder="30" value = {{formData.waitTimeMinute}}>
+                <input name="waitTimeMinute" id="waitTimeMinute" type="number" min="0" max="59" placeholder="30" value = "{{formData.waitTimeMinute}}">
                 <label for = "waitTimeMinute">min</label>
             <p class = "error" id = "errorTime">{{errors.Time}}</p>
             </div>
@@ -234,7 +232,7 @@ ALL RSVP FIELDS:
         {{/if}}
     </form>
 </section>
-</details>
+
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

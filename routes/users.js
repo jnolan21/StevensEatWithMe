@@ -20,7 +20,7 @@ router
     const verificationToken = xss(req.query.token);
     if (!verificationToken) {
       return res.status(400).render('error', {
-        title: "EatWithMe Error Page",
+        title: "400 Bad Request",
         error: 'Verification token is missing.',
         status: 400
       });
@@ -30,7 +30,7 @@ router
       // User could not be found
       if (!signupUser) {
         return res.status(404).render('error', {
-          title: "EatWithMe Error Page",
+          title: "404 Page Not Found",
           error: 'Verification link is invalid.',
           status: 404
         });
@@ -40,7 +40,7 @@ router
       return res.redirect('/users/login');
     } catch (e) {
       return res.status(500).render('error', {
-        title: "EatWithMe Error Page",
+        title: "500 Internal Server Error",
         error: e.message,
         status: 500
       });
@@ -63,8 +63,8 @@ router
       return res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript', isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
       return res.status(500).render('error', {
-        title: "EatWithMe Error Page",
-        error: [e.message],
+        title: "500 Internal Server Error",
+        error: e.message,
         status: 500
       });
     }
@@ -136,7 +136,11 @@ router
     try {
       allUsers = await userData.getAllUsers();
     } catch (e) {
-      errors.push(e.message);
+      return res.status(500).render('error', {
+        title: "500 Internal Server Error",
+        error: e.message,
+        status: 500
+      });
     }
     try {
       // Check if a user already exists with the given email or username
@@ -214,8 +218,8 @@ router
       res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
       return res.status(500).render('error', {
-        title: "EatWithMe Error Page",
-        error: [e.message],
+        title: "500 Internal Server Error",
+        error: e.message,
         status: 500
       });
     }

@@ -194,7 +194,7 @@ try {
             "Friday": "8:00AM - 6:00PM",
             "Saturday": "Closed"
         },
-        "https://api.dineoncampus.com/files/section_banner/6a236224-dc5f-4641-bae6-d6e9f8b8174d.jpg",
+        "https://www.stevens.edu/_next/image?url=https%3A%2F%2Fimages.ctfassets.net%2Fmviowpldu823%2F6kglSEkQkhgKD8aJd88b8r%2Ffe1f30df06c4f862c701d8919e8d6057%2FCampus_Public_Spaces__5_.png%3Fw%3D640%26h%3D360%26f%3Dcenter%26q%3D80%26fit%3Dfill&w=2400&q=80",
         ["Vegan", "Vegetarian", "Dairy-free", "Nut-free"]
     );
 } catch (e) {

@@ -1,6 +1,7 @@
 import {restaurants} from '../config/mongoCollections.js';
 import {ObjectId, ReturnDocument} from 'mongodb';
 import helper from './helpers.js';
+import reviews from './reviews.js';
 
 
 
@@ -73,9 +74,36 @@ const removeRestaurant = async (id) => {
     id = helper.checkId(id);
     // Get the restaurant from mongodb
     const rCollection = await restaurants();
-    const deletedRestaurant = await rCollection.findOneAndDelete({_id: new ObjectId(id)});
-    if (!deletedRestaurant) throw new Error(`Could not remove restaurant with id '${id}'!`);
+    const restaurant = await rCollection.findOne({_id: new ObjectId(id)});
+    if (!restaurant) throw new Error(`Could not find restaurant with id '${id}'!`);
+
+    // Delete all reviews for the menu items associated with this restaurant
+    let allReviews = await reviews.getAllReviews();
+    for (let i = 0; i < restaurant.menuItems.length; i++) {
+        let menuItem = restaurant.menuItems[i];
+        for (let j = 0; j < allReviews.length; j++) {
+            let review = allReviews[j];
+            if (review.menuItemId && review.menuItemId.toString() === menuItem._id.toString()) {
+                // Delete the review for the given menu item
+                await reviews.deleteReview(review._id.toString());
+            }
+        }
+    }
+
+    // Delete all general reviews about the restaurant
+    for (let i = 0; i < allReviews.length; i++) {
+        let review = allReviews[i];
+        if (review.restaurantId && review.restaurantId.toString() === id && !review.menuItemId) {
+            // Delete the review about the restaurant
+            await reviews.deleteReview(review._id.toString());
+        }
+    }
+
     // Convert the restaurant _id to a string before returning the deleted restaurant object
+    const deletedRestaurant = await rCollection.findOneAndDelete(
+        {_id: new ObjectId(id)}
+    )
+    if (!deletedRestaurant) throw new Error(`Could not remove restaurant with id '${id}'.`);
     deletedRestaurant._id = deletedRestaurant._id.toString();
     return deletedRestaurant;
 }
@@ -125,6 +153,8 @@ const updateRestaurant = async (
     imageURL = helper.checkString(imageURL, "Image URL");
     dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
     // Update the restaurant
+    let checkRestaurantName = await getRestaurantByName(name);
+    if (checkRestaurantName !== null && id !== checkRestaurantName._id.toString()) throw new Error(`Restaurant already exists with the name ${checkRestaurantName.name}.`);
     let restaurant = await getRestaurantById(id);
     if (!restaurant) throw new Error("Restaurant not found.");
     const rCollection = await restaurants();
@@ -138,7 +168,8 @@ const updateRestaurant = async (
             imageURL: imageURL,
             dietaryRestrictions: dietaryRestrictions}}
     );
-    if (updatedInfo.modifiedCount === 0) throw new Error("Failed to update the restaurant.");
+    if (updatedInfo.matchedCount === 0) throw new Error("Failed to update the restaurant.");
+    if (!updatedInfo.acknowledged) throw new Error('MongoDB failed to perform the restaurant update.');
     const returnRestaurant = await getRestaurantById(id);
     return returnRestaurant;
 }

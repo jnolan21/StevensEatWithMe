@@ -31,21 +31,24 @@
         str = checkString(str, strName);
         let stringArray = [];
         let currentWord = '';
-        const regex = /^[A-Za-z]+$/;
+        const regex = /^[A-Za-z ]+$/;
         for (let i = 0; i < str.length; i++) {
-            if (str[i] == ',' || str[i] === ' ') {
+            if (str[i] == ',') {
                 if (currentWord.length > 0) {
-                    if (!regex.test(currentWord)) return errors.push(`${strName} can only contain letters separated by commas or spaces`);
-                    stringArray.push(currentWord);
-                    currentWord = '';
+                  let word = currentWord.trim();
+                  if (word.length > 0) {
+                    if (!regex.test(currentWord)) return errors.push(`${strName} can only contain letters separated by commas.`);
+                    stringArray.push(currentWord.trim());
+                  }
+                  currentWord = '';
                 }
             } else {
                 currentWord += str[i];
             }
         }
-        if (currentWord.length > 0) {
-            if (!regex.test(currentWord)) return errors.push(`${strName} can only contain letters separated by commas or spaces`);
-            stringArray.push(currentWord);
+        if (currentWord.trim().length > 0) {
+            if (!regex.test(currentWord.trim())) return errors.push(`${strName} can only contain letters separated by commas.`);
+            stringArray.push(currentWord.trim());
         }
         return stringArray;
     }

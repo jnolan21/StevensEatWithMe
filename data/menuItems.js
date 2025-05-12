@@ -162,6 +162,8 @@ const updateMenuItem = async (
     description = helper.checkString(description, 'Menu item description');
     dietaryRestrictions = helper.checkDietaryRestrictions(dietaryRestrictions);
     // Update the menu item
+    let checkMenuItem = await getMenuItemByName(name, restaurantId);
+    if (checkMenuItem !== null && menuItemId !== checkMenuItem._id.toString()) throw new Error(`Menu item already exists with the name ${checkMenuItem.name}.`);
     const menuItem = await getMenuItemById(menuItemId);
     if (!menuItem) throw new Error("Menu item not found.");
     const oldRestaurantId = menuItem.restaurantId.toString();
@@ -186,7 +188,8 @@ const updateMenuItem = async (
         {_id: new ObjectId(restaurantId)},
         {$push: {menuItems: newMenuItem}}
     );
-    if (updatedInfo.modifiedCount === 0) throw new Error("Failed to update the menu item.");
+    if (updatedInfo.matchedCount === 0) throw new Error("Failed to update the menu item.");
+    if (!updatedInfo.acknowledged) throw new Error('MongoDB failed to perform the menu item update.');
     // Get the new menu item array from the restaurant
     let restaurant = await restaurantData.getRestaurantById(restaurantId);
     // Sort the menu items

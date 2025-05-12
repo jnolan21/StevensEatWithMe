@@ -50,15 +50,16 @@
             <h3 class="menuItemName">{{this.name}}</h3>
             
             <div class="hoverPopup">
-                <p class="menuItemDescription">{{this.description}}</p>
+                <p class="menuItemDescription">Description: {{this.description}}</p>
                 
                 <p class="dietaryRestrictions">
+                    Dietary Restrictions:
                 {{#each this.dietaryRestrictions}}
                     {{this}}{{#unless @last}}, {{/unless}}
                 {{/each}}
                 </p>
 
-                <p>{{this.rating}}/5</p>
+                <p class = "rating">Rating: {{this.rating}}/5</p>
             </div>
             </li>
             {{/each}}
