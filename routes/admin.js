@@ -111,7 +111,7 @@ router
                 lastName: user.lastName,
                 reviews // array of review objects
             },
-            //partial: 'adminScript',
+            partial: 'adminScript',
             days: days,
             allUsers: allUsers,
             allRestaurants: allRestaurants,
