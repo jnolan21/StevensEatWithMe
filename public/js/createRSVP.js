@@ -35,44 +35,62 @@
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
     if (!dateRegex.test(date)) throw 'Date must be in YYYY-MM-DD format';
     
-    // Check if date is in future
-    const selectedDate = new Date(date);
+    const [year, month, day] = date.split('-').map(Number);
+    const selectedDate = new Date(year, month - 1, day);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+
+    // If it's the same day, we'll let the time validation handle it
+    if (selectedDate.toDateString() === today.toDateString()) {
+      return true;
+    }
+    
+    // For other days, check if the date is in the future
     if (selectedDate < today) throw 'Date must be in the future';
     
     return true;
   };
 
-  // Validate time format (H:MM AM/PM) and is reasonable
+  // Validate time format (HH:MM) and is reasonable
   const validateTime = (time) => {
     if (!time) throw 'Please select a time';
     
-    // Check format H:MM AM/PM
-    const timeRegex = /^(1[0-2]|[1-9]):[0-5][0-9] ?(?:AM|PM)$/i;
-    if (!timeRegex.test(time)) throw 'Time must be in H:MM AM/PM format';
+    // Check format HH:MM (24-hour format)
+    const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/;
+    if (!timeRegex.test(time)) throw 'Time must be in HH:MM format';
     
-    // Extract hour and period
-    const [timePart, period] = time.split(' ');
-    const [hours] = timePart.split(':');
-    let hour = parseInt(hours);
-    
-    // Convert to 24-hour for validation
-    if (period.toUpperCase() === 'PM' && hour !== 12) hour += 12;
-    if (period.toUpperCase() === 'AM' && hour === 12) hour = 0;
+    // Extract hour
+    const [hours] = time.split(':');
+    const hour = parseInt(hours);
     
     // Check if time is between 6 AM and 10 PM
     if (hour < 6 || hour > 22) throw 'Time must be between 6 AM and 10 PM';
     
+    // Only check if time is in the future if the date is today
+    const date = document.getElementById('rsvpDate').value;
+    const [year, month, day] = date.split('-').map(Number);
+    const selectedDate = new Date(year, month - 1, day);
+    const today = new Date();
+    
+    if (selectedDate.toDateString() === today.toDateString()) {
+      const [selectedHours, selectedMinutes] = time.split(':').map(Number);
+      const currentHours = today.getHours();
+      const currentMinutes = today.getMinutes();
+      
+      if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
+        throw 'Time must be in the future';
+      }
+    }
+    
     return true;
   };
 
-  // Validate comment length (max 500 characters)
+  // Validate comment length (10-400 characters)
   const validateComment = (comment) => {
     if (!comment) throw 'Please provide a comment';
     comment = comment.trim();
     if (comment.length === 0) throw 'Comment cannot be empty';
-    if (comment.length > 500) throw 'Comment must be 500 characters or less';
+    if (comment.length < 10) throw 'Comment must be at least 10 characters';
+    if (comment.length > 400) throw 'Comment must be no more than 400 characters';
     return true;
   };
 
@@ -101,7 +119,39 @@
         validateRestaurant(restaurant);
         validateComment(comment);
 
-        // If all validation passes, submit the form
+        // Convert date from YYYY-MM-DD to MM/DD/YYYY with leading zeros
+        const [year, month, day] = date.split('-');
+        const formattedDate = `${month.padStart(2, '0')}/${day.padStart(2, '0')}/${year}`;
+
+        // Convert time from 24-hour (HH:MM) to 12-hour (H:MM AM/PM)
+        const [hours, minutes] = time.split(':');
+        let hour = parseInt(hours);
+        const period = hour >= 12 ? 'PM' : 'AM';
+        if (hour > 12) hour -= 12;
+        if (hour === 0) hour = 12;
+        // Add leading zero for single-digit hours
+        const formattedHour = hour.toString().padStart(2, '0');
+        const formattedTime = `${formattedHour}:${minutes}${period}`;
+
+        // Create hidden inputs for the formatted values
+        const dateInput = document.createElement('input');
+        dateInput.type = 'hidden';
+        dateInput.name = 'rsvpDate';
+        dateInput.value = formattedDate;
+
+        const timeInput = document.createElement('input');
+        timeInput.type = 'hidden';
+        timeInput.name = 'rsvpTime';
+        timeInput.value = formattedTime;
+
+        // Remove the original inputs
+        document.getElementById('rsvpDate').remove();
+        document.getElementById('rsvpTime').remove();
+
+        // Add the hidden inputs with formatted values
+        meetupForm.appendChild(dateInput);
+        meetupForm.appendChild(timeInput);
+
         this.submit();
       } catch (e) {
         showError(meetupForm, e);
