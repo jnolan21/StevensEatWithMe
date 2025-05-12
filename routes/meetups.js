@@ -124,40 +124,33 @@ router
           if(!comment || !rsvpDate || !restId || !rsvpTime || (comment=="") ){
             throw new Error("All fields must be filled out.")
           }
-          //format the date properly 
-          let [year, month, day] = rsvpDate.split('-');
-          rsvpDate = `${month}/${day}/${year}`;
-          //format the military time 
-          let [hourStr, minuteStr] = rsvpTime.split(':');
-          let hour = Number(hourStr);
-          let minute = minuteStr;
-          let period;
-          if(hour >=12){ period = 'PM';}
-          else{ period = 'AM';}
-          if (hour === 0) hour = 12;
-          else if (hour > 12) hour -= 12;
-          //add leading 0 to hour if needed
-          let formattedHour;
-          if (hour < 10) {
-            formattedHour = '0' + hour;
+          
+          // Check if date is already in MM/DD/YYYY format
+          if (!rsvpDate.includes('-')) {
+            // Date is already in correct format, no need to reformat
+            rsvpDate = rsvpDate.trim();
           } else {
-            formattedHour = hour;
+            // Format the date from YYYY-MM-DD to MM/DD/YYYY
+            let [year, month, day] = rsvpDate.split('-');
+            rsvpDate = `${month}/${day}/${year}`;
           }
-          rsvpTime = `${formattedHour}:${minute}${period}`;
-          rsvpTime=rsvpTime.trim();
+
+          // No need to reformat time - it's already in the correct format from the client
+          rsvpTime = rsvpTime.trim();
           rsvpDate = rsvpDate.trim();
-        let meetupTime = {Date: rsvpDate, Time: rsvpTime};
-        helpers.checkMeetUpTime(meetupTime);
-        helpers.checkString(comment);
-        helpers.checkId(restId);
-        helpers.checkId(userId);
-        helpers.checkCommentLength(comment);
-        if(!(helpers.isFutureDateTime(rsvpDate, rsvpTime))){
-          throw new Error("Meetup time must be a future date.");
-        }
-        await rsvps.createRsvp(comment,meetupTime,restId,userId);
-        req.session.message = "Meetup Created!"; 
-          res.redirect('/meetupPage');
+          
+          let meetupTime = {Date: rsvpDate, Time: rsvpTime};
+          helpers.checkMeetUpTime(meetupTime);
+          helpers.checkString(comment);
+          helpers.checkId(restId);
+          helpers.checkId(userId);
+          helpers.checkCommentLength(comment);
+          if(!(helpers.isFutureDateTime(rsvpDate, rsvpTime))){
+            throw new Error("Meetup time must be a future date.");
+          }
+          await rsvps.createRsvp(comment,meetupTime,restId,userId);
+          req.session.message = "Meetup Created!"; 
+            res.redirect('/meetupPage');
         }
         catch(e){
           req.session.message = e.message || "Something went wrong. Cannot create a meetup."
