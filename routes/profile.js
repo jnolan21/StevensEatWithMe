@@ -602,9 +602,10 @@ router
 
     // check if current user is following target user
     let isFollowing = currentUser.friends.includes(targetUserId);
-
+    console.log(currentUserId === targetUserId);
     // render the profile page
     try {
+        
         const message = req.session.message || null;
         req.session.message = null;
         res.render('users/profile', {

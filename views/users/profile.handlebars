@@ -109,6 +109,7 @@ ALL RSVP FIELDS:
                 <li class="reviewLi">
                     
                     {{#if ../isOwnProfile}}
+                    
                     <form action = "/profile/editReview" method = "GET" class = "editReviewForm">
                      <input type="hidden" name="revieww" value="{{this}}">
                       
@@ -136,6 +137,7 @@ ALL RSVP FIELDS:
                     </form>
                     <div  class="meetupError" hidden></div>
                     {{/if}}
+                    {{#if ../isOwnProfile}}
                     <div class="reviewInfo">
                         {{#if this.menuItemName}}
                             <span class="reviewSpan">{{this.restaurantName}}:</span> <span class="revItalic">{{this.menuItemName}}</span>
@@ -148,12 +150,31 @@ ALL RSVP FIELDS:
                         <p><span class="reviewSpan">Wait Time:</span> {{this.waitTime}}</p>
                         <p><span class="reviewSpan">Review:</span> {{this.review}}</p>
                     </div>
+                    {{else}}
+                        {{#if this.anonymous}}
+                            <div class="reviewInfo"><p>Posted Anonymously</p></div>
+                        {{else}}
+                            <div class="reviewInfo">
+                            {{#if this.menuItemName}}
+                                <span class="reviewSpan">{{this.restaurantName}}:</span> <span class="revItalic">{{this.menuItemName}}</span>
+                                <input type="hidden" name="properId" value="{{this.menuItemId}}">
+                            {{else}}
+                                <span class="reviewSpan">{{this.restaurantName}}</span>
+                                <input type="hidden" name="properId" value="{{this.restaurantId}}">
+                            {{/if}}
+                            <p><span class="reviewSpan">Rating:</span> {{this.rating}}</p>
+                            <p><span class="reviewSpan">Wait Time:</span> {{this.waitTime}}</p>
+                            <p><span class="reviewSpan">Review:</span> {{this.review}}</p>
+                            </div>
+                        {{/if}}
+                    {{/if}}
                 </li>
             {{/each}}
         </ul>
         </details> 
     </section>
 </div>
+{{#if isOwnProfile}}
 <section id = "createReviewContainer">
     <form method = "POST" class = "formContainer" id = "review-form">
         <h2>Create New Review</h2>
@@ -231,8 +252,9 @@ ALL RSVP FIELDS:
             <p class="error">{{message}}</p>
         {{/if}}
     </form>
-</section>
 
+</section>
+{{/if}}
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
