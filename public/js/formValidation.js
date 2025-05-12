@@ -104,7 +104,7 @@ function checkReview(review) {
 function checkRating(rating) {
   if (rating === '') throw "Rating is required.";
   const numberRating = Number(rating);
-  if (isNaN(numberRating) || numberRating < 1 || numberRating > 5) throw "Rating must be between 1 and 5.";
+  if (isNaN(numberRating) || numberRating < 0 || numberRating > 5) throw "Rating must be between 0 and 5.";
   return numberRating;
 }
 
@@ -220,5 +220,4 @@ if (reviewForm) {
 
     });
 };
-
 
