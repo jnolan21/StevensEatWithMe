@@ -70,32 +70,45 @@ router
     }
 
     // Get the users RSVPS
-    let userRSVPPosts = []; 
+    let userRSVPPosts = [];
     let currentRSVPPosts = [];
     try{
         for (let i = 0; i < user.RSVP.length; i++) {
-            let curr1 = await rsvpData.getRsvpById(user.RSVP[i]);
-            let curr2 = await rsvpData.getRsvpById(user.RSVP[i]);
-            userRSVPPosts.push(curr1);
-            currentRSVPPosts.push(curr2);
-        }
-        currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts); //going to return any rsvp posts that are active AND posted by user or that hte user is attending with names instead of ids for posteduser, usersattending and restaurant
-        //convert restaurantID and usersAttendingIds to names 
-        for(let i =0; i< userRSVPPosts.length; i++){
-            userRSVPPosts[i].restaurantId = (await restaurants.getRestaurantById(userRSVPPosts[i].restaurantId)).name;
-            userRSVPPosts[i].user = (await userData.getUserById(userRSVPPosts[i].userId)).firstName
-            let namesAttending = [];
-            let userIdsAttending = userRSVPPosts[i].usersAttending; //get all IDS of users attending 
-            for (let j=0 ;j<userIdsAttending.length; j++){
-                let currUser = (await userData.getUserById(userIdsAttending[j])).firstName;
-                namesAttending.push(currUser)
+            try {
+                let curr1 = await rsvpData.getRsvpById(user.RSVP[i]);
+                let curr2 = await rsvpData.getRsvpById(user.RSVP[i]);
+                userRSVPPosts.push(curr1);
+                currentRSVPPosts.push(curr2);
+            } catch (e) {
+                // Skip this RSVP if it's not found
+                continue;
             }
-            userRSVPPosts[i].usersAttending = namesAttending;
-          }
+        }
+        if (currentRSVPPosts.length > 0) {
+            currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts);
+        }
+        //convert restaurantID and usersAttendingIds to names
+        for(let i = 0; i < userRSVPPosts.length; i++){
+            try {
+                userRSVPPosts[i].restaurantId = (await restaurants.getRestaurantById(userRSVPPosts[i].restaurantId)).name;
+                userRSVPPosts[i].user = (await userData.getUserById(userRSVPPosts[i].userId)).firstName;
+                let namesAttending = [];
+                let userIdsAttending = userRSVPPosts[i].usersAttending; //get all IDS of users attending
+                for (let j = 0; j < userIdsAttending.length; j++){
+                    let currUser = (await userData.getUserById(userIdsAttending[j])).firstName;
+                    namesAttending.push(currUser);
+                }
+                userRSVPPosts[i].usersAttending = namesAttending;
+            } catch (e) {
+                // Skip this RSVP if there's an error processing it
+                continue;
+            }
+        }
     }
     catch(e){
         return res.status(500).json({error: e.message});
     }
+
 
     // Get the users reviews
     let userReviews = [];
