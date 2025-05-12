@@ -20,6 +20,7 @@ router
         // 403 = forbidden page
         return res.status(403).redirect('users/login');
     }
+    if (!req.session.message) {req.session.formData = {}};
 
     let id = req.session.user._id;
     // Determine if an admin is logged in
@@ -59,14 +60,23 @@ router
     try {
         followers = await userData.getAllPeopleFollowingThisUser(id);
     } catch (e) {
-        return res.status(400).json({error: e.message});
+        return res.status(400).render('errors/error', {
+            title: "400 Bad Request",
+            error: e.message,
+            status: 400
+          });
+        
     }
     // Get all of the users this user is following
     let following;
     try {
         following = await userData.getFollowingList(id);
     } catch (e) {
-        return res.status(400).json({error: e.message});
+        return res.status(400).render('errors/error', {
+            title: "400 Bad Request",
+            error: e.message,
+            status: 400
+          });
     }
 
     // Get the users RSVPS
@@ -106,7 +116,11 @@ router
         }
     }
     catch(e){
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('errors/error', {
+            title: "500 Internal Server Error",
+            error: 'Invalid session user ID. Please log out and log back in.',
+            status: 400
+          });
     }
 
 
@@ -148,8 +162,8 @@ router
     }
 
     // Render the user's profile page
-    try {
-        const message = req.session.message || null;  
+    try {   
+        const message = req.session.message || null; 
         req.session.message = null;  
         res.render('users/profile', {
             title: "EatWithMe Profile Page",
@@ -179,7 +193,11 @@ router
         })
     } catch (e) {
         req.session.message = e.message;
-        return res.redirect('/profile');
+        return res.status(500).render('errors/error', {
+            title: "error",
+            message: e.message || String(e),
+            status: 500
+        });
     }
     
   })
@@ -209,6 +227,21 @@ router
         req.session.message = e.message;
         return res.redirect('/profile');
     }
+    try {
+        if (menuId) {
+            let restaurant = await restaurants.getRestaurantById(restaurantId);
+            const menuItem = restaurant.menuItems.find(
+            m => m._id.toString() === menuId
+            );
+            if (!menuItem) {
+            throw new Error("Menu Item does not exist");
+            }
+        }
+    } catch (e) {
+        req.session.message  = e.message || String(e);
+        req.session.formData = req.body;
+        return res.redirect('/profile');
+    }
 
 
     try {
@@ -231,8 +264,7 @@ router
 
         return res.redirect('/profile');
     } catch(e) {
-        console.log(req.body);
-        req.session.message = e || "Duplicate Review.";
+        req.session.message = e.message || String(e);
         req.session.formData = req.body;
         return res.redirect('/profile');
     }
@@ -508,7 +540,6 @@ router
         res.redirect(`/profile/${friendId}`);
     }
     catch(e) {
-        console.log("Follow error:", e);
         req.session.message = e.message || "Something went wrong. Cannot follow/unfollow this user.";
         res.redirect(`/profile/${xss(req.body.friendId)}`);
     }
@@ -632,7 +663,10 @@ router
             isOwnProfile: currentUserId === targetUserId
         });
     } catch (e) {
-        res.status(500).json({error: e.message});
+        res.status(500).render(error, {
+            title: "500 Internal Server Error",
+            error: e.message,
+            status: 500});
     }
   });
 
@@ -642,7 +676,6 @@ router
         const friendId = xss(req.body.friendId);
         const currUserId = xss(req.body.userId);
         const action = xss(req.body.action); // 'follow' or 'unfollow'
-
         // Validate IDs
         if (!friendId || !currUserId) {
             throw new Error("Both user IDs are required");
@@ -684,6 +717,7 @@ router
         res.redirect(`/profile/${xss(req.body.friendId)}`);
     }
   });
+  
 
 router  
 .route('/api/diningList')

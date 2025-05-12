@@ -41,7 +41,7 @@ router
                 })
         }
         catch (e) {
-          return res.status(500).json({
+          return res.status(500).render('error', {
             title: "500 Internal Server Error",
             error: e.message,
             status: 500});
