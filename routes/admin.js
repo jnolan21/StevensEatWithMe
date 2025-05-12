@@ -27,7 +27,7 @@ router
         id = helper.checkId(id);
     } catch (e) {
         // If the id is invalid, render the error page
-        return res.status(400).render('error', {
+        return res.status(400).render('errors/error', {
             title: "400 Bad Request",
             error: 'Invalid session user ID. Please log out and log back in.',
             status: 400
@@ -56,7 +56,7 @@ router
     }
     catch(e){
         console.log("ERROR: getAllReviewsWithInfo()")
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
             status: 500
@@ -71,7 +71,7 @@ router
             return id !== user._id.toString();
         })
     } catch (e) {
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
             status: 500
@@ -83,7 +83,7 @@ router
         allRestaurants = await restaurants.getAllRestaurants();
     } catch (e) {
         console.log("ERROR: getAllRestaurants()")
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
             status: 500
@@ -134,7 +134,7 @@ router
         return;
     } catch (e) {
         console.log('RENDER THE PAGE PROBLEM')
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
             status: 500
@@ -163,7 +163,7 @@ router
     }
     catch (e){
         req.session.message = e.message || "Something went wrong deleting the review.";
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: req.session.message,
             status: 500
@@ -193,7 +193,7 @@ router
         await restaurants.removeRestaurant(restaurantId);
     } catch (e){
         req.session.message = e.message || "Something went wrong deleting the restaurant.";
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: req.session.message,
             status: 500
@@ -327,7 +327,7 @@ router
         let checkRestaurantName = await restaurants.getRestaurantByName(restaurant.name);
         if (checkRestaurantName !== null) errors.push(`Restaurant already exists with the name '${restaurant.name}'`);
         } catch (e) {
-            return res.status(500).render('error', {
+            return res.status(500).render('errors/error', {
                 title: "500 Internal Server Error",
                 error: e.message,
                 status: 500
@@ -388,7 +388,7 @@ router
         req.session.message = `New restaurant created successfully!`;
         return res.redirect('/admin');
     } catch (e) {
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
             status: 500
@@ -416,7 +416,7 @@ router
         await menuItems.removeMenuItem(menuItemId);
     } catch (e) {
         req.session.message = e.message || "Something went wrong deleting the menu item.";
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: req.session.message,
             status: 500
@@ -616,7 +616,7 @@ router
     try {
         allRestaurants = await restaurants.getAllRestaurants();
     } catch (e) {
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
             status: 500
@@ -642,7 +642,7 @@ router
         req.session.message = `New menu item, '${menuItem.name}', successfully added to '${restaurant.name}'!`;
         return res.redirect('/admin');
     } catch (e) {
-        return res.status(500).render('error', {
+        return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
             status: 500

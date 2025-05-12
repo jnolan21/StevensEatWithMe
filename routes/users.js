@@ -19,27 +19,29 @@ router
     // Get the token from the verification email link
     const verificationToken = xss(req.query.token);
     if (!verificationToken) {
-      return res.status(400).render('error', {
+      return res.status(400).render('errors/error', {
         title: "400 Bad Request",
         error: 'Verification token is missing.',
         status: 400
       });
     }
+    let signupUser;
     try {
-      let signupUser = await userData.getUserByVerificationToken(verificationToken);
+      signupUser = await userData.getUserByVerificationToken(verificationToken);
       // User could not be found
-      if (!signupUser) {
-        return res.status(404).render('error', {
+    } catch(e) {
+        return res.status(404).render('errors/error', {
           title: "404 Page Not Found",
           error: 'Verification link is invalid.',
           status: 404
         });
       }
+    try {
       // Update the user signing up to mark them as verified!
       signupUser = await userData.verifyUserSignup(signupUser._id);
       return res.redirect('/users/login');
     } catch (e) {
-      return res.status(500).render('error', {
+      return res.status(500).render('errors/error', {
         title: "500 Internal Server Error",
         error: e.message,
         status: 500
@@ -62,7 +64,7 @@ router
       }
       return res.render('users/signup', {title: "EatWithMe signup", partial: 'signupScript', isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
-      return res.status(500).render('error', {
+      return res.status(500).render('errors/error', {
         title: "500 Internal Server Error",
         error: e.message,
         status: 500
@@ -136,7 +138,7 @@ router
     try {
       allUsers = await userData.getAllUsers();
     } catch (e) {
-      return res.status(500).render('error', {
+      return res.status(500).render('errors/error', {
         title: "500 Internal Server Error",
         error: e.message,
         status: 500
@@ -217,7 +219,7 @@ router
     try {
       res.render('users/login', {title: "EatWithMe login", partial: 'loginScript', isLoggedIn: !!req.session.user, isAdmin});
     } catch (e) {
-      return res.status(500).render('error', {
+      return res.status(500).render('errors/error', {
         title: "500 Internal Server Error",
         error: e.message,
         status: 500
