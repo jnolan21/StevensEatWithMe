@@ -1,7 +1,8 @@
-import {restaurants} from '../config/mongoCollections.js';
+import {restaurants,rsvps} from '../config/mongoCollections.js';
 import {ObjectId, ReturnDocument} from 'mongodb';
 import helper from './helpers.js';
 import reviews from './reviews.js';
+import rsvpData from './rsvps.js'
 
 
 
@@ -72,8 +73,9 @@ const getRestaurantById = async (id) => {
 const removeRestaurant = async (id) => {
     // Validate id
     id = helper.checkId(id);
-    // Get the restaurant from mongodb
+    // Get the restaurant and RSVP collections from mongodb
     const rCollection = await restaurants();
+    const rsvpCollection = await rsvps();
     const restaurant = await rCollection.findOne({_id: new ObjectId(id)});
     if (!restaurant) throw new Error(`Could not find restaurant with id '${id}'!`);
 
@@ -97,6 +99,14 @@ const removeRestaurant = async (id) => {
             // Delete the review about the restaurant
             await reviews.deleteReview(review._id.toString());
         }
+    }
+
+    // Delete all RSVPs for this restaurant
+    let allRSVPs = await rsvpCollection.find({restaurantId: id}).toArray();
+    for (let i = 0; i < allRSVPs.length; i++) {
+        let rsvp = allRSVPs[i];
+        // Delete the RSVP
+        await rsvpData.deleteRsvp(rsvp._id.toString(), rsvp.userId.toString());
     }
 
     // Convert the restaurant _id to a string before returning the deleted restaurant object
