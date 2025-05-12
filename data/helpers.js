@@ -593,6 +593,33 @@ const checkImgURL = (imageURL) => {
     return imageURL;
 }
 
+const getMinutes = (waitTime) => {
+
+    waitTime = checkWaitTime(waitTime);
+
+    const parts = waitTime.split(" ");
+  if (parts.length < 2) return 0;
+  const minutesPart = parts[1].trim();      
+  
+  const minutes = parseInt(minutesPart); 
+
+    if (isNaN(minutes)) throw "Could not get a number"
+
+  
+  return minutes;
+    
+}
+
+const getHours = (waitTime) => {
+    waitTime = checkWaitTime(waitTime);
+
+    const hour = parseInt(waitTime);
+
+    if (isNaN(hour)) throw "Could not get a number";
+
+    return hour;
+    
+}
 
 
 // Export all the functions
@@ -632,5 +659,7 @@ export default {
     fixDietaryInput,
     xssForObjects,
     xssForArrays,
-    checkImgURL
+    checkImgURL,
+    getHours,
+    getMinutes
 };

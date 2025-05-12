@@ -25,13 +25,13 @@
         
         <h2>Where: {{this.restaurantId}}</h2>
     <div class="postheader">
-        <p>User Posted: {{this.user}} 
-          <input type="hidden" id="follow-friendId" name="friendId" value="{{this.userId}}">
+        <p>User Posted: {{this.user}}</p>
+          <input type="hidden" id="follow-friend" name="friend" value="{{this.userId}}">
             <form action="/meetupPage/follow" method="POST" class = "followForm">
                 <input type="hidden" id="follow-friendId" name="friendId" value="{{this.userId}}">
                 <input type="hidden" id="follow-userId" name="userId" value="{{../currUser._id}}">
                 <button type="submit" class="followButton">Follow</button>
-            </form></p>
+            </form>
     </div>
         <p>When: {{this.meetUpTime.Date}}</p>
         <p> {{this.meetUpTime.Time}}</p>
@@ -42,12 +42,10 @@
                 <input type="hidden" name="rsvpID" value="{{this._id}}">
                  <input type="hidden" name="posterId" value="{{this.userId}}">
                 <button type="submit" class="rsvpButton">RSVP</button>
-            </form></p>
+            </form>
     </div>
     {{/each}}
 
   
 
 <script src="/js/formValidation.js"></script>
-</body>
-</html>
