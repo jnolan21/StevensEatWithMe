@@ -1,14 +1,14 @@
 <div class="admin-container">
 
     <section class="admin-leftside">
-        <h2 class="profile">Welcome to the admin page!</h2>
+        <h2 id="admin-welcome-message" class="profile">Welcome to the admin page!</h2>
 
-        <!-- Profile Information Container -->
+        <!-- Profile Information Container
         <div class="profile-info">
             <p class="profileInfo">Username: {{user.username}}</p>
             <p class="profileInfo">First Name: {{user.firstName}}</p>
             <p class="profileInfo">Last Name: {{user.lastName}}</p>
-        </div>
+        </div> -->
 
         <!-- PERSONAL COMMENT:
         ALL RSVP FIELDS:
@@ -19,7 +19,7 @@
             usersAttending: [userId]
         -->
         {{#if message}}
-        <p class="deletedReview">{{message}}</p>
+        <p id="admin-error-message" class="deletedReview">{{message}}</p>
         {{/if}}
 
         <!-- All Reviews! -->
@@ -188,7 +188,7 @@
         <!-- EDIT restaurant form -->
             <div class="profSection">
                 <section class="profile-myRSVPposts">
-                    <h2 class="profile">Edit Restaurant:</h2>
+                    <h2 id="edit-restaurant-title" class="profile">Edit Restaurant:</h2>
                     <!-- Form to edit a restaurant -->
                     <form action="/admin/restaurant/edit" method="POST" id="restaurant-edit-form" class="restaurant-form">
                         <!-- Override the POST method to a PUT request -->
@@ -234,39 +234,39 @@
                             </div>
 
                             <!-- Dietary Restrictions -->
-                            <div class="loginForm">
+                            <div class="dietaryRestrictions">
                                 <p>Dietary Restrictions:</p>
                                 <div class="restaurant-checkbox">
                                     <!-- Vegetarian -->
-                                    {{#if dietaryCheckBox.Vegetarian}}
+                                    {{#if restaurantDietaryCheckBox.Vegetarian}}
                                     <input type="checkbox" checked id="editRestaurant-dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
                                     {{else}}
                                     <input type="checkbox" id="editRestaurant-dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
                                     {{/if}}
                                     <label for="editRestaurant-dietaryRestrictions-vegetarian">Vegetarian</label>
                                     <!-- Nut-free -->
-                                    {{#if dietaryCheckBox.Nut-free}}
+                                    {{#if restaurantDietaryCheckBox.Nut-free}}
                                     <input type="checkbox" checked id="editRestaurant-dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
                                     {{else}}
                                     <input type="checkbox" id="editRestaurant-dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
                                     {{/if}}
                                     <label for="editRestaurant-dietaryRestrictions-nut-free">Nut-free</label>
                                     <!-- Vegan -->
-                                    {{#if dietaryCheckBox.Vegan}}
+                                    {{#if restaurantDietaryCheckBox.Vegan}}
                                     <input type="checkbox" checked id="editRestaurant-dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
                                     {{else}}
                                     <input type="checkbox" id="editRestaurant-dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
                                     {{/if}}
                                     <label for="editRestaurant-dietaryRestrictions-vegan">Vegan</label>
                                     <!-- Dairy-free -->
-                                    {{#if dietaryCheckBox.Dairy-free}}
+                                    {{#if restaurantDietaryCheckBox.Dairy-free}}
                                     <input type="checkbox" checked id="editRestaurant-dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
                                     {{else}}
                                     <input type="checkbox" id="editRestaurant-dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
                                     {{/if}}
                                     <label for="editRestaurant-dietaryRestrictions-dairy-free">Dairy-free</label>
                                     <!-- Gluten-free -->
-                                    {{#if dietaryCheckBox.Gluten-free}}
+                                    {{#if restaurantDietaryCheckBox.Gluten-free}}
                                     <input type="checkbox" checked id="editRestaurant-dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
                                     {{else}}
                                     <input type="checkbox" id="editRestaurant-dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
@@ -293,7 +293,7 @@
             <!-- CREATE restaurant form -->
             <div class="profSection">
                 <section class="profile-myRSVPposts">
-                    <h2 class="profile">Create a New Restaurant:</h2>
+                    <h2 id="create-restaurant-title" class="profile">Create a New Restaurant:</h2>
                     <!-- Form to create a restaurant -->
                     <form action="/admin/restaurant" method="POST" id="restaurant-create-form" class="restaurant-form">
                         <div class="adminBox">
@@ -335,40 +335,40 @@
                             </div>
 
                             <!-- Dietary Restrictions -->
-                            <div class="loginForm">
+                            <div class="dietaryRestrictions">
                                 <!-- <label for="restaurant-dietaryRestrictions">Dietary Restrictions:</label> -->
                                 <p>Dietary Restrictions:</p>
                                 <div class="restaurant-checkbox">
                                     <!-- Vegetarian -->
-                                    {{#if dietaryCheckBox.Vegetarian}}
+                                    {{#if restaurantDietaryCheckBox.Vegetarian}}
                                     <input type="checkbox" checked id="createRestaurant-dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
                                     {{else}}
                                     <input type="checkbox" id="createRestaurant-dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
                                     {{/if}}
                                     <label for="createRestaurant-dietaryRestrictions-vegetarian">Vegetarian</label>
                                     <!-- Nut-free -->
-                                    {{#if dietaryCheckBox.Nut-free}}
+                                    {{#if restaurantDietaryCheckBox.Nut-free}}
                                     <input type="checkbox" checked id="createRestaurant-dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
                                     {{else}}
                                     <input type="checkbox" id="createRestaurant-dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
                                     {{/if}}
                                     <label for="createRestaurant-dietaryRestrictions-nut-free">Nut-free</label>
                                     <!-- Vegan -->
-                                    {{#if dietaryCheckBox.Vegan}}
+                                    {{#if restaurantDietaryCheckBox.Vegan}}
                                     <input type="checkbox" checked id="createRestaurant-dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
                                     {{else}}
                                     <input type="checkbox" id="createRestaurant-dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
                                     {{/if}}
                                     <label for="createRestaurant-dietaryRestrictions-vegan">Vegan</label>
                                     <!-- Dairy-free -->
-                                    {{#if dietaryCheckBox.Dairy-free}}
+                                    {{#if restaurantDietaryCheckBox.Dairy-free}}
                                     <input type="checkbox" checked id="createRestaurant-dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
                                     {{else}}
                                     <input type="checkbox" id="createRestaurant-dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
                                     {{/if}}
                                     <label for="createRestaurant-dietaryRestrictions-dairy-free">Dairy-free</label>
                                     <!-- Gluten-free -->
-                                    {{#if dietaryCheckBox.Gluten-free}}
+                                    {{#if restaurantDietaryCheckBox.Gluten-free}}
                                     <input type="checkbox" checked id="createRestaurant-dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
                                     {{else}}
                                     <input type="checkbox" id="createRestaurant-dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
@@ -398,7 +398,7 @@
         <!-- EDIT menu item form -->
             <div class="profSection">
                 <section class="profile-myRSVPposts">
-                    <h2 class="profile">Edit Menu Item:</h2>
+                    <h2 id="edit-menuItem-title" class="profile">Edit Menu Item:</h2>
                     <!-- Form to edit a menu item -->
                     <form action="/admin/menuItem/edit" method="POST" id="menuItem-edit-form" class="restaurant-form">
                         <!-- Override the POST method to a PUT request -->
@@ -426,40 +426,40 @@
                             </div>
 
                             <!-- Dietary Restrictions -->
-                            <div class="loginForm">
+                            <div class="dietaryRestrictions">
                                 <!-- <label for="menuItem-dietaryRestrictions">Dietary Restrictions:</label> -->
                                 <p>Dietary Restrictions:</p>
                                 <div class="restaurant-checkbox">
                                     <!-- Vegetarian -->
-                                    {{#if dietaryCheckBox.Vegetarian}}
+                                    {{#if menuItemDietaryCheckBox.Vegetarian}}
                                     <input type="checkbox" checked id="editMenuItem-dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
                                     {{else}}
                                     <input type="checkbox" id="editMenuItem-dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
                                     {{/if}}
                                     <label for="editMenuItem-dietaryRestrictions-vegetarian">Vegetarian</label>
                                     <!-- Nut-free -->
-                                    {{#if dietaryCheckBox.Nut-free}}
+                                    {{#if menuItemDietaryCheckBox.Nut-free}}
                                     <input type="checkbox" checked id="editMenuItem-dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
                                     {{else}}
                                     <input type="checkbox" id="editMenuItem-dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
                                     {{/if}}
                                     <label for="editMenuItem-dietaryRestrictions-nut-free">Nut-free</label>
                                     <!-- Vegan -->
-                                    {{#if dietaryCheckBox.Vegan}}
+                                    {{#if menuItemDietaryCheckBox.Vegan}}
                                     <input type="checkbox" checked id="editMenuItem-dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
                                     {{else}}
                                     <input type="checkbox" id="editMenuItem-dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
                                     {{/if}}
                                     <label for="editMenuItem-dietaryRestrictions-vegan">Vegan</label>
                                     <!-- Dairy-free -->
-                                    {{#if dietaryCheckBox.Dairy-free}}
+                                    {{#if menuItemDietaryCheckBox.Dairy-free}}
                                     <input type="checkbox" checked id="editMenuItem-dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
                                     {{else}}
                                     <input type="checkbox" id="editMenuItem-dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
                                     {{/if}}
                                     <label for="editMenuItem-dietaryRestrictions-dairy-free">Dairy-free</label>
                                     <!-- Gluten-free -->
-                                    {{#if dietaryCheckBox.Gluten-free}}
+                                    {{#if menuItemDietaryCheckBox.Gluten-free}}
                                     <input type="checkbox" checked id="editMenuItem-dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
                                     {{else}}
                                     <input type="checkbox" id="editMenuItem-dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
@@ -486,7 +486,7 @@
             <!-- Create menu item form -->
             <div class="profSection">
                 <section class="profile-myRSVPposts">
-                    <h2 class="profile">Create Menu Item:</h2>
+                    <h2 id="create-menuItem-title" class="profile">Create Menu Item:</h2>
                     <!-- Form to create a menu item -->
                     <form action="/admin/menuItem" method="POST" id="menuItem-create-form" class="restaurant-form">
                         <div class="adminBox">
@@ -510,40 +510,40 @@
                             </div>
 
                             <!-- Dietary Restrictions -->
-                            <div class="loginForm">
+                            <div class="dietaryRestrictions">
                                 <!-- <label for="menuItem-dietaryRestrictions">Dietary Restrictions:</label> -->
                                 <p>Dietary Restrictions:</p>
                                 <div class="restaurant-checkbox">
                                     <!-- Vegetarian -->
-                                    {{#if dietaryCheckBox.Vegetarian}}
+                                    {{#if menuItemDietaryCheckBox.Vegetarian}}
                                     <input type="checkbox" checked id="createMenuItem-dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
                                     {{else}}
                                     <input type="checkbox" id="createMenuItem-dietaryRestrictions-vegetarian" name="dietaryRestrictions" value="Vegetarian">
                                     {{/if}}
                                     <label for="createMenuItem-dietaryRestrictions-vegetarian">Vegetarian</label>
                                     <!-- Nut-free -->
-                                    {{#if dietaryCheckBox.Nut-free}}
+                                    {{#if menuItemDietaryCheckBox.Nut-free}}
                                     <input type="checkbox" checked id="createMenuItem-dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
                                     {{else}}
                                     <input type="checkbox" id="createMenuItem-dietaryRestrictions-nut-free" name="dietaryRestrictions" value="Nut-free">
                                     {{/if}}
                                     <label for="createMenuItem-dietaryRestrictions-nut-free">Nut-free</label>
                                     <!-- Vegan -->
-                                    {{#if dietaryCheckBox.Vegan}}
+                                    {{#if menuItemDietaryCheckBox.Vegan}}
                                     <input type="checkbox" checked id="createMenuItem-dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
                                     {{else}}
                                     <input type="checkbox" id="createMenuItem-dietaryRestrictions-vegan" name="dietaryRestrictions" value="Vegan">
                                     {{/if}}
                                     <label for="createMenuItem-dietaryRestrictions-vegan">Vegan</label>
                                     <!-- Dairy-free -->
-                                    {{#if dietaryCheckBox.Dairy-free}}
+                                    {{#if menuItemDietaryCheckBox.Dairy-free}}
                                     <input type="checkbox" checked id="createMenuItem-dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
                                     {{else}}
                                     <input type="checkbox" id="createMenuItem-dietaryRestrictions-dairy-free" name="dietaryRestrictions" value="Dairy-free">
                                     {{/if}}
                                     <label for="createMenuItem-dietaryRestrictions-dairy-free">Dairy-free</label>
                                     <!-- Gluten-free -->
-                                    {{#if dietaryCheckBox.Gluten-free}}
+                                    {{#if menuItemDietaryCheckBox.Gluten-free}}
                                     <input type="checkbox" checked id="createMenuItem-dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">
                                     {{else}}
                                     <input type="checkbox" id="createMenuItem-dietaryRestrictions-gluten-free" name="dietaryRestrictions" value="Gluten-free">

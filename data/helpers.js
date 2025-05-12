@@ -559,7 +559,8 @@ const clearAdminSession = (session) => {
     session.restaurantInfo = null;
     session.menuItemInfo = null;
     session.message = null;
-    session.dietaryCheckBox = null;
+    session.restaurantDietaryCheckBox = null;
+    session.menuItemDietaryCheckBox = null;
 }
 
 const buildDietaryCheckBox = (selectedDietaryRestrictions) => {
