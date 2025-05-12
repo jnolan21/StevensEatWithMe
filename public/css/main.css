@@ -275,13 +275,12 @@ footer{
     columns: 2;
     column-gap: 50px;
     width: fit-content;
-    list-style-position: inside;
     margin-left: auto;
     margin-right: auto;
     border: 1px solid #c0bfbf;
     border-radius: 8px;
-    padding-bottom: 12px;;
-    list-style-position: inside;
+    padding-bottom: 12px;
+    display: inside;
   }
 /*styling for create meetup form */
 .meetupForm {
@@ -378,6 +377,7 @@ footer{
 #menuItems ol li.menuItem {
   position: relative; 
   margin-bottom: 20px;
+  overflow: visible;
 }
 
 .hoverPopup {
@@ -396,6 +396,17 @@ footer{
   z-index: 100;
   transform: translateY(10px);
   transition: opacity 0.3s ease, transform 0.3s ease;
+  width: 250px;
+  white-space: normal;   
+  overflow: visible;   
+}
+
+
+
+.hoverPopup p {
+  display: inline-block;   
+  margin: 0;               
+  white-space: inherit;    
 }
 
 #menuItems ol li.menuItem:hover .hoverPopup {
