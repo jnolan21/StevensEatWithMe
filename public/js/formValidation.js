@@ -64,10 +64,10 @@
         const friendId = validateId(document.getElementById('follow-friendId').value, 'friend ID');
         const userId = validateId(document.getElementById('follow-userId').value, 'user ID');
         validateNotSelf(friendId, userId, 'follow yourself');
-        return true; // Indicate validation passed
+        followForm.submit(); // Indicate validation passed
       } catch (e) {
         showError(followForm, e);
-        return false; // Indicate validation failed
+        //return false; // Indicate validation failed
       }
     });
   }

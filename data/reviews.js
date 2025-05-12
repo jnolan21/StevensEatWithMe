@@ -33,6 +33,7 @@ const createMenuItemReview = async (
     let user = await userData.getUserById(userId);
     let restaurant = await restaurantData.getRestaurantById(restaurantId);
     let menuItem = await menuItemData.getMenuItemById(menuItemId);
+    if (menuItem === null) throw "Could not find menu Item"
     let newReview = {
         userId: userId,
         restaurantId: restaurantId,
