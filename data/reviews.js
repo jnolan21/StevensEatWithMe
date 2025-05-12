@@ -47,6 +47,7 @@ const createMenuItemReview = async (
     // Add the review to the database and the corresponding user, restaurant, and menu item
     const reviewCollection = await reviews();
 
+
     const menuItemExist = await rCollection.findOne({
         _id: new ObjectId(restaurantId),
         'menuItems._id': new ObjectId(menuItemId)
@@ -151,7 +152,6 @@ const createRestaurantReview = async (
         throw "Cannot create multiple reviews of the same place";
     }
     
-
 
 
     const newReviewInfo = await reviewCollection.insertOne(newReview);
