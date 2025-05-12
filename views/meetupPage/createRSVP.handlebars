@@ -10,12 +10,12 @@
 
   <div class="formGroup">
     <label for="rsvpDate">Date:</label>
-    <input type="date" name="rsvpDate" id="rsvpDate" class="createMeet">
+    <input type="date" name="rsvpDate" id="rsvpDate" class="createMeet" value = {{date}}>
   </div>
 
   <div class="formGroup">
     <label for="rsvpTime">Time:</label>
-    <input type="time" name="rsvpTime" id="rsvpTime" class="createMeet">
+    <input type="time" name="rsvpTime" id="rsvpTime" class="createMeet" value = {{time}}>
   </div>
 
   <div class="formGroup">
@@ -23,14 +23,14 @@
     <select name="restaurant" id="restaurantSelect" class="createMeet">
       <option value="">-- Select --</option>
       {{#each restNames}}
-        <option value="{{this.id}}">{{this.name}}</option>
+        <option value="{{this.id}}" {{#if this.isSelected}}selected{{/if}} >{{this.name}}</option>
       {{/each}}
     </select>
   </div>
 
   <div class="formGroup">
     <label for="comment">Comment:</label>
-    <input type="text" name="comment" id="comment" class="createMeet">
+    <input type="text" name="comment" id="comment" class="createMeet" value = "{{comment}}">
   </div>
 
   <div class="formGroup">
