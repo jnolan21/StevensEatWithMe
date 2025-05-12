@@ -139,15 +139,17 @@ const validateId = (id, field) => {
 
 let selectedRadio = null;
 let anonymous = document.getElementById('anonymous'); 
-anonymous.addEventListener('click', function () {
-  if (selectedRadio === this) {
-    this.checked = false;
-    selectedRadio = null;
-  } else {
-    selectedRadio = this;
-    }
-    //console.log(anonymous.checked); 
-});
+if (anonymous) {
+  anonymous.addEventListener('click', function () {
+    if (selectedRadio === this) {
+      this.checked = false;
+      selectedRadio = null;
+    } else {
+      selectedRadio = this;
+      }
+      //console.log(anonymous.checked); 
+  });
+}
 
 
 
