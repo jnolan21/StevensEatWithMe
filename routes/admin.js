@@ -47,7 +47,8 @@ router
     const restaurant = req.session.restaurantInfo || false;
     const menuItem = req.session.menuItemInfo || false;
     const message = req.session.message || null;
-    const dietaryCheckBox = req.session.dietaryCheckBox || null;
+    const restaurantDietaryCheckBox = req.session.restaurantDietaryCheckBox || null;
+    const menuItemDietaryCheckBox = req.session.menuItemDietaryCheckBox || null;
 
     // Get all users reviews
     let reviews;
@@ -55,7 +56,6 @@ router
         reviews = await reviewData.getAllReviewsWithInfo();
     }
     catch(e){
-        console.log("ERROR: getAllReviewsWithInfo()")
         return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
@@ -82,7 +82,6 @@ router
     try {
         allRestaurants = await restaurants.getAllRestaurants();
     } catch (e) {
-        console.log("ERROR: getAllRestaurants()")
         return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
@@ -112,7 +111,7 @@ router
                 lastName: user.lastName,
                 reviews // array of review objects
             },
-            partial: 'adminScript',
+            //partial: 'adminScript',
             days: days,
             allUsers: allUsers,
             allRestaurants: allRestaurants,
@@ -123,7 +122,8 @@ router
             editingMenuItem,
             restaurant,
             menuItem,
-            dietaryCheckBox,
+            restaurantDietaryCheckBox,
+            menuItemDietaryCheckBox,
             message,
             script: 'adminScript',
             isLoggedIn: !!req.session.user,
@@ -133,7 +133,6 @@ router
         helper.clearAdminSession(req.session);
         return;
     } catch (e) {
-        console.log('RENDER THE PAGE PROBLEM')
         return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
             error: e.message,
@@ -239,7 +238,7 @@ router
     }
     req.session.editingRestaurant = true;
     req.session.restaurantInfo = restaurant;
-    req.session.dietaryCheckBox = dietaryCheckBox;
+    req.session.restaurantDietaryCheckBox = dietaryCheckBox;
     res.redirect('/admin');
 })
 
@@ -286,7 +285,7 @@ router
             dietaryRestrictions: req.body.dietaryRestrictions
         };
         let dietaryRestrictions = helper.fixDietaryInput(req.body.dietaryRestrictions);
-        req.session.dietaryCheckBox = helper.buildDietaryCheckBox(dietaryRestrictions);
+        req.session.restaurantDietaryCheckBox = helper.buildDietaryCheckBox(dietaryRestrictions);
         return res.status(400).redirect('/admin');
     }
 });
@@ -370,7 +369,7 @@ router
     if (errors.length > 0) {
         req.session.message = errors[0];
         req.session.restaurantInfo = restaurant;
-        req.session.dietaryCheckBox = dietaryCheckBox;
+        req.session.restaurantDietaryCheckBox = dietaryCheckBox;
         return res.status(400).redirect('/admin');
       }
 
@@ -460,7 +459,7 @@ router
     }
     req.session.editingMenuItem = true;
     req.session.menuItemInfo = menuItem;
-    req.session.dietaryCheckBox = dietaryCheckBox;
+    req.session.menuItemDietaryCheckBox = dietaryCheckBox;
     res.redirect('/admin');
 })
 
@@ -514,19 +513,12 @@ router
     } catch (e) {
         errors.push(e.message);
     }
-    let dietaryCheckBox = {};
-    try {
-        // Create the dietaryCheckBox object
-        dietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
-    } catch (e) {
-        errors.push(e.message);
-    }
     // Reload with errors if needed
     if (errors.length > 0) {
         req.session.message = errors[0];
         req.session.editingMenuItem = true;
         req.session.menuItemInfo = menuItem;
-        req.session.dietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
+        req.session.menuItemDietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
         return res.status(400).redirect('/admin');
     }
     // Update the menu item
@@ -544,7 +536,7 @@ router
         req.session.message = e.message || "Something went wrong updating the menu item.";
         req.session.editingMenuItem = true;
         req.session.menuItemInfo = menuItem;
-        req.session.dietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
+        req.session.menuItemDietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
         return res.redirect('/admin');        
     }
 });
@@ -612,21 +604,11 @@ router
     if (menuItem.dietaryRestrictions) {
         dietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
     }
-    let allRestaurants;
-    try {
-        allRestaurants = await restaurants.getAllRestaurants();
-    } catch (e) {
-        return res.status(500).render('errors/error', {
-            title: "500 Internal Server Error",
-            error: e.message,
-            status: 500
-        });
-    }
     // Reload with errors if needed
     if (errors.length > 0) {
         req.session.message = errors[0];
         req.session.menuItemInfo = menuItem;
-        req.session.dietaryCheckBox = dietaryCheckBox;
+        req.session.menuItemDietaryCheckBox = dietaryCheckBox;
         return res.status(400).redirect('/admin');
     }
 
