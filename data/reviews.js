@@ -142,7 +142,6 @@ const createRestaurantReview = async (
     const reviewCollection = await reviews();
 
     //check if review already exists;
-
     const existingReview = await reviewCollection.findOne({
         restaurantId: restaurantId,
         userId: userId,
