@@ -30,6 +30,7 @@ router
           }
         let allrsvps = await rsvps.getAllRsvps();
         allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
+        allrsvps = helpers.sortRSVPSbyTime(allrsvps);
         //need to send all restaurants to this page. then send it to get create page so we can do a dropdown with all the restaurants
         res.render('meetupPage/meetupPage', {
             title: "EatWithMe Meetup Page", 

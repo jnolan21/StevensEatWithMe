@@ -339,7 +339,19 @@ function fixMilitaryTime(miltime){
     return miltime;
 
 }
-
+function sortRSVPSbyTime(currrsvps){ //sort current day rsvps by time
+    let to24Hour = timeStr => {
+      let [time, ampm] = timeStr.split(/(AM|PM)/);
+      let [hours, minutes] = time.split(':').map(Number);
+  
+      if (ampm === 'PM' && hours !== 12) hours += 12;
+      if (ampm === 'AM' && hours === 12) hours = 0;
+  
+      return hours * 60 + minutes;
+    };
+  
+    return currrsvps.sort((a, b) => to24Hour(a.meetUpTime.Time) - to24Hour(b.meetUpTime.Time));
+}
 
 async function formatAndCheckRSVPS(allrsvps, wantFuture){ //given a list of raw rsvp objects, returns current rsvps with  (non-expired and happening within current year) with list of attendees as user names rather than just IDs, and also restaurant name instead of ID, and same for the user that posted
     let currentRsvps = [];
@@ -831,6 +843,7 @@ export default {
     filt,
     isValidMeetupTime,
     sortByRating,
-    sortByWaitTime
+    sortByWaitTime,
+    sortRSVPSbyTime
 };
 
