@@ -24,9 +24,6 @@ const createRsvp = async (
 
     let hoo = rest.hoursOfOperation;
     hoo = helper.checkHoursOfOperation(hoo);
-
-    
-
     helper.isValidMeetupTime(meetUpTime['Time'], meetUpTime['Date'], hoo);
 
     await userData.getUserById(userId);

@@ -74,6 +74,12 @@ router.route('/diningList/:id').get(async (req, res) => {
       if (req.session.user.isAdmin) isAdmin = true;
       else isAdmin = false;
     }
+    let sortBy = xss(req.query.sortBy)
+    if (sortBy === 'rating') {
+      restaurantReviews = helpers.sortByRating(restaurantReviews); 
+    } else if (sortBy === 'waitTime') {
+      restaurantReviews = helpers.sortByWaitTime(restaurantReviews); 
+    }
 
     for (let i = 0; i < restaurantReviews.length; i++) {
       restaurantReviews[i] = await reviews.addNametoReview(restaurantReviews[i]); 
