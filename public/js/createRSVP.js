@@ -118,6 +118,7 @@
         validateComment(comment);
 
         // Convert date from YYYY-MM-DD to MM/DD/YYYY with leading zeros
+        /*
         const [year, month, day] = date.split('-');
         const formattedDate = `${month.padStart(2, '0')}/${day.padStart(2, '0')}/${year}`;
 
@@ -149,7 +150,9 @@
         // Add the hidden inputs with formatted values
         meetupForm.appendChild(dateInput);
         meetupForm.appendChild(timeInput);
-
+        console.log(dateInput)
+        console.log(timeInput)
+        */
         this.submit();
       } catch (e) {
         showError(meetupForm, e);
