@@ -216,9 +216,6 @@ router
     let waitTime = `${hour}h ${minute}min`;
     let anonymous = xss(req.body.anonymous) || "false";
 
-
-    //console.log(restaurantId + " " + menuId + " " + review + " " + rating + " " + waitTime);
-
     try {
     restaurantId = helper.checkId(restaurantId);
     if (menuId !== null) menuId = helper.checkId(menuId);
@@ -241,7 +238,6 @@ router
             }
         }
     } catch (e) {
-        console.log(e);
         req.session.message  = e.message || String(e);
         req.session.formData = req.body;
         return res.redirect('/profile');
@@ -320,7 +316,7 @@ router
         await reviews.updateReview(reviewId, {
             rating: rating,
             review: review,
-            waitHours: waitTime,
+            waitTime: waitTime,
             anonymous: anon
           },isMenuItem, properId, restId);
     
@@ -658,7 +654,6 @@ router
 
     // check if current user is following target user
     let isFollowing = currentUser.friends.includes(targetUserId);
-    console.log(currentUserId === targetUserId);
     // render the profile page
     try {
         
@@ -737,7 +732,6 @@ router
         res.redirect(`/profile/${friendId}`);
     }
     catch(e) {
-        console.log("Follow error:", e);
         req.session.message = e.message || "Something went wrong. Cannot follow/unfollow this user.";
         res.redirect(`/profile/${xss(req.body.friendId)}`);
     }
