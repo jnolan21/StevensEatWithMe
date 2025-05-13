@@ -133,10 +133,10 @@ router
             });
           }
 
-           rawDate = xss(req.body.rsvpDate);
-           rawComment = xss(req.body.comment);
-           rawtime = xss(req.body.rsvpTime);
-           rawrestaurant = xss(req.body.restaurant);
+          rawDate = xss(req.body.rsvpDate);
+          rawComment = xss(req.body.comment);
+          rawtime = xss(req.body.rsvpTime);
+          rawrestaurant = xss(req.body.restaurant);
           let rsvpDate = xss(req.body.rsvpDate);
           let rsvpTime = xss(req.body.rsvpTime);
           let restId = xss(req.body.restaurant);
