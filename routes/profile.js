@@ -195,7 +195,7 @@ router
             formData: req.session.formData || {}
         })
     } catch (e) {
-        req.session.message = e.message;
+        req.session.message = e.message || String(e);
         return res.status(500).render('errors/error', {
             title: "error",
             message: e.message || String(e),
@@ -227,7 +227,7 @@ router
     waitTime = helper.checkWaitTime(waitTime);
     } catch(e) {
         req.body.formData = req.body;
-        req.session.message = e.message;
+        req.session.message = e.message || String(e);
         return res.redirect('/profile');
     }
     try {
@@ -237,10 +237,11 @@ router
             m => m._id.toString() === menuId
             );
             if (!menuItem) {
-            throw new Error("Menu Item does not exist");
+            throw "Menu Item does not exist";
             }
         }
     } catch (e) {
+        console.log(e);
         req.session.message  = e.message || String(e);
         req.session.formData = req.body;
         return res.redirect('/profile');
