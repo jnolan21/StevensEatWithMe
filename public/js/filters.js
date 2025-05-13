@@ -7,7 +7,7 @@ document.querySelectorAll('.dropdown-menu').forEach(menu => {
 
   
 let dietary = [];
-let waitTime = 359;
+let waitTime = Infinity;
 let rating = 0;
 
 
@@ -47,7 +47,7 @@ $.ajax(requestConfig).then(function (responseMessage) {
 
 $('#waitTime input').click(function() {
     waitTime = this.value;
-    if (waitTime === 'None') waitTime = 359;
+    if (waitTime === 'None') waitTime = Infinity;
     rerender();
   });
 
@@ -62,7 +62,7 @@ function waitTimeConversion (time) {
 
     const [hour, minutes] = time.split(" ");
     
-
+    
     let h = parseInt(hour);
     let m = parseInt(minutes);
 
