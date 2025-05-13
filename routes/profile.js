@@ -141,7 +141,10 @@ router
         }
     }
     catch(e){
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('errors/error', {
+            title: "500 Internal Server Error",
+            error: e.message || String(e),
+            status: 500});
     }
 
     //Get the restaurants and menuItems for the create review
@@ -332,25 +335,25 @@ router
   router
   .route('/editReview').get( async (req, res) =>{
         try{
-            let reviewObj = req.query.revieww
-            let userId = req.query.userId
-            let reviewId= req.query.reviewId;
-            let reviewComment = req.query.reviewComment
+            //let reviewObj = helper.xssForObjects(req.query.revieww);
+            let userId = xss(req.query.userId);
+            let reviewId= xss(req.query.reviewId);
+            let reviewComment = xss(req.query.reviewComment);
             reviewComment = reviewComment.trim()
-            let reviewRating = req.query.reviewRating
-            let reviewWaitTime = req.query.reviewWaitTime
-            let reviewHours = helper.getHours(req.query.reviewWaitTime);
-            let reviewMinutes = helper.getMinutes(req.query.reviewWaitTime);
-            let reviewRestaurant = req.query.reviewRestaurant
-            let reviewMenuItem = req.query.reviewMenuItem
-            let properId = req.query.properId;
-            let isMenuItem = req.query.isMenuItem;
-            let restId = req.query.restId;
+            let reviewRating = xss(req.query.reviewRating);
+            let reviewWaitTime = xss(req.query.reviewWaitTime);
+            let reviewHours = helper.getHours(xss(req.query.reviewWaitTime));
+            let reviewMinutes = helper.getMinutes(xss(req.query.reviewWaitTime));
+            let reviewRestaurant = xss(req.query.reviewRestaurant)
+            let reviewMenuItem = xss(req.query.reviewMenuItem)
+            let properId = xss(req.query.properId);
+            let isMenuItem = xss(req.query.isMenuItem);
+            let restId = xss(req.query.restId);
             let r = await reviews.getReviewById(reviewId);
             let anonymous = r.anonymous;
             res.render('users/editReview', {
                 title: "Edit Review",
-                reviewObj: reviewObj,
+                //reviewObj: reviewObj,
                 userId: userId,
                 reviewId: reviewId,
                 reviewComment: reviewComment,
@@ -383,7 +386,7 @@ router
     if (!req.session.user) {
         return res.status(403).redirect('/users/login');
     }
-    let targetUserId = req.params.id;
+    let targetUserId = xss(req.params.id);
     let currentUserId = req.session.user._id;
     let isAdmin = req.session.user.isAdmin || false;
 
@@ -415,7 +418,10 @@ router
         followers = await userData.getAllPeopleFollowingThisUser(targetUserId);
         following = await userData.getFollowingList(targetUserId);
     } catch (e) {
-        return res.status(400).json({error: e.message});
+        return res.status(400).render('errors/error', {
+            title: "400 Cannot get Data",
+            error: e.message || String(e),
+            status: 400});
     }
     // get target user's rsvps
     let userRSVPPosts = [];
@@ -441,7 +447,10 @@ router
             userRSVPPosts[i].usersAttending = namesAttending;
         }
     } catch (e) {
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('errors/error', {
+            title: "500 Internal Server Error",
+            error: e.message || String(e),
+            status: 500});
     }
 
     // get the target user's reviews
@@ -458,7 +467,10 @@ router
             userReviews.push(review);
         }
     } catch (e) {
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('errors/error', {
+            title: "500 Internal Server Error",
+            error: e.message || String(e),
+            status: 500});
     }
 
     // check if current user is following target user
@@ -494,7 +506,10 @@ router
             isOwnProfile: currentUserId === targetUserId,
         });
     } catch (e) {
-        res.status(500).json({error: e.message});
+        return res.status(500).render('errors/error', {
+            title: "500 Internal Server Error",
+            error: e.message || String(e),
+            status: 500});
     }
   });
   router
@@ -553,7 +568,7 @@ router
     if (!req.session.user) {
         return res.status(403).redirect('/users/login');
     }
-    let targetUserId = req.params.id;
+    let targetUserId = xss(req.params.id);
     let currentUserId = req.session.user._id;
     let isAdmin = req.session.user.isAdmin || false;
 
@@ -585,7 +600,10 @@ router
         followers = await userData.getAllPeopleFollowingThisUser(targetUserId);
         following = await userData.getFollowingList(targetUserId);
     } catch (e) {
-        return res.status(400).json({error: e.message});
+        return res.status(400).render('errors/error', {
+            title: "400 Data Error",
+            error: e.message || String(e),
+            status: 400});
     }
     // get target user's rsvps
     let userRSVPPosts = [];
@@ -611,7 +629,10 @@ router
             userRSVPPosts[i].usersAttending = namesAttending;
         }
     } catch (e) {
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('errors/error', {
+            title: "500 Internal Server Error",
+            error: e.message || String(e),
+            status: 500});
     }
 
     // get the target user's reviews
@@ -628,7 +649,10 @@ router
             userReviews.push(review);
         }
     } catch (e) {
-        return res.status(500).json({error: e.message});
+        return res.status(500).render('errors/error', {
+            title: "500 Internal Server Error",
+            error: e.message || String(e),
+            status: 500});
     }
 
     // check if current user is following target user
@@ -719,18 +743,18 @@ router
   });
   
 
-router  
-.route('/api/diningList')
-  .get(async (req, res) => {
-    try {
-    let serverRestaurants = await restaurants.getAllRestaurants();
-    res.json(serverRestaurants);
-    } catch(e) {
-      return res.status(500).json({
-      title: "500 Internal Server Error",
-      error: e.message,
-      status: 500});
-    }
-  });
+// router  
+// .route('/api/diningList')
+//   .get(async (req, res) => {
+//     try {
+//     let serverRestaurants = await restaurants.getAllRestaurants();
+//     res.json(serverRestaurants);
+//     } catch(e) {
+//       return res.status(500).render('errors/error', {
+//       title: "500 Internal Server Error",
+//       error: e.message || String(e),
+//       status: 500});
+//     }
+//   });
 
 export default router;

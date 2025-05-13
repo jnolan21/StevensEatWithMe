@@ -4,6 +4,7 @@ import restaurants from '../data/restaurants.js';
 import rsvps from '../data/rsvps.js'
 import users from '../data/users.js'
 import helpers from '../data/helpers.js';
+import xss from 'xss';
 import reviews from '../data/reviews.js';
 import { all } from 'axios';
 
@@ -53,8 +54,8 @@ router
         try{
             allrsvps = await rsvps.getAllRsvps();
             allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
-            const friendId = req.body.friendId;
-            const currUserId = req.body.userId;
+            const friendId = xss(req.body.friendId);
+            const currUserId = xss(req.body.userId);
             if(friendId === currUserId) throw new Error("Can only add other users, not yourself!")
             //const addFriend = async (id, friendId) => {
             await users.addFriend(currUserId, friendId);
@@ -74,9 +75,9 @@ router
         try{
             allrsvps = await rsvps.getAllRsvps();
             allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
-            let userId = req.body.userId;
-            let rsvpId = req.body.rsvpID;
-            let posterId = req.body.posterId;
+            let userId = xss(req.body.userId);
+            let rsvpId = xss(req.body.rsvpID);
+            let posterId = xss(req.body.posterId);
             if(posterId === userId) throw new Error("This is your meetup! You are already attending.");
             let currRSVP = await rsvps.userJoinRsvp(rsvpId, userId);
             req.session.message = "Added to attendees!"; 
@@ -90,7 +91,7 @@ router
   router
   .get('/create', async (req, res) => {
         try{
-          let restNames = req.query.restNames; 
+          let restNames = helpers.xssForArrays(req.query.restNames)
           restNames = restNames.map(entry => {
             const [name, id] = entry.split('::');
             return { name, id };
@@ -127,14 +128,14 @@ router
             });
           }
 
-           rawDate = req.body.rsvpDate;
-           rawComment = req.body.comment;
-           rawtime = req.body.rsvpTime;
-           rawrestaurant = req.body.restaurant;
-          let rsvpDate = req.body.rsvpDate;
-          let rsvpTime = req.body.rsvpTime;
-          let restId = req.body.restaurant;
-          let comment = req.body.comment;
+           rawDate = xss(req.body.rsvpDate);
+           rawComment = xss(req.body.comment);
+           rawtime = xss(req.body.rsvpTime);
+           rawrestaurant = xss(req.body.restaurant);
+          let rsvpDate = xss(req.body.rsvpDate);
+          let rsvpTime = xss(req.body.rsvpTime);
+          let restId = xss(req.body.restaurant);
+          let comment = xss(req.body.comment);
           comment=comment.trim();
           let userId = req.session.user._id;
           let userObj = await users.getUserById(userId);

@@ -33,7 +33,7 @@ router.route('/').get(async (req, res) => {
     });
   }
   catch (e) {
-    return res.status(500).json({
+    return res.status(500).render('errors/error', {
       title: "500 Internal Server Error",
       error: e.message,
       status: 500});
@@ -53,7 +53,7 @@ router.route('/diningList').get(async (req, res) => {
 })
   } 
   catch (e) {
-    return res.status(500).json({
+    return res.status(500).render('errors/error', {
       title: "500 Internal Server Error",
       error: e.message,
       status: 500});
@@ -66,7 +66,7 @@ router.route('/diningList/:id').get(async (req, res) => {
 
 
   try {
-    const id = helpers.checkId(req.params.id);
+    const id = helpers.checkId(xss(req.params.id));
     const restaurant = await restaurants.getRestaurantById(id);
     let restaurantReviews = await reviews.getAllRestaurantReviews(id);
     let isAdmin;
@@ -99,7 +99,7 @@ router
     let serverRestaurants = await restaurants.getAllRestaurants();
     res.json(serverRestaurants);
     } catch(e) {
-      return res.status(500).json({
+      return res.status(500).render('errors/error', {
       title: "500 Internal Server Error",
       error: e.message,
       status: 500});

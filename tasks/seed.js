@@ -1943,7 +1943,7 @@ for (const data of menuItemReviewData) {
 }
 
 
-// createReview() create 4 reviews for tu taco menu items
+// createReview() create 4 reviews for acup menu items
 reviewData = [
     {
         user: user2._id,
@@ -1983,7 +1983,7 @@ reviewData = [
     }
 ];
 
-// Add the 4 menu item reviews to tu taco
+// Add the 4 menu item reviews to acup
 for (const data of reviewData) {
     try {
         const review = await reviews.createMenuItemReview(

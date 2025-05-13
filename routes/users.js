@@ -2,8 +2,8 @@ import {Router} from 'express';
 const router = Router();
 import userData from '../data/users.js';
 import helper from '../data/helpers.js';
-import bcrypt from 'bcrypt'
-import xss from 'xss'
+import bcrypt from 'bcrypt';
+import xss from 'xss';
 
 
 // VERIFY EMAIL route
