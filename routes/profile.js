@@ -157,7 +157,7 @@ router
             restaurantss[i].menuItems.forEach((menuItem) => menu.push(menuItem));
         } 
     } catch(e) {
-        res.status(404).res.render('error', {
+        res.status(404).res.render('errors/error', {
             title: "404 Page Not Found",
             error: "Restaurants could not be found",
             status: 404
