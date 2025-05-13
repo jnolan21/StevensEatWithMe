@@ -53,6 +53,7 @@ router
   .post('/follow', async (req, res) => {
     let allrsvps;
         try{
+            req.session.message = null; 
             allrsvps = await rsvps.getAllRsvps();
             allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
             const friendId = xss(req.body.friendId);
@@ -61,6 +62,7 @@ router
             //const addFriend = async (id, friendId) => {
             await users.addFriend(currUserId, friendId);
             req.session.message = "Friend Added!"; 
+             
             res.redirect('/meetupPage');
         }
         catch(e){
@@ -74,6 +76,7 @@ router
     //const userJoinRsvp = async (id,userId..returns rsvp object
     let allrsvps;
         try{
+            req.session.message = null; 
             allrsvps = await rsvps.getAllRsvps();
             allrsvps = await helpers.formatAndCheckRSVPS(allrsvps);
             let userId = xss(req.body.userId);
@@ -120,6 +123,7 @@ router
     let rawrestaurant;
     
         try{
+          req.session.message = null; 
           let allrestaurants = await restaurants.getAllRestaurants();
           
           for(let i=0;i<allrestaurants.length; i++){
@@ -179,11 +183,11 @@ router
             res.redirect('/meetupPage');
         }
         catch(e){
-          req.session.message = e.message || String(e) ||"Something went wrong. Cannot create a meetup."
+          let message = e.message || String(e) ||"Something went wrong. Cannot create a meetup."
           res.render('meetupPage/createRSVP', {
             title: "EatWithMe Create Meetup",
             isLoggedIn: !!req.session.user,
-            message: req.session.message,
+            message: message,
             restNames: restNames,
             comment: rawComment,
             restaurant: rawrestaurant,
