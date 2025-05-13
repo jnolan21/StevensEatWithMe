@@ -656,6 +656,43 @@ const getHours = (waitTime) => {
     
 }
 
+function waitTimeConversion (time) {
+
+    time = checkWaitTime(time);
+
+    const [hour, minutes] = time.split(" ");
+    
+    
+    let h = parseInt(hour);
+    let m = parseInt(minutes);
+
+    h = h * 60
+    m = h + m
+
+    return m;
+
+}
+
+function filt (d, w, r, rest) {
+
+    if (!w || typeof w !== 'number') throw "Must enter a valid waitTime"
+    r = checkOverallRating(r);
+    d = checkDietaryRestrictions(d);
+
+    for (let i = rest.length - 1; i >= 0; i--) {
+        const restI = rest[i];
+        if (
+            waitTimeConversion(restI.averageWaitTime) > w ||
+            restI.averageRating < r ||
+            (d.length !== 0 &&
+            !d.every(restriction => restI.dietaryRestrictions.includes(restriction)))
+        ) {
+            rest.splice(i, 1);
+        }
+    }
+    return rest;
+  }
+
 
 // Export all the functions
 export default {
@@ -696,5 +733,6 @@ export default {
     xssForArrays,
     checkImgURL,
     getHours,
-    getMinutes
+    getMinutes,
+    filt
 };
