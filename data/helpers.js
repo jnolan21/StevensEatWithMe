@@ -693,6 +693,88 @@ function filt (d, w, r, rest) {
     return rest;
   }
 
+  const parseTime = (fullHours, time) => {
+
+    let [open, close] = fullHours.split(" - ");
+
+    let o;
+    if (open.slice(-2) === 'AM') {
+        if (open.slice(0,2) == '12') {
+            o = 0;
+        } else {
+        o = open.slice(0,2);
+        if (isNaN(o)) o = open.slice(0,1);
+        o = Number(o);
+        }
+    } else if (open.slice(-2) === 'PM') {
+        if (open.slice(0,2) === '12') o = 12;
+        else {
+            o = open.slice(0,2);
+            if (isNaN(o)) o = open.slice(0,1);
+            o = Number(o);
+            o = o + 12;
+        }
+    }
+
+    let c;
+    if (close.slice(-2) === 'AM') {
+        if (close.slice(0,2) === '12') {
+            c = 24;
+        } else {
+        c = close.slice(0,2);
+        if (isNaN(c)) c = close.slice(0,1);
+        c = Number(c);
+        }
+    } else if (close.slice(-2) === 'PM') {
+        if (close.slice(0,2) == '12') c = 12;
+        else {
+            c = close.slice(0,2);
+            if (isNaN(c)) c = close.slice(0,1);
+            c = Number(c);
+            c = c + 12;
+        }
+    }
+
+    let t;
+    if (time.slice(-2) === 'AM') {
+        t = time.slice(0,2);
+        if (isNaN(t)) t = time.slice(0,1);
+        t = Number(t);
+    } else if (time.slice(-2) === 'PM') {
+        if (time.slice(0,2) == '12') t = 12;
+        else {
+            t = time.slice(0,2);
+            t = Number(t);
+            t = t + 12;
+        }
+    }
+
+    
+
+    if (t > o && t < c) return true;
+
+    return false;
+
+
+}
+
+const isValidMeetupTime = (time,date,ho) => {
+
+    let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+    let day = new Date(date);
+    day = day.getDay();
+
+    let weekday = days[day];
+    let validTime = ho[weekday];
+    if (validTime === 'closed') throw "Restaurant is Closed on this day";
+
+
+    if (parseTime(validTime, time)) return true;
+    else throw "Restaurant is closed at that time";
+    
+}
+
 
 // Export all the functions
 export default {
@@ -734,5 +816,7 @@ export default {
     checkImgURL,
     getHours,
     getMinutes,
-    filt
+    filt,
+    isValidMeetupTime
 };
+

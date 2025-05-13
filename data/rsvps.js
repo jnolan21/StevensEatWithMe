@@ -20,7 +20,15 @@ const createRsvp = async (
     userId = helper.checkId(userId);
 
     // Validate that the ids exist (restaurantId, userId)
-    await restaurantData.getRestaurantById(restaurantId);
+    let rest = await restaurantData.getRestaurantById(restaurantId);
+
+    let hoo = rest.hoursOfOperation;
+    hoo = helper.checkHoursOfOperation(hoo);
+
+    
+
+    helper.isValidMeetupTime(meetUpTime['Time'], meetUpTime['Date'], hoo);
+
     await userData.getUserById(userId);
     let newRsvp = {
         comment: comment,

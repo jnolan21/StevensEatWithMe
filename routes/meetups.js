@@ -84,7 +84,7 @@ router
             res.redirect('/meetupPage');
         }
         catch(e){
-          req.session.message = e.message || "Something went wrong. Cannot RSVP to this meetup."
+          req.session.message = e.message || String(e) ||"Something went wrong. Cannot RSVP to this meetup."
             res.redirect('/meetupPage')
     }
   });
@@ -178,7 +178,7 @@ router
             res.redirect('/meetupPage');
         }
         catch(e){
-          req.session.message = e.message || "Something went wrong. Cannot create a meetup."
+          req.session.message = e.message || String(e) ||"Something went wrong. Cannot create a meetup."
           res.render('meetupPage/createRSVP', {
             title: "EatWithMe Create Meetup",
             isLoggedIn: !!req.session.user,

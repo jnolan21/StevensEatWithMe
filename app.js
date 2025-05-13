@@ -63,10 +63,11 @@ app.use((req, res, next) => {
 
   if (isLoggedIn) {
       // User
-      if (req.session.user.role === 'user')
-          console.log(`[${date}]: ${req.method} ${req.path} (Authenticated User)`);
-  }
-  else console.log(`[${date}]: ${req.method} ${req.path} (Non-Authenticated)`);
+      if (req.session.user.isAdmin)
+        console.log(`[${date}]: ${req.method} ${req.path} (Authenticated Admin)`);   
+      else
+        console.log(`[${date}]: ${req.method} ${req.path} (Authenticated User)`);
+      } else console.log(`[${date}]: ${req.method} ${req.path} (Non-Authenticated)`);
 
   next();
 });
