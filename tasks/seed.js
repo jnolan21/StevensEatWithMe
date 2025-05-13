@@ -2054,6 +2054,169 @@ for (const data of menuItemReviewData) {
 }
 
 
+// createReview() create 4 reviews for Piccola Italia
+menuItemReviewData = [
+    {
+        user: user1._id,
+        restaurant: piccolaItalia._id,
+        text: " They have some mid items, but overall it's a good place to go for a quick bite. ",
+        rating: 3,
+        time: "0h 25min",
+        anonymous: "true"
+    },
+    {
+        user: user2._id,
+        restaurant: piccolaItalia._id,
+        text: "This is a great place to eat! If you like Italian food, you'll love Piccola!",
+        rating: 5,
+        time: "0h 35min",
+        anonymous: "false"
+    },
+    {
+        user: user3._id,
+        restaurant: piccolaItalia._id,
+        text: "I'm not a huge fan of Italian food, but I will say Piccola slaps. Most times I get it, it hits different fr.",
+        rating: 4,
+        time: "0h 45min",
+        anonymous: "false"
+    },
+    {
+        user: user4._id,
+        restaurant: piccolaItalia._id,
+        text: "The buff chick pizza alone is enough to earn this spot a 5/5. Enough said.",
+        rating: 5,
+        time: "0h 30min",
+        anonymous: "false"
+    }
+];
+
+// Add the 4 reviews for Piccola Italia
+for (const data of menuItemReviewData) {
+    try {
+        const review = await reviews.createRestaurantReview(
+            data.user,
+            data.restaurant,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
+// createReview() create 10 reviews for Piccola Italia menu items
+menuItemReviewData = [
+    {
+        user: user1._id,
+        restaurant: piccolaItalia._id,
+        menuItem: broccSoup._id.toString(),
+        text: " The broccoli soup is ok, not sure I would get it again though. ",
+        rating: 2,
+        time: "0h 23min",
+        anonymous: "false"
+    },
+    {
+        user: user2._id,
+        restaurant: piccolaItalia._id,
+        menuItem: cheesepiz._id.toString(),
+        text: "I love being able to customize",
+        rating: 4,
+        time: "0h 20min",
+        anonymous: "false"
+    },
+    {
+        user: user2._id,
+        restaurant: piccolaItalia._id,
+        menuItem: flatbread._id.toString(),
+        text: "This is my favorite food at Stevens! Feels like I'm in Italia when I munch on this.",
+        rating: 5,
+        time: "0h 25min",
+        anonymous: "false"
+    },
+    {
+        user: user3._id,
+        restaurant: piccolaItalia._id,
+        menuItem: vegpiz._id.toString(),
+        text: "This actually tastes like sawdust, I can't believe I wasted a meal swipe on this garbage.",
+        rating: 0,
+        time: "0h 32min",
+        anonymous: "false"
+    },
+    {
+        user: user4._id,
+        restaurant: piccolaItalia._id,
+        menuItem: cookie._id.toString(),
+        text: "Warm and gooey, what's not to love!",
+        rating: 5,
+        time: "0h 10min",
+        anonymous: "false"
+    },
+    {
+        user: user1._id,
+        restaurant: piccolaItalia._id,
+        menuItem: cookie._id.toString(),
+        text: "This was cold and hard as a rock, there's nothing to love :(",
+        rating: 0,
+        time: "0h 19min",
+        anonymous: "false"
+    },
+    {
+        user: user2._id,
+        restaurant: piccolaItalia._id,
+        menuItem: bakedMac._id.toString(),
+        text: "This is some good mac. If you like cheese and can tolerate some lactose, you gotta get this!",
+        rating: 4,
+        time: "0h 18min",
+        anonymous: "false"
+    },
+    {
+        user: user4._id,
+        restaurant: piccolaItalia._id,
+        menuItem: buffpiz._id.toString(),
+        text: "  Let me start by saying I am a buff-chick conoisseur. This is gas! I had low expectations, but this was really good!",
+        rating: 5,
+        time: "0h 26min",
+        anonymous: "true"
+    },
+    {
+        user: user3._id,
+        restaurant: piccolaItalia._id,
+        menuItem: cheesepiz._id.toString(),
+        text: "  This ain't it chief. I mean it's ok, but just that... ok.",
+        rating: 2,
+        time: "0h 20min",
+        anonymous: "false"
+    },
+    {
+        user: user3._id,
+        restaurant: piccolaItalia._id,
+        menuItem: meatballSub._id.toString(),
+        text: "  This beats Yella's by a long shot, Piccola meatball sub stays on top fr fr.",
+        rating: 5,
+        time: "0h 29min",
+        anonymous: "false"
+    }
+];
+
+// Add the 10 menu item reviews to Piccola Italia
+for (const data of menuItemReviewData) {
+    try {
+        const review = await reviews.createMenuItemReview(
+            data.user,
+            data.restaurant,
+            data.menuItem,
+            data.text,
+            data.rating,
+            data.time,
+            data.anonymous
+        );
+    } catch (e) {
+        console.log(`${e}`);
+    }
+}
+
 
 // addFriend() - add user2 to user1's friend list
 try {
