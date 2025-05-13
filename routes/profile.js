@@ -95,7 +95,7 @@ router
             }
         }
         if (currentRSVPPosts.length > 0) {
-            currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts);
+            currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts, true);
         }
         //convert restaurantID and usersAttendingIds to names
         for(let i = 0; i < userRSVPPosts.length; i++){
@@ -434,7 +434,7 @@ router
             let curr2 = await rsvpData.getRsvpById(targetUser.RSVP[i]);
             currentRSVPPosts.push(curr2);
         }
-        currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts);
+        currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts, true);
         
         for(let i = 0; i < userRSVPPosts.length; i++) {
             userRSVPPosts[i].restaurantId = (await restaurants.getRestaurantById(userRSVPPosts[i].restaurantId)).name;
@@ -616,7 +616,7 @@ router
             let curr2 = await rsvpData.getRsvpById(targetUser.RSVP[i]);
             currentRSVPPosts.push(curr2);
         }
-        currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts);
+        currentRSVPPosts = await helper.formatAndCheckRSVPS(currentRSVPPosts, true);
         
         for(let i = 0; i < userRSVPPosts.length; i++) {
             userRSVPPosts[i].restaurantId = (await restaurants.getRestaurantById(userRSVPPosts[i].restaurantId)).name;

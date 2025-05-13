@@ -341,7 +341,7 @@ function fixMilitaryTime(miltime){
 }
 
 
-async function formatAndCheckRSVPS(allrsvps){ //given a list of raw rsvp objects, returns current rsvps with  (non-expired and happening within current year) with list of attendees as user names rather than just IDs, and also restaurant name instead of ID, and same for the user that posted
+async function formatAndCheckRSVPS(allrsvps, wantFuture){ //given a list of raw rsvp objects, returns current rsvps with  (non-expired and happening within current year) with list of attendees as user names rather than just IDs, and also restaurant name instead of ID, and same for the user that posted
     let currentRsvps = [];
     for(let i =0; i< allrsvps.length; i++){
         let [month, day, year] = (allrsvps[i].meetUpTime.Date).split('/');
@@ -376,7 +376,7 @@ async function formatAndCheckRSVPS(allrsvps){ //given a list of raw rsvp objects
                     currentRsvps.push(allrsvps[i]);
                 }
             }
-            else{ //future rsvp (not current day),just psush
+            else if(wantFuture){ //future rsvp (not current day),just psush
                 let rest = await restaurants.getRestaurantById(allrsvps[i].restaurantId);
                 allrsvps[i].restaurantId = rest.name;
                 let userPosted = await users.getUserById(String(allrsvps[i].userId));
