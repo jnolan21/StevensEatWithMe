@@ -62,8 +62,6 @@
     const [hours] = time.split(':');
     const hour = parseInt(hours);
     
-    // Check if time is between 6 AM and 10 PM
-    if (hour < 6 || hour > 22) throw 'Time must be between 6 AM and 10 PM';
     
     // Only check if time is in the future if the date is today
     const date = document.getElementById('rsvpDate').value;
