@@ -43,7 +43,7 @@ router
     } catch (e) {
       return res.status(500).render('errors/error', {
         title: "500 Internal Server Error",
-        error: e.message,
+        error: e.message || String(e),
         status: 500
       });
     }
@@ -66,7 +66,7 @@ router
     } catch (e) {
       return res.status(500).render('errors/error', {
         title: "500 Internal Server Error",
-        error: e.message,
+        error: e.message || String(e),
         status: 500
       });
     }
@@ -92,32 +92,32 @@ router
     try {
       user.firstName = helper.checkName(user.firstName, 'First name');
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e.message || String(e));
     }
     try {
       user.lastName = helper.checkName(user.lastName, 'Last name');
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e.message || String(e));
     }
     try{
       user.email = helper.checkEmail(user.email);
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e.message || String(e));
     }
     try {
       user.username = helper.checkUsername(user.username);
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e.message || String(e));
     }
     try {
       user.password = helper.checkPassword(user.password);
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e.message || String(e));
     }
     try {
       user.passwordConfirm = helper.checkPassword(user.passwordConfirm);
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e.message || String(e));
     }
     // Make sure password === passwordConfirm
     if (user.password !== user.passwordConfirm) errors.push("Password and confirm password must match.");
@@ -140,7 +140,7 @@ router
     } catch (e) {
       return res.status(500).render('errors/error', {
         title: "500 Internal Server Error",
-        error: e.message,
+        error: e.message || String(e),
         status: 500
       });
     }
@@ -151,7 +151,7 @@ router
         if (user.username.toLowerCase() === allUsers[i].username.toLowerCase()) throw new Error(`User with username '${user.username}' already exists!`);
       }
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e.message || String(e));
     }
     // If there are errors, reload the signup page and display the errors
     if (errors.length > 0) {
@@ -221,7 +221,7 @@ router
     } catch (e) {
       return res.status(500).render('errors/error', {
         title: "500 Internal Server Error",
-        error: e.message,
+        error: e.message || String(e),
         status: 500
       });
     }
@@ -243,12 +243,12 @@ router
     try {
       email = helper.checkEmail(user.email);
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e.message || String(e));
     }
     try {
       password = helper.checkPassword(user.password);
     } catch (e) {
-      errors.push(e.message);
+      errors.push(e.message || String(e));
     }
     if (errors.length > 0) {
       // Render login if invalid input supplied

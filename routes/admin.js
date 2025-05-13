@@ -58,7 +58,7 @@ router
     catch(e){
         return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
-            error: e.message,
+            error: e.message || String(e),
             status: 500
         });
     }
@@ -73,7 +73,7 @@ router
     } catch (e) {
         return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
-            error: e.message,
+            error: e.message || String(e),
             status: 500
         });
     }
@@ -84,7 +84,7 @@ router
     } catch (e) {
         return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
-            error: e.message,
+            error: e.message || String(e),
             status: 500
         });
     }
@@ -135,7 +135,7 @@ router
     } catch (e) {
         return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
-            error: e.message,
+            error: e.message || String(e),
             status: 500
         });
     }
@@ -225,7 +225,7 @@ router
         restaurant.typeOfFood = helper.stringArrayToString(restaurant.typeOfFood, "Restaurant types of food");
         restaurant.dietaryRestrictions = helper.checkDietaryRestrictions(restaurant.dietaryRestrictions);
     } catch (e) {
-        req.session.message = e.message;
+        req.session.message = e.message || String(e);
         return res.status(400).redirect('/admin');
     }
     // Create the dietaryCheckBox object
@@ -233,7 +233,7 @@ router
     try {
         dietaryCheckBox = helper.buildDietaryCheckBox(restaurant.dietaryRestrictions);
     } catch (e) {
-        req.session.message = e.message;
+        req.session.message = e.message || String(e);
         return res.status(400).redirect('/admin');
     }
     req.session.editingRestaurant = true;
@@ -303,7 +303,7 @@ router
     try {
         hoursOfOperation = helper.xssForObjects(req.body.hoursOfOperation);
     } catch (e) {
-        errors.push(`Invalid 'hours of operation' input type: ${e.message}`);
+        errors.push(`Invalid 'hours of operation' input type: ${e.message || String(e)}`);
     }
     // Use xss on each value in dietaryRestrictions
     let dietaryRestrictions = helper.fixDietaryInput(req.body.dietaryRestrictions);
@@ -318,7 +318,7 @@ router
     try {
         restaurant.name = helper.checkString(restaurant.name, 'Restaurant name');
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     if (restaurant.name && errors.length == 0) {
         try {
@@ -328,7 +328,7 @@ router
         } catch (e) {
             return res.status(500).render('errors/error', {
                 title: "500 Internal Server Error",
-                error: e.message,
+                error: e.message || String(e),
                 status: 500
             });
         }
@@ -336,29 +336,29 @@ router
     try {
         restaurant.location = helper.checkString(restaurant.location, 'Restaurant location');
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     try {
         restaurant.typeOfFood = helper.stringToArray(restaurant.typeOfFood, 'Restaurant types of food');
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     try {
         restaurant.hoursOfOperation = helper.checkHoursOfOperation(restaurant.hoursOfOperation);
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     try {
         restaurant.imageURL = helper.checkImgURL(restaurant.imageURL);
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     try {
         // Make dietaryRestrictions into an array
         restaurant.dietaryRestrictions = helper.fixDietaryInput(restaurant.dietaryRestrictions);
         restaurant.dietaryRestrictions = helper.checkDietaryRestrictions(restaurant.dietaryRestrictions);
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     // Create the dietaryCheckBox object
     let dietaryCheckBox = {};
@@ -389,7 +389,7 @@ router
     } catch (e) {
         return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
-            error: e.message,
+            error: e.message || String(e),
             status: 500
         });
     }
@@ -446,7 +446,7 @@ router
     try {
         menuItem.dietaryRestrictions = helper.checkDietaryRestrictions(menuItem.dietaryRestrictions);
     } catch (e) {
-        req.session.message = e.message;
+        req.session.message = e.message || String(e);
         return res.status(400).redirect('/admin');
     }
     // Create the dietaryCheckBox object
@@ -454,7 +454,7 @@ router
     try {
         dietaryCheckBox = helper.buildDietaryCheckBox(menuItem.dietaryRestrictions);
     } catch (e) {
-        req.session.message = e.message;
+        req.session.message = e.message || String(e);
         return res.status(400).redirect('/admin');
     }
     req.session.editingMenuItem = true;
@@ -490,28 +490,28 @@ router
     try {
         menuItem._id = helper.checkId(menuItem._id);
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     try {
         menuItem.restaurantId = helper.checkId(menuItem.restaurantId);
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     try {
         menuItem.name = helper.checkString(menuItem.name, "Menu item name");
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     try {
         menuItem.description = helper.checkString(menuItem.description, "Menu item description");
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     try {
         menuItem.dietaryRestrictions = helper.fixDietaryInput(menuItem.dietaryRestrictions);
         menuItem.dietaryRestrictions = helper.checkDietaryRestrictions(menuItem.dietaryRestrictions);
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     // Reload with errors if needed
     if (errors.length > 0) {
@@ -570,12 +570,12 @@ router
     try {
         menuItem.restaurantId = helper.checkId(menuItem.restaurantId);
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }    
     try {
         menuItem.name = helper.checkString(menuItem.name, 'Menu item name');
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     if (menuItem.name) {
         try {
@@ -589,14 +589,14 @@ router
     try {
         menuItem.description = helper.checkString(menuItem.description, 'Menu item description');
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
     try {
         // Make dietaryRestrictions into an array
         menuItem.dietaryRestrictions = helper.fixDietaryInput(menuItem.dietaryRestrictions);
         menuItem.dietaryRestrictions = helper.checkDietaryRestrictions(menuItem.dietaryRestrictions);
     } catch (e) {
-        errors.push(e.message);
+        errors.push(e.message || String(e));
     }
 
     // Create the dietaryCheckBox object
@@ -626,7 +626,7 @@ router
     } catch (e) {
         return res.status(500).render('errors/error', {
             title: "500 Internal Server Error",
-            error: e.message,
+            error: e.message || String(e),
             status: 500
         });
     }
@@ -642,14 +642,14 @@ router
     try {
         id = helper.checkId(id);
     } catch (e) {
-        req.session.message = e.message;
+        req.session.message = e.message || String(e);
         return res.status(400).redirect('/admin');
     }
     let isAdmin;
     try {
         isAdmin = await userData.changeAdminPrivileges(id);
     } catch (e) {
-        req.session.message = e.message;
+        req.session.message = e.message || String(e);
         return res.status(400).redirect('/admin');
     }
     if (isAdmin) req.session.message = 'Admin privileges granted.'

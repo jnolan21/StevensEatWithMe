@@ -44,7 +44,7 @@ router
         catch (e) {
           return res.status(500).render('error', {
             title: "500 Internal Server Error",
-            error: e.message,
+            error: e.message || String(e),
             status: 500});
         }
   });

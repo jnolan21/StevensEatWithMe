@@ -119,7 +119,7 @@ function checkWaitTime(hour, minute) {
   minute = Number(minute);
 
   if (isNaN(hour) || isNaN(minute)) throw "Time must be entered as a number";
-  if (hour < 0) throw "Hours must be a positive number";
+  if (hour < 0 || hour > 5) throw "Hours must be a positive number between 0 and 5";
   if (minute < 0 || minute > 59) throw "Minutes must be between 0-59";
 
   let h = hour.toString();

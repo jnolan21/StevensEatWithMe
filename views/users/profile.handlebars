@@ -228,12 +228,12 @@ ALL RSVP FIELDS:
         <div class = "form-group" id = "waitTimeContainer"> 
             Wait Time
             <div class="time-field">
-                <input name="waitTimeHour" id="waitTimeHour" type="number" min="0" placeholder="1" value = "{{formData.waitTimeHour}}">
-                <label for = "waitTimeHour">hour</label>
+                <input name="waitTimeHour" id="waitTimeHour" type="number" min="0" max = "5" placeholder="1" value = "{{formData.waitTimeHour}}">
+                <label for = "waitTimeHour">hours (0-5)</label>
             </div>
             <div class="time-field">
                 <input name="waitTimeMinute" id="waitTimeMinute" type="number" min="0" max="59" placeholder="30" value = "{{formData.waitTimeMinute}}">
-                <label for = "waitTimeMinute">min</label>
+                <label for = "waitTimeMinute">min (0-59)</label>
             <p class = "error" id = "errorTime">{{errors.Time}}</p>
             </div>
             <div id = "anonymous-field">
