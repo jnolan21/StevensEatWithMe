@@ -775,6 +775,18 @@ const isValidMeetupTime = (time,date,ho) => {
     
 }
 
+const sortByRating = (reviews) => {
+    
+    return reviews.sort((review1, review2) => review1.rating - review2.rating);
+
+}
+
+const sortByWaitTime = (reviews) => {
+
+    return reviews.sort((review1, review2) => subtractWaitTime(review1.waitTime, review2.waitTime))
+
+}
+
 
 // Export all the functions
 export default {
@@ -817,6 +829,8 @@ export default {
     getHours,
     getMinutes,
     filt,
-    isValidMeetupTime
+    isValidMeetupTime,
+    sortByRating,
+    sortByWaitTime
 };
 

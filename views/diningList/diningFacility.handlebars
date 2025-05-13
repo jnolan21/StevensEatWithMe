@@ -73,6 +73,14 @@
 <div class = "reviews">
     <details>
         <summary class = "caret-summary-reviews"><span class="caret"></span> Reviews</summary>
+        <form action="/diningList/{{restaurant._id}}" method="GET">
+            <input type="hidden" name="sortBy" value="rating">
+            <button type="submit" class="button2">Sort By Rating</button>
+        </form>
+        <form action="/diningList/{{restaurant._id}}" method="GET">
+            <input type="hidden" name="sortBy" value="waitTime">
+            <button type="submit" class="button2">Sort By Wait Time</button>
+        </form>
     <ol>
         {{#each reviews}}
         <li>
@@ -93,6 +101,7 @@
     </ol>
     </details>
 </div>
+
 
 
 </section>
