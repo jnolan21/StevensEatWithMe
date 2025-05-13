@@ -67,7 +67,7 @@ router.route('/diningList/:id').get(async (req, res) => {
 
   try {
     const id = helpers.checkId(xss(req.params.id));
-    const restaurant = await restaurants.getRestaurantById(id);
+    let restaurant = await restaurants.getRestaurantById(id);
     let restaurantReviews = await reviews.getAllRestaurantReviews(id);
     let isAdmin;
     if (req.session.user) {
@@ -78,12 +78,12 @@ router.route('/diningList/:id').get(async (req, res) => {
     for (let i = 0; i < restaurantReviews.length; i++) {
       restaurantReviews[i] = await reviews.addNametoReview(restaurantReviews[i]); 
     }
-
+    helpers.addHasReviewsKey([restaurant]);
     return res.render('diningList/diningFacility', {title: restaurant.name, restaurant:restaurant,
       reviews: restaurantReviews, isLoggedIn: !!req.session.user, isAdmin
     }); 
   } catch(e) {
-    return res.status(404).render('error', {
+    return res.status(404).render('errors/error', {
       title: "404 Page Not Found",
       error: "Restaurant Could Not be Found, If it does exist Reload and try again",
       status: 404});

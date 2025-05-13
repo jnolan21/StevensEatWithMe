@@ -59,7 +59,11 @@
                 {{/each}}
                 </p>
 
+                {{#if this.hasReviews}}
                 <p class = "rating">Rating: {{this.rating}}/5</p>
+                {{else}}
+                <p class = "rating">Rating: N/A - no reviews</p>
+                {{/if}}
             </div>
             </li>
             {{/each}}
