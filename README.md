@@ -68,7 +68,7 @@ All RSVP posts made by this user will be displayed.
 
 **RSVP Page**
 - On this page, users can create an RSVP post for a specific dining location, date, and time. The users can also add a short comment along with the RSVP post.
-- All RSVPs for the current day will be posted on this page. RSVPs will be automatically sorted by most recently posted.
+- All RSVPs for the current day will be posted on this page. RSVPs will be automatically sorted by the nearest time.
 - Each posted RSVP will display the username of the user who posted it. Any registered user who views the RSVP post will have the option to RSVP to the post. This will display the user’s username alongside the post to indicate that they plan on attending. 
 - User’s who view the RSVP post can also “follow” the user who posted the RSVP.
 
