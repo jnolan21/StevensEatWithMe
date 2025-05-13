@@ -96,14 +96,55 @@ router
   .route('/api/diningList')
   .get(async (req, res) => {
     try {
-    let serverRestaurants = await restaurants.getAllRestaurants();
-    res.json(serverRestaurants);
+      let serverRestaurants = await restaurants.getAllRestaurants();
+      res.json(serverRestaurants);
     } catch(e) {
       return res.status(500).render('errors/error', {
       title: "500 Internal Server Error",
       error: e.message,
       status: 500});
     }
+  })
+  .post(async (req,res) => {
+    
+    try {
+      let dietary = helpers.xssForArrays(req.body.dietary);
+      let rating = xss(req.body.rating);
+      let waitTime = xss(req.body.waitTime);
+
+      if (!Array.isArray(dietary)) throw 'Dietary must be an array'
+
+    
+      rating = Number(rating);
+      if (Number.isNaN(rating) || rating < 0 || rating > 5) {
+        throw 'Invalid rating';
+      }
+
+      if (waitTime === "Infinity") waitTime = Infinity;
+      else {
+        waitTime = parseInt(waitTime);
+        if (Number.isNaN(waitTime) || waitTime < 0) {
+          throw 'Invalid waitTime';
+        }
+      }
+      //console.log(waitTime);
+
+      let rest = await restaurants.getAllRestaurants();
+
+      rest = helpers.filt(dietary, waitTime, rating, rest);
+
+      res.json(rest);
+    
+    } catch(e)
+    {
+      res.status(400).render('errors/error', {
+        title: "400 Error",
+        error: e.message || String(e),
+        status: 400
+      })
+    }
+    
+
   });
 
 

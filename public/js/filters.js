@@ -1,3 +1,5 @@
+
+
 document.querySelectorAll('.dropdown-menu').forEach(menu => {
     menu.addEventListener('click', function (e) {
       e.stopPropagation(); // prevents dropdown from closing on click
@@ -9,51 +11,103 @@ document.querySelectorAll('.dropdown-menu').forEach(menu => {
 let dietary = [];
 let waitTime = Infinity;
 let rating = 0;
+let filterForm = $('.dropdown-form');
+let error = document.getElementById('filterError');
 
+filterForm.on('submit', function(e) {
+  e.preventDefault();  
+
+  error.textContent = '';
+  
+  try {
+    
+    if (waitTime) {
+    if (waitTime == Infinity) waitTime = 'Infinity';
+    if (typeof waitTime !== 'string') throw "waitTime should be a string";
+    } else {
+      waitTime = Infinity;
+    }
+    if (rating) {
+      parseInt(rating);
+    } else rating = 0;
+    if (dietary) {
+      if (!Array.isArray(dietary)) throw "Dietary Restrictions must be an array"
+    } 
+    }catch(e) {
+      error.textContent = e;
+      return;
+    }
+
+  let requestConfig = {
+    method: 'POST',               
+    url: '/api/diningList',
+    contentType: 'application/json',     
+    data: JSON.stringify({
+      waitTime: waitTime,
+      rating: rating,
+      dietary: dietary
+    }),              
+  };
+  $.ajax(requestConfig).then(function (responseMessage) {
+    render(responseMessage);
+  });    
+});
 
 let requestConfig = {
-    method: 'GET',
-    url: '/api/diningList'
-  };
+  method: 'GET',
+  url: '/api/diningList'
+};
 
 let filter = document.getElementById('dietary');
 
 $.ajax(requestConfig).then(function (responseMessage) {
-    let dietaryRestrictions = [];
+  let dietaryRestrictions = [];
 
-    responseMessage.forEach((restaurant) => {
-    dietaryRestrictions.push(...restaurant.dietaryRestrictions);
-    });
-
-    dietaryRestrictions = [...new Set(dietaryRestrictions)];
-
-    dietaryRestrictions.forEach((restrictions) => {
-        let element = $(`<li><label><input type="checkbox" value="${restrictions}">${restrictions}</label></li>`);
-        $(filter).append(element);
-    });
-
-    $('#dietary input').change(function() {
-        if (this.checked === true) dietary.push(this.value);
-        else if (this.checked === false) {
-            const index = dietary.indexOf(this.value);
-            if (index > -1) { 
-            dietary.splice(index, 1); 
-            }
-        }
-        rerender();
-      });
+  responseMessage.forEach((restaurant) => {
+  dietaryRestrictions.push(...restaurant.dietaryRestrictions);
   });
+
+  dietaryRestrictions = [...new Set(dietaryRestrictions)];
+
+  dietaryRestrictions.forEach((restrictions) => {
+      let element = $(`<li><label><input type="checkbox" value="${restrictions}">${restrictions}</label></li>`);
+      $(filter).append(element);
+  });
+
+  $('#dietary input').change(function() {
+      if (this.checked === true) dietary.push(this.value);
+      else if (this.checked === false) {
+          const index = dietary.indexOf(this.value);
+          if (index > -1) { 
+          dietary.splice(index, 1); 
+          }
+      }
+      try {
+      if (!Array.isArray(dietaryRestrictions)) throw "Must be an array";
+      } catch(e) {
+        return false;
+      }
+    });
+    render(responseMessage);
+});
+
+
+
+
+
 
 
 $('#waitTime input').click(function() {
     waitTime = this.value;
+    //console.log(typeof waitTime);
     if (waitTime === 'None') waitTime = Infinity;
-    rerender();
+    //rerender();
   });
 
 $('#rating input').click(function() {
-    rating = Number(this.value);
-    rerender();
+  rating = Number(this.value);
+    
+    //rerender();
   });
 
 function waitTimeConversion (time) {
@@ -90,16 +144,16 @@ function filt (d, w, r, rest) {
   
   let listedRestaurant = document.getElementById("listRestaurants");
 
-function rerender() {
-$.ajax(requestConfig).then(function (responseMessage) {
-    
-    const filteredRestaurants = filt(dietary, waitTime, rating, responseMessage);
+
+
+function render(restaurants) {
+  //const filteredRestaurants = filt(dietary, waitTime, rating, responseMessage);
 
     // Clear old list
     $(listedRestaurant).empty();
     
 
-    filteredRestaurants.map((restaurant) => {
+    restaurants.forEach((restaurant) => {
       let menuList = restaurant.menuItems.map(item => `<li>${item.name}</li>`).join('');
       let element = $(
         `<li>
@@ -121,37 +175,10 @@ $.ajax(requestConfig).then(function (responseMessage) {
       $(listedRestaurant).append(element);
       
     });
-  });
 }
 
 
   
-  
-
-  
-
-
-//   {{#each restaurantList}}
-//   <li>
-//       <a href = "/diningList/{{this._id}}">
-//           <h2 id = "restName">{{this.name}}</h2>
-//           <img src = "{{this.imageURL}}" class = "restaurant_img" alt = "{{this.name}}" >    
-//       </a>                   
-//      <details>
-//       <summary class = "caret-summary"> <span class="caret"></span> Menu Items</summary>
-//           <ul>
-//               {{#each menuItems}}
-//               <li>{{name}}</li>
-//               {{/each}}
-//           </ul>
-//       </details>
-//   </li>
-      
-// {{/each}}
-
-
-
-rerender();
 
 
 
