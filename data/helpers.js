@@ -749,9 +749,13 @@ function filt (d, w, r, rest) {
 
     let t;
     if (time.slice(-2) === 'AM') {
+        if (time.slice(0,2) === '12') {
+            t = 0;
+        } else {
         t = time.slice(0,2);
         if (isNaN(t)) t = time.slice(0,1);
         t = Number(t);
+        }
     } else if (time.slice(-2) === 'PM') {
         if (time.slice(0,2) == '12') t = 12;
         else {
@@ -762,8 +766,8 @@ function filt (d, w, r, rest) {
     }
 
     
-
-    if (t > o && t < c) return true;
+    
+    if (t >= o && t < c) return true;
 
     return false;
 
